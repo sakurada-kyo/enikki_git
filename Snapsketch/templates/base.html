@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>base</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    {% block css %}{% endblock %}
+    {% block js %}{% endblock %}
+</head>
+<body>
+<div class="wrapper">
+    <header>
+            <div id = "logo">Snap Sketch</div>
+    </header>
+    <main>
+        <div id = "foot">
+            <p>マイページ</p><br>
+            <p>カレンダー</p><br>
+            <p>ガチャ</p>
+        </div>
+        <!-- ここから中身作成 -->
+        <div id = "box">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+    {% block footer %}
+    {% comment %} <footer>
+        <div id = "kotei">
+            <small>&copy;2023 SnapSketch</small>
+        </div>
+    </footer> {% endcomment %}
+    {% endblock footer %}
+</div>
+</body>
+</html>

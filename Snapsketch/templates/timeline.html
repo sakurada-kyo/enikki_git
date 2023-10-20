@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/timeline.css" %}">
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'js\jquery.jscroll.min.js' %}"></script>
+{% endblock %}
+
+{% block content%}
+    <div id="group_nav">
+        <img class="group_icon" src="{% static "images/test_icon.jpeg" %}" alt="グループアイコン">
+    </div>
+    <div class="jscroll">
+        <article class="content">
+            <div class="content_header">
+                <img class="user_icon" src="{% static "images/test_icon.jpeg" %}" alt="ユーザーアイコン">
+                <p class="user_name">aaaaaaaaaaa</p>
+                <img class="good" src="{% static "images/test_icon.jpeg" %}" alt="いいね">
+                <img class="comment" src="{% static "images/test_icon.jpeg" %}" alt="コメント">
+            </div>
+            <section class="draw_diary">
+                <img class="draw" src="{% static "images/test_icon.jpeg" %}" alt="絵日記の絵">
+                <p class="diary">a</p>
+            </section>
+            <div class="content_footer">
+                {% comment %} <a class="jscroll-next" href="アプリ名/timeline.html">次へ</a> {% endcomment %}
+            </div>
+        </article>
+    </div>
+    <script>
+        var jscrollOption = {
+            loadingHtml: '読み込み中', // 記事読み込み中の表示、画像等をHTML要素で指定することも可能
+            autoTrigger: true, // 次の表示コンテンツの読み込みを自動( true )か、ボタンクリック( false )にする
+            padding: 20, // autoTriggerがtrueの場合、指定したコンテンツの下から何pxで読み込むか指定
+            nextSelector: 'a.jscroll-next', // 次に読み込むコンテンツのURLのあるa要素を指定
+            contentSelector: '.jscroll' // 読み込む範囲を指定、指定がなければページごと丸っと読み込む
+        }
+        $('.jscroll').jscroll(jscrollOption);
+    </script>
+{% endblock %}

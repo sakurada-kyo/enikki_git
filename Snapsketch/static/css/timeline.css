@@ -1,0 +1,70 @@
+body{
+    margin:0;
+    padding:0;
+}
+
+img{
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+}
+
+p{
+    margin: 0;
+    background-color: aqua;
+}
+
+/* main{
+    width: 500px;
+    margin:0 auto;
+} */
+
+#group_nav{
+    width: 10%;
+    float: left;
+    margin-top:70px;
+}
+
+.jscroll{
+    /* width: 90%; */
+    float: left;
+    margin-top:10px;
+    margin-bottom: 10px;
+}
+
+.user_icon{
+    float:left;
+}
+
+.user_name{
+    padding-top:20px;
+    float: left;
+}
+
+.good{
+    float: left;
+    margin-left:600px;
+}
+
+.comment{
+    float: left;
+}
+
+.draw_diary{
+    clear: both;
+    
+    width: 100%;
+}
+
+.draw{
+    border-radius: 0%;
+    height: 500px;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.diary{
+    background-color: red;
+    height: 200px;
+    width: 100%;
+}
