@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content%}
+    {% for enikki in enikki_list %}
     <div id="group_nav">
         <img class="group_icon" src="{% static "images/test_icon.jpeg" %}" alt="グループアイコン">
     </div>
@@ -13,7 +14,7 @@
         <article class="content">
             <div class="content_header">
                 <img class="user_icon" src="{% static "images/test_icon.jpeg" %}" alt="ユーザーアイコン">
-                <p class="user_name">aaaaaaaaaaa</p>
+                <p class="user_name">{{ enikki.user_name }}</p>
                 <img class="good" src="{% static "images/test_icon.jpeg" %}" alt="いいね">
                 <img class="comment" src="{% static "images/test_icon.jpeg" %}" alt="コメント">
             </div>
@@ -26,6 +27,7 @@
             </div>
         </article>
     </div>
+    {% endfor %}
     {% block js %}
     <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
     <script src="{% static 'js\jquery.jscroll.min.js' %}"></script>
