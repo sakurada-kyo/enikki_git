@@ -17,7 +17,6 @@ def view_timeline(request):
 
 #タイムラインのajax
 def ajax_timeline(request):
-    
     data = {
         "user_icon_path":{},
         "user_name":{},
