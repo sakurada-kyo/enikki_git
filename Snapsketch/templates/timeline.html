@@ -9,8 +9,8 @@
         <div id="group_nav">
             <img class="group_icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
         </div>
-    {% comment %} {% for enikki in enikki_list %} {% endcomment %}
-        <div class="jscroll">
+    {% for enikki in enikki_list %}
+        <div class="scroll" data-url="">
             <article class="content">
                 <div class="content_header">
                     <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
@@ -22,15 +22,15 @@
                     <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
                     <p class="diary">a</p>
                 </section>
-                <div class="content_footer">
-                    <a class="jscroll-next" href="{% url 'enikki:timeline' %} ">次へ</a>
-                </div>
+                {% comment %} 無限スクロール用 {% endcomment %}
+                {% comment %} <div class="content_footer">
+                    <a class="scroll-next" href="{% url 'enikki:timeline' %} ">次へ</a>
+                </div> {% endcomment %}
             </article>
         </div>
-    {% comment %} {% endfor %} {% endcomment %}
+    {% endfor %}
 {% block js %}
     <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static 'js\jquery.jscroll.min.js' %}"></script>
     {% comment %} <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script> {% endcomment %}
     <script src="{% static 'js\timeline.js' %}"></script>
 {% endblock %}

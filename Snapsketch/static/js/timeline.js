@@ -1,49 +1,40 @@
 // --------------------無限スクロール----------------------
-//タグの再利用
-var jscrollOption = {
-    loadingHtml: '読み込み中', // 記事読み込み中の表示、画像等をHTML要素で指定することも可能
-    autoTrigger: true, // 次の表示コンテンツの読み込みを自動( true )か、ボタンクリック( false )にする
-    padding: 20, // autoTriggerがtrueの場合、指定したコンテンツの下から何pxで読み込むか指定
-    nextSelector: 'a.jscroll-next', // 次に読み込むコンテンツのURLのあるa要素を指定
-    contentSelector: '.jscroll' // 読み込む範囲を指定、指定がなければページごと丸っと読み込む
-}
-$('.jscroll').jscroll(jscrollOption);
-
+//intersection observer api
 // 交差を監視する要素を準備
-const targets = document.querySelectorAll('.jscroll');
-const staticURL = location.href + '?page=';
-var num = 0;
-var changeURL = '';
+// const targets = document.querySelectorAll('.jscroll');
+// const staticURL = location.href + '?page=';
+// var num = 0;
+// var changeURL = '';
 
-// 範囲の設定
-const options = {
-  root: null,
-  rootMargin: '-50px 0px',
-  threshold: 0.5
-};
+// // 範囲の設定
+// const options = {
+//   root: null,
+//   rootMargin: '-50px 0px',
+//   threshold: 0.5
+// };
 
-// Intersection Observerを使えるようにする
-const observer = new IntersectionObserver(intersect, options);
+// // Intersection Observerを使えるようにする
+// const observer = new IntersectionObserver(intersect, options);
 
-// 対象の要素をそれぞれ監視する
-targets.forEach(target => {
-  observer.observe(target);
-});
+// // 対象の要素をそれぞれ監視する
+// targets.forEach(target => {
+//   observer.observe(target);
+// });
 
-// 交差したときに実行する関数
-function intersect(entries) {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) { // 監視中の要素が交差した状態ならtrue
-      // 監視中の要素が交差したときの処理
-	  	num++;
-		changeURL = staticURL + num;
-		history.replaceState(null,null,changeURL);
-    } else { // 監視中の要素が交差してない状態ならfalse
-      // 監視中の要素が交差していないときの処理
-	  return;
-    }
-  });
-}
+// // 交差したときに実行する関数
+// function intersect(entries) {
+//   entries.forEach(entry => {
+//     if (entry.isIntersecting) { // 監視中の要素が交差した状態ならtrue
+//       // 監視中の要素が交差したときの処理
+// 	  	num++;
+// 		changeURL = staticURL + num;
+// 		history.replaceState(null,null,changeURL);
+//     } else { // 監視中の要素が交差してない状態ならfalse
+//       // 監視中の要素が交差していないときの処理
+// 	  return;
+//     }
+//   });
+// }
 // --------------------無限スクロール----------------------
 
 //------------------ajax------------------

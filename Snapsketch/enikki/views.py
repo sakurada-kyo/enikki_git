@@ -6,7 +6,7 @@ from .models import EnikkiModel
 def view_timeline(request):
     model = EnikkiModel.objects.all()
     # page = request.GET.get("page")
-    # print(page)
+    print(model)
     context = {
         "enikki_list":model
         # グループアイコン
@@ -16,20 +16,6 @@ def view_timeline(request):
         # いいね有無(数字)
     }
     return render(request,'timeline.html',context)
-
-def view_timeline2(request):
-    model = EnikkiModel.objects.all()
-    # page = request.GET.get("page")
-    # print(page)
-    context = {
-        "enikki_list":model
-        # グループアイコン
-        # グループ内のユーザーアイコン
-        # グループ内のユーザー名
-        # グループ内のユーザーの絵日記
-        # いいね有無(数字)
-    }
-    return render(request,'timeline2.html',context)
 
 #タイムラインのajax
 def ajax_timeline(request):
