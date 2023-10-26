@@ -9,49 +9,41 @@ var jscrollOption = {
 }
 $('.jscroll').jscroll(jscrollOption);
 
-//urlパラメータ
-// var posi_top,wih_half,current_view,set_url,set_url_old;
-// var now_url = location.pathname;
+// 交差を監視する要素を準備
+const targets = document.querySelectorAll('.jscroll');
+const staticURL = location.href + '?page=';
+var num = 0;
+var changeURL = '';
 
-// $(window).load(function(){
-// 	var wih = window.innerHeight;
-// 	var wih_half = wih/2;
-// 	current_view = wih_half;
-// 	set_posi();
-// });
+// 範囲の設定
+const options = {
+  root: null,
+  rootMargin: '-50px 0px',
+  threshold: 0.5
+};
 
-// $(window).scroll(function(){
-// 	var wih = window.innerHeight;
-// 	var wih_half = wih/2;
-// 	current_view = $(this).scrollTop() + wih_half;
-// 	set_posi();
-// });
+// Intersection Observerを使えるようにする
+const observer = new IntersectionObserver(intersect, options);
 
+// 対象の要素をそれぞれ監視する
+targets.forEach(target => {
+  observer.observe(target);
+});
 
-// function set_posi(){
-
-// 	$('.demo_url_replacer').each(function() {
-// 		var posi = $(this).offset();
-// 		posi_top = posi.top;
-// 		posi_bottom = posi_top+$(this).height();
-
-// 		//画面真ん中が要素の上部の位置を超過かつ、要素の下部未満の場合URL変更。
-// 		if(current_view > posi_top && current_view < posi_bottom){
-// 			set_url_old = set_url;
-// 			if($(this).attr("data-url")){
-// 				set_url = $(this).attr("data-url");
-// 			}else{
-// 				set_url = now_url;
-// 			}
-// 			if(set_url!==set_url_old){
-// 				//ただ書き換える処理
-// 				//history.replaceState('','',set_url);
-// 				//履歴に書き込む処理
-// 				history.pushState('','',set_url);
-// 			}
-// 		}
-// 	});
-// }
+// 交差したときに実行する関数
+function intersect(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { // 監視中の要素が交差した状態ならtrue
+      // 監視中の要素が交差したときの処理
+	  	num++;
+		changeURL = staticURL + num;
+		history.replaceState(null,null,changeURL);
+    } else { // 監視中の要素が交差してない状態ならfalse
+      // 監視中の要素が交差していないときの処理
+	  return;
+    }
+  });
+}
 // --------------------無限スクロール----------------------
 
 //------------------ajax------------------

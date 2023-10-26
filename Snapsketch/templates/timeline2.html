@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+    
         <div id="group_nav">
             <img class="group_icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
         </div>
@@ -23,15 +24,15 @@
                     <p class="diary">a</p>
                 </section>
                 <div class="content_footer">
-                    <a class="jscroll-next" href="{% url 'enikki:timeline' %} ">次へ</a>
+                    <a class="jscroll-next" href="{% url 'enikki:timeline' %}?page=1 ">次へ</a>
                 </div>
             </article>
         </div>
     {% comment %} {% endfor %} {% endcomment %}
 {% block js %}
     <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static 'js\jquery.jscroll.min.js' %}"></script>
-    {% comment %} <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script> {% endcomment %}
+    <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script>
+    {% comment %} <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script> {% endcomment %}
     <script src="{% static 'js\timeline.js' %}"></script>
 {% endblock %}
 {% endblock %}
