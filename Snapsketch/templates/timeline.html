@@ -10,17 +10,17 @@
             <img class="group_icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
         </div>
     {% for enikki in enikki_list %}
-        <div class="scroll" data-url="">
+        <div class="scroll" data-url="?groupName={{ enikki.group_name }}&page={{ enikki.page_num }}">
             <article class="content">
                 <div class="content_header">
                     <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
-                    <p class="user_name">a</p>
+                    <p class="user_name">{{ enikki.user_name }}</p>
                     <img class="good" src="{% static 'images/test_icon.jpeg' %}" alt="いいね">
                     <img class="comment" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
                 </div>
                 <section class="draw_diary">
                     <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
-                    <p class="diary">a</p>
+                    <p class="diary">{{ enikki.diary }}</p>
                 </section>
                 {% comment %} 無限スクロール用 {% endcomment %}
                 {% comment %} <div class="content_footer">
