@@ -8,21 +8,20 @@ def view_timeline(request):
     # page = request.GET.get("page")
     print(model)
     context = {
-        "enikki_list":model
-        # グループアイコン
-        # グループ内のユーザーアイコン
-        # グループ内のユーザー名
-        # グループ内のユーザーの絵日記
-        # いいね有無(数字)
+        "enikki_list":model,
+        "current_path":request.path
     }
     return render(request,'timeline.html',context)
 
 #タイムラインのajax
 def ajax_timeline(request):
+    # グループ名+page番号より上の行を持ってくる
     data = {
         "user_icon_path":{},
         "user_name":{},
         "draw_path":{},
         "diary":{},
+        "group_name":{},
+        "page":{}
     }
     return JsonResponse(data)
