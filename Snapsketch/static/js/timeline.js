@@ -1,5 +1,6 @@
 window.addEventListener('load', initPaginator());
 function initPaginator() {
+  let pathname = location.pathname;
     $(window).scroll(function() {
       // handle scroll events to update content
       var scroll_pos = $(window).scrollTop();
@@ -16,9 +17,8 @@ function initPaginator() {
         last_scroll = scroll_pos;
         $(".content").each(function(index) {
           if (mostlyVisible(this)) {
-
-            history.replaceState(null, null,$(this).attr('data-url'))
-            // $("#pagination").html($(this).attr("data-pagination"));
+            var params = "?groupName=" + $(this).attr("data-group") + "&page=" + $(this).attr("data-page");
+            history.replaceState(null, null,pathname+params);
             return(false);
           }
         });
@@ -48,10 +48,9 @@ function loadScroll(){
     // console.log(params);
     let param1 = params.get('groupName');
     let param2 = params.get('page');
-    console.log(groupName + ":" + page);
+    console.log("画面スクロール：" +param1 + ":" + param2);
     if(param1 != null && param2 != null){
-        var dataURL = pathname + "?groupName=" + param1 + "&page=" + param2;
-        var element = document.querySelector('[data-url="'+ dataURL +'"]');
+        var element = document.querySelector('[data-group="' + param1 + '"][data-page="' + param2 + '"]');
         console.log("element:"+element);
         if(!element) return;
         console.log("nullじゃない");
@@ -75,11 +74,12 @@ function updates_sign(){
 
   const callback = (entries) => {
     entries.forEach( (entry) => {
+      console.log(entry);
       //監視対象の要素が領域内に入った場合の処理
       if (entry.isIntersecting) {
         alert("監視中");
         //ajax
-        ajax_open(entry);
+        ajax_open(entry.target);
       } else { //監視対象の要素が領域外になった場合の処理
         console.log("監視してない");
       }
@@ -87,8 +87,10 @@ function updates_sign(){
   }
 
   const observer = new IntersectionObserver(callback,options);
-  const parent = document.getElementById('scroll');
+  const parent = document.getElementById("scroll");
+  if(!parent) return;
   var target = parent.lastElementChild;
+  console.log("target:"+target);
   observer.observe(target);
 }
 //-----------------------intersection observer api-----------------------
@@ -129,23 +131,20 @@ $.ajaxSetup({
 //-----------------------ajax処理-----------------------
 function ajax_open(lastElement){
   $.ajax({
-    'url': '{% url "enikki:ajax_timeline" %}',
-    'type': 'POST',
-    'data': {
-        'groupName': lastElement.getAttribute('data-group'),
-        'page': lastElement.getAttribute('data-page'),
+    url: 'ajax_timeline/',
+    type: 'POST',
+    data: {
+        // 'groupName': $(lastElement).attr('data-group'),
+        // 'page': $(lastElement).attr('data-page'),
     },
-    'dataType': 'json',
-    'headers': {'X-CSRFToken': csrftoken}
+    dataType: 'json',
+    headers: {'X-CSRFToken': csrftoken}
   })
   .done(function(response){
+    console.log("done");
     //データがあれば追記
     if(response != null){
-      $.each(response, function(index, val) {
-        $('#scroll').append(
-          
-        );
-      });
+      console.log("ajax_response:" + response);
     }else{
       //最新記事なし
       console.log("no_more");
@@ -153,3 +152,25 @@ function ajax_open(lastElement){
   });
 }
 //-----------------------ajax処理-----------------------
+
+//-----------------------templateタグ複製-----------------------
+function add_article(data){
+  const article = document.getElementById("article");
+  var article_content;
+  data.forEach(element => {
+    //複製する
+    var article_partial = article.content.cloneNode(true);
+
+    //複製した要素にデータ挿入
+    article_partial.querySelector(".content").setAttribute('data-group', element.groupName);
+    article_partial.querySelector(".content").setAttribute('data-page', element.page);
+    article_partial.querySelector(".user_icon").setAttribute('src', element.userIconPath);
+    article_partial.querySelector(".user_name").innerHTML = element.userName;
+    article_partial.querySelector(".draw").setAttribute('src', element.drawPath);
+    article_partial.querySelector(".diary").innerHTML = element.diary;
+
+    article_content += article_partial;
+  });
+  return article_content;
+}
+//-----------------------templateタグ複製-----------------------

@@ -17,11 +17,11 @@ def view_timeline(request):
 def ajax_timeline(request):
     # グループ名+page番号より上の行を持ってくる
     data = {
-        "user_icon_path":{},
-        "user_name":{},
-        "draw_path":{},
+        "userIconPath":{},
+        "userName":{},
+        "drawPath":{},
         "diary":{},
-        "group_name":{},
+        "groupName":{},
         "page":{}
     }
     return JsonResponse(data)

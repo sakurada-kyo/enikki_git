@@ -5,6 +5,5 @@ app_name = 'enikki'
 
 urlpatterns = [
     path('timeline/', views.view_timeline, name='timeline'),
-    path('ajax_timeline/', views.ajax_timeline, name='ajax_timeline'),
-    
+    path('timeline/ajax_timeline/', views.ajax_timeline, name='ajax_timeline'),
 ]

@@ -6,7 +6,7 @@
     <title>base</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block css %}{% endblock %}
-    {% block js %}{% endblock %}
+    
 </head>
 <body>
 <div class="wrapper">
@@ -33,5 +33,6 @@
     </footer> {% endcomment %}
     {% endblock footer %}
 </div>
+{% block js %}{% endblock %}
 </body>
 </html>

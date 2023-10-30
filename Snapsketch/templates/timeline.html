@@ -11,7 +11,7 @@
         </div>
         <div id="scroll">
             {% for enikki in enikki_list %}
-                <article class="content" data-url="{{ current_path }}?groupName={{ enikki.group_name }}&page={{ enikki.page_num }}" data-group="{{ enikki.group_name }}" data-page="{{ enikki.page_num }}">
+                <article class="content" data-group="{{ enikki.group_name }}" data-page="{{ enikki.page_num }}">
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
                         <p class="user_name">{{ enikki.user_name }}</p>
@@ -22,14 +22,23 @@
                         <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
                         <p class="diary">{{ enikki.diary }}</p>
                     </section>
-                    {% comment %} 無限スクロール用 {% endcomment %}
-                    {% comment %} <div class="content_footer">
-                        <a class="scroll-next" href="{% url 'enikki:timeline' %} ">次へ</a>
-                    </div> {% endcomment %}
                 </article>
             {% endfor %}
-            <div id="update_sign"></div>
         </div>
+        <template id="article">
+            <article class="content" data-group="" data-page="">
+                <div class="content_header">
+                    <img class="user_icon" src="" alt="ユーザーアイコン">
+                    <p class="user_name"></p>
+                    <img class="good" src="{% static 'images/test_icon.jpeg' %}" alt="いいね">
+                    <img class="comment" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
+                </div>
+                <section class="draw_diary">
+                    <img class="draw" src="" alt="絵日記の絵">
+                    <p class="diary"></p>
+                </section>
+            </article>
+        </template>
     {% block js %}
         <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
         {% comment %} <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script> {% endcomment %}
