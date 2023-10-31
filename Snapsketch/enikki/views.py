@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render
 from .models import EnikkiModel
@@ -15,6 +16,10 @@ def view_timeline(request):
 
 #タイムラインのajax
 def ajax_timeline(request):
+
+    groupName = str(request.POST.get('groupName'))
+    page = int(request.POST.get('page'))
+
     # グループ名+page番号より上の行を持ってくる
     data = {
         "userIconPath":{},
