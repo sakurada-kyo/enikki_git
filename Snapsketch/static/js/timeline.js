@@ -15,7 +15,7 @@ function initPaginator() {
       // for reasonable amounts of items
       if (Math.abs(scroll_pos - last_scroll)>$(window).height()*0.1) {
         last_scroll = scroll_pos;
-        $(".content").each(function(index) {
+        $(".content").each(function(i) {
           if (mostlyVisible(this)) {
             var params = "?groupName=" + $(this).attr("data-group") + "&page=" + $(this).attr("data-page");
             history.replaceState(null, null,pathname+params);
@@ -141,7 +141,7 @@ function ajax_open(lastElement){
     headers: {'X-CSRFToken': csrftoken}
   })
   .done(function(response){
-    console.log("done");
+    demo_article();
     //データがあれば追記
     if(response != null){
       console.log("ajax_response:" + response);
@@ -172,5 +172,14 @@ function add_article(data){
     article_content += article_partial;
   });
   return article_content;
+}
+
+function demo_article(){
+  console.log("demo_article");
+  const fragment = document.createDocumentFragment('tbody');
+
+  for (let i = 0; i < 2; i++) {
+    const article = document.createElement('article');
+  }
 }
 //-----------------------templateタグ複製-----------------------
