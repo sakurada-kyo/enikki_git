@@ -127,7 +127,7 @@ $.ajaxSetup({
 });
 //-----------------------CSRFトークン-----------------------
 
-//-----------------------ajax処理-----------------------
+//-----------------------タイムラインajax処理-----------------------
 function ajax_open(lastElement){
   console.log("page:"+$(lastElement).attr('data-page'));
   $.ajax({
@@ -145,6 +145,12 @@ function ajax_open(lastElement){
     $('#scroll').append(fragment);
     updates_sign();
     //データがあれば追記
+  })
+  .fail( (jqXHR, textStatus, errorThrown) => {
+    alert('Ajax通信に失敗しました。');
+    console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+    console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+    console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
   });
 }
 //-----------------------ajax処理-----------------------
@@ -240,29 +246,12 @@ document.querySelector('like').addEventListener('click', e => {
     url: url,
     type: 'POST',
     data: {
-        'groupName': $(lastElement).attr('data-group'),
-        'page': String($(lastElement).attr('data-page')),
+        //記事のID
     },
     dataType: 'json',
     headers: {'X-CSRFToken': csrftoken}
   })
   .done(function(response){
-    var fragment = demo_article(response.page);
-    $('#scroll').append(fragment);
-    updates_sign();
-    //データがあれば追記
-  });
-
-  fetch(url, {
-    method: 'POST',
-    body: `article_pk={{ article.pk }}`,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-      'X-CSRFToken': '{{ csrf_token }}',
-    },
-  }).then(response => {
-    return response.json();
-  }).then(response => {
     // いいね数を書き換える
     const counter = document.getElementById('like-count')
     counter.textContent = response.like_count
@@ -277,8 +266,41 @@ document.querySelector('like').addEventListener('click', e => {
       icon.classList.add('far')
       icon.id = 'like-icon'
     }
-  }).catch(error => {
-    console.log(error);
+  })
+  .fail( (jqXHR, textStatus, errorThrown) => {
+    alert('Ajax通信に失敗しました。');
+    console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+    console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+    console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
+  })
   });
-});
+
+//   fetch(url, {
+//     method: 'POST',
+//     body: `article_pk={{ article.pk }}`,
+//     headers: {
+//       'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+//       'X-CSRFToken': '{{ csrf_token }}',
+//     },
+//   }).then(response => {
+//     return response.json();//bodyからjsonを返す
+//   }).then(response => {
+//     // いいね数を書き換える
+//     const counter = document.getElementById('like-count')
+//     counter.textContent = response.like_count
+//     const icon = document.getElementById('like-icon')
+//     // いいねした時はハートを塗る
+//     if (response.method == 'create') {
+//       icon.classList.remove('far')
+//       icon.classList.add('fas')
+//       icon.id = 'like-icon'
+//     } else {
+//       icon.classList.remove('fas')
+//       icon.classList.add('far')
+//       icon.id = 'like-icon'
+//     }
+//   }).catch(error => {
+//     console.log(error);
+//   });
+// });
 //-----------------------いいね機能-----------------------
