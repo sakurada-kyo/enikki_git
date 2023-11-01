@@ -1,4 +1,4 @@
-window.addEventListener('load', initPaginator());
+// window.addEventListener('load', initPaginator());
 function initPaginator() {
   let pathname = location.pathname;
     $(window).scroll(function() {
@@ -42,6 +42,7 @@ function mostlyVisible(element) {
 window.addEventListener('load', loadScroll());
 function loadScroll(){
     let url = new URL(window.location.href);
+    console.log(url);
     let pathname = location.pathname;
     // console.log(pathname);
     let params = url.searchParams;
@@ -68,22 +69,20 @@ window.addEventListener('load',updates_sign());
 function updates_sign(){
   const options = {
     root: null,
-    rootMargin: "0px 0px 250px 0px", // 上 右 下 左
-    threshold: 0.1
+    rootMargin: "0px 0px 200px 0px", // 上 右 下 左
+    threshold: 0.5
   }
 
   const callback = (entries) => {
-    entries.forEach( (entry) => {
-      console.log(entry);
+      console.log(entries[0]);
       //監視対象の要素が領域内に入った場合の処理
-      if (entry.isIntersecting) {
-        alert("監視中");
+      if (entries[0].isIntersecting) {
+        console.log("監視中");
         //ajax
-        ajax_open(entry.target);
+        ajax_open(entries[0].target);
       } else { //監視対象の要素が領域外になった場合の処理
         console.log("監視してない");
       }
-    });
   }
 
   const observer = new IntersectionObserver(callback,options);
@@ -130,25 +129,22 @@ $.ajaxSetup({
 
 //-----------------------ajax処理-----------------------
 function ajax_open(lastElement){
+  console.log("page:"+$(lastElement).attr('data-page'));
   $.ajax({
     url: 'ajax_timeline/',
     type: 'POST',
     data: {
         'groupName': $(lastElement).attr('data-group'),
-        'page': $(lastElement).attr('data-page'),
+        'page': String($(lastElement).attr('data-page')),
     },
     dataType: 'json',
     headers: {'X-CSRFToken': csrftoken}
   })
   .done(function(response){
-    demo_article();
+    var fragment = demo_article(response.page);
+    $('#scroll').append(fragment);
+    updates_sign();
     //データがあれば追記
-    if(response != null){
-      console.log("ajax_response:" + response);
-    }else{
-      //最新記事なし
-      console.log("no_more");
-    }
   });
 }
 //-----------------------ajax処理-----------------------
@@ -174,12 +170,115 @@ function add_article(data){
   return article_content;
 }
 
-function demo_article(){
+function demo_article(data){
   console.log("demo_article");
-  const fragment = document.createDocumentFragment('tbody');
 
-  for (let i = 0; i < 2; i++) {
-    const article = document.createElement('article');
+  var scroll = document.querySelector("#scroll");
+  var fragment = document.createDocumentFragment();
+
+  for(var cnt=0;cnt<10;cnt++){
+    var content = document.createElement('article');
+    var contentHeader = document.createElement('div');
+    var userIcon = document.createElement('img');
+    var userName = document.createElement('p');
+    var like = document.createElement('img');
+    var comment = document.createElement('img');
+    var drawDiary = document.createElement('section');
+    var draw = document.createElement('img');
+    var diary = document.createElement('p');
+
+    userIcon.setAttribute("class","user_icon");
+    userIcon.setAttribute("src","/static/images/test_icon.jpeg");
+
+    userName.setAttribute("class","user_name");
+    userName.innerHTML = "a";
+
+    like.setAttribute("class","good");
+    like.setAttribute("src","/static/images/test_icon.jpeg");
+
+    comment.setAttribute("class","comment");
+    comment.setAttribute("src","/static/images/test_icon.jpeg");
+
+    contentHeader.setAttribute("class","content_header");
+    contentHeader.appendChild(userIcon);
+    contentHeader.appendChild(userName);
+    contentHeader.appendChild(like);
+    contentHeader.appendChild(comment);
+
+    draw.setAttribute("class","draw");
+    draw.setAttribute("src","/static/images/test_icon.jpeg");
+
+    diary.setAttribute("class","diary");
+    diary.innerHTML = "a";
+
+    drawDiary.setAttribute("class","draw_diary");
+    drawDiary.appendChild(draw);
+    drawDiary.appendChild(diary);
+
+    content.setAttribute("class","content");
+    content.setAttribute("data-group","group");
+    content.setAttribute("data-page",data);
+    content.appendChild(contentHeader);
+    content.appendChild(drawDiary);
+
+    fragment.appendChild(content); // fragmentの追加する
+
+    data++;
   }
+
+  // 最後に追加！
+  return fragment;
 }
 //-----------------------templateタグ複製-----------------------
+
+//-----------------------いいね機能-----------------------
+document.querySelector('like').addEventListener('click', e => {
+  e.preventDefault();
+  const url = '{% url "enikki:like" %}';
+
+  $.ajax({
+    url: url,
+    type: 'POST',
+    data: {
+        'groupName': $(lastElement).attr('data-group'),
+        'page': String($(lastElement).attr('data-page')),
+    },
+    dataType: 'json',
+    headers: {'X-CSRFToken': csrftoken}
+  })
+  .done(function(response){
+    var fragment = demo_article(response.page);
+    $('#scroll').append(fragment);
+    updates_sign();
+    //データがあれば追記
+  });
+
+  fetch(url, {
+    method: 'POST',
+    body: `article_pk={{ article.pk }}`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+      'X-CSRFToken': '{{ csrf_token }}',
+    },
+  }).then(response => {
+    return response.json();
+  }).then(response => {
+    // いいね数を書き換える
+    const counter = document.getElementById('like-count')
+    counter.textContent = response.like_count
+    const icon = document.getElementById('like-icon')
+    // いいねした時はハートを塗る
+    if (response.method == 'create') {
+      icon.classList.remove('far')
+      icon.classList.add('fas')
+      icon.id = 'like-icon'
+    } else {
+      icon.classList.remove('fas')
+      icon.classList.add('far')
+      icon.id = 'like-icon'
+    }
+  }).catch(error => {
+    console.log(error);
+  });
+});
+//-----------------------いいね機能-----------------------

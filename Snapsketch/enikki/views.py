@@ -16,17 +16,23 @@ def view_timeline(request):
 
 #タイムラインのajax
 def ajax_timeline(request):
+    groupName = str(request.POST.get('groupName'))# グループ名
+    page = str(request.POST.get('page'))#現在のページ番号
+    
+    pageNum = int(page) + 1#次回、始まりのページ番号
 
-    groupName = str(request.POST.get('groupName'))
-    page = int(request.POST.get('page'))
-
-    # グループ名+page番号より上の行を持ってくる
+    # グループ名+page番号より上の行を持ってくる（更新データのみ）
     data = {
-        "userIconPath":{},
-        "userName":{},
-        "drawPath":{},
-        "diary":{},
-        "groupName":{},
-        "page":{}
+        # ユーザー名
+        # ユーザーアイコン
+        # 絵
+        # 日記
+        # いいね数
+        # いいねの有無
+        "page":pageNum#次付与するページ番号
     }
     return JsonResponse(data)
+
+#いいね機能
+def ajax_like(request):
+    return 

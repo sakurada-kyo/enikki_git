@@ -15,7 +15,7 @@
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
                         <p class="user_name">{{ enikki.user_name }}</p>
-                        <img class="good" src="{% static 'images/test_icon.jpeg' %}" alt="いいね">
+                        <img class="like" src="{% static 'images/test_icon.jpeg' %}" alt="いいね">
                         <img class="comment" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
                     </div>
                     <section class="draw_diary">
@@ -25,23 +25,10 @@
                 </article>
             {% endfor %}
         </div>
-        <template id="article">
-            <article class="content" data-group="" data-page="">
-                <div class="content_header">
-                    <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
-                    <p class="user_name">a</p>
-                    <img class="good" src="{% static 'images/test_icon.jpeg' %}" alt="いいね">
-                    <img class="comment" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
-                </div>
-                <section class="draw_diary">
-                    <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
-                    <p class="diary">a</p>
-                </section>
-            </article>
-        </template>
-    {% block js %}
+{% endblock %}
+
+{% block js %}
         <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
         {% comment %} <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script> {% endcomment %}
         <script src="{% static 'js\timeline.js' %}"></script>
-    {% endblock %}
 {% endblock %}
