@@ -181,7 +181,9 @@ function demo_article(data){
     var contentHeader = document.createElement('div');
     var userIcon = document.createElement('img');
     var userName = document.createElement('p');
-    var like = document.createElement('img');
+    var like = document.createElement('div');
+    var likeBtn = document.createElement('button');
+    var likeIcon = document.createElement('i');
     var comment = document.createElement('img');
     var drawDiary = document.createElement('section');
     var draw = document.createElement('img');
@@ -193,8 +195,11 @@ function demo_article(data){
     userName.setAttribute("class","user_name");
     userName.innerHTML = "a";
 
-    like.setAttribute("class","good");
-    like.setAttribute("src","/static/images/test_icon.jpeg");
+    likeBtn.setAttribute("id","ajax-like");
+
+    likeIcon.setAttribute("class","like");
+
+    like.setAttribute("class","like");
 
     comment.setAttribute("class","comment");
     comment.setAttribute("src","/static/images/test_icon.jpeg");
@@ -232,37 +237,21 @@ function demo_article(data){
 //-----------------------templateタグ複製-----------------------
 
 //-----------------------いいね機能-----------------------
-document.querySelector('like').addEventListener('click', e => {
+document.querySelector('.like').addEventListener('click', e => {
+  console.log("click");
   e.preventDefault();
-  const url = '{% url "enikki:like" %}';
 
   $.ajax({
-    url: url,
+    url: 'ajax_like/',
     type: 'POST',
     data: {
-        'groupName': $(lastElement).attr('data-group'),
-        'page': String($(lastElement).attr('data-page')),
+      'articleId':'',
+      'userId':'',
     },
     dataType: 'json',
     headers: {'X-CSRFToken': csrftoken}
   })
   .done(function(response){
-    var fragment = demo_article(response.page);
-    $('#scroll').append(fragment);
-    updates_sign();
-    //データがあれば追記
-  });
-
-  fetch(url, {
-    method: 'POST',
-    body: `article_pk={{ article.pk }}`,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-      'X-CSRFToken': '{{ csrf_token }}',
-    },
-  }).then(response => {
-    return response.json();
-  }).then(response => {
     // いいね数を書き換える
     const counter = document.getElementById('like-count')
     counter.textContent = response.like_count
@@ -276,9 +265,40 @@ document.querySelector('like').addEventListener('click', e => {
       icon.classList.remove('fas')
       icon.classList.add('far')
       icon.id = 'like-icon'
-    }
-  }).catch(error => {
-    console.log(error);
+    }})
+    // Ajax通信が失敗したら発動
+    .fail( (jqXHR, textStatus, errorThrown) => {
+      alert('Ajax通信に失敗しました。');
+      console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+      console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+      console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
+    });
   });
-});
+//   fetch(url, {
+//     method: 'POST',
+//     body: `article_pk={{ article.pk }}`,
+//     headers: {
+//       'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+//       'X-CSRFToken': '{{ csrf_token }}',
+//     },
+//   }).then(response => {
+//     return response.json();
+//   }).then(response => {
+//     // いいね数を書き換える
+//     const counter = document.getElementById('like-count')
+//     counter.textContent = response.like_count
+//     const icon = document.getElementById('like-icon')
+//     // いいねした時はハートを塗る
+//     if (response.method == 'create') {
+//       icon.classList.remove('far')
+//       icon.classList.add('fas')
+//       icon.id = 'like-icon'
+//     } else {
+//       icon.classList.remove('fas')
+//       icon.classList.add('far')
+//       icon.id = 'like-icon'
+//     }
+//   }).catch(error => {
+//     console.log(error);
+//   });
 //-----------------------いいね機能-----------------------

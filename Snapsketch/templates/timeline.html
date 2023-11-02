@@ -15,7 +15,21 @@
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
                         <p class="user_name">{{ enikki.user_name }}</p>
-                        <img class="like" src="{% static 'images/test_icon.jpeg' %}" alt="いいね">
+                        <div class="like">
+                            {% if is_user_liked %}
+                            <button type="button" id="ajax-like" style="border:none;background:none">
+                            <!-- すでにいいねしている時はfasクラス -->
+                            <i class="fas fa-heart text-danger" id="like-icon"></i>
+                            </button>
+                            {% else %}
+                            <button type="button" id="ajax-like" style="border:none;background:none">
+                            <!-- いいねしていないときはfarクラス -->
+                            <i class="far fa-heart text-danger" id="like-icon"></i>
+                            </button>
+                            {% endif %}
+                            <!-- いいねの数 -->
+                            <span id="like-count">{{ like_count }}</span>
+                        </div>
                         <img class="comment" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
                     </div>
                     <section class="draw_diary">
