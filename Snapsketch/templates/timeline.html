@@ -17,12 +17,12 @@
                         <p class="user_name">{{ enikki.user_name }}</p>
                         <div class="like">
                             {% if is_user_liked %}
-                            <button type="button" id="ajax-like" style="border:none;background:none">
+                            <button type="button" id="ajax-like">
                             <!-- すでにいいねしている時はfasクラス -->
                             <i class="fas fa-heart text-danger" id="like-icon"></i>
                             </button>
                             {% else %}
-                            <button type="button" id="ajax-like" style="border:none;background:none">
+                            <button type="button" id="ajax-like">
                             <!-- いいねしていないときはfarクラス -->
                             <i class="far fa-heart text-danger" id="like-icon"></i>
                             </button>

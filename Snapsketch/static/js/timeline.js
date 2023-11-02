@@ -127,7 +127,7 @@ $.ajaxSetup({
 });
 //-----------------------CSRFトークン-----------------------
 
-//-----------------------ajax処理-----------------------
+//-----------------------タイムラインajax処理-----------------------
 function ajax_open(lastElement){
   console.log("page:"+$(lastElement).attr('data-page'));
   $.ajax({
@@ -145,6 +145,12 @@ function ajax_open(lastElement){
     $('#scroll').append(fragment);
     updates_sign();
     //データがあれば追記
+  })
+  .fail( (jqXHR, textStatus, errorThrown) => {
+    alert('Ajax通信に失敗しました。');
+    console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+    console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+    console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
   });
 }
 //-----------------------ajax処理-----------------------
@@ -237,53 +243,21 @@ function demo_article(data){
 //-----------------------templateタグ複製-----------------------
 
 //-----------------------いいね機能-----------------------
-document.querySelector('.like').addEventListener('click', e => {
-  console.log("click");
-  e.preventDefault();
+// document.querySelector('.like').addEventListener('click', e => {
+//   console.log("click");
+//   e.preventDefault();
 
-  $.ajax({
-    url: 'ajax_like/',
-    type: 'POST',
-    data: {
-      'articleId':'',
-      'userId':'',
-    },
-    dataType: 'json',
-    headers: {'X-CSRFToken': csrftoken}
-  })
-  .done(function(response){
-    // いいね数を書き換える
-    const counter = document.getElementById('like-count')
-    counter.textContent = response.like_count
-    const icon = document.getElementById('like-icon')
-    // いいねした時はハートを塗る
-    if (response.method == 'create') {
-      icon.classList.remove('far')
-      icon.classList.add('fas')
-      icon.id = 'like-icon'
-    } else {
-      icon.classList.remove('fas')
-      icon.classList.add('far')
-      icon.id = 'like-icon'
-    }})
-    // Ajax通信が失敗したら発動
-    .fail( (jqXHR, textStatus, errorThrown) => {
-      alert('Ajax通信に失敗しました。');
-      console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-      console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-      console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
-    });
-  });
-//   fetch(url, {
-//     method: 'POST',
-//     body: `article_pk={{ article.pk }}`,
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-//       'X-CSRFToken': '{{ csrf_token }}',
+//   $.ajax({
+//     url: 'ajax_like/',
+//     type: 'POST',
+//     data: {
+//       // 'articleId':'',
+//       // 'userId':'',
 //     },
-//   }).then(response => {
-//     return response.json();
-//   }).then(response => {
+//     dataType: 'json',
+//     headers: {'X-CSRFToken': csrftoken}
+//   })
+//   .done(function(response){
 //     // いいね数を書き換える
 //     const counter = document.getElementById('like-count')
 //     counter.textContent = response.like_count
@@ -297,8 +271,15 @@ document.querySelector('.like').addEventListener('click', e => {
 //       icon.classList.remove('fas')
 //       icon.classList.add('far')
 //       icon.id = 'like-icon'
-//     }
-//   }).catch(error => {
-//     console.log(error);
+//     }})
+//     // Ajax通信が失敗したら発動
+//     .fail( (jqXHR, textStatus, errorThrown) => {
+//       alert('Ajax通信に失敗しました。');
+//       console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+//       console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+//       console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
+//     });
 //   });
+
+
 //-----------------------いいね機能-----------------------
