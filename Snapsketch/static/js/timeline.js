@@ -141,7 +141,7 @@ function ajax_open(lastElement){
     headers: {'X-CSRFToken': csrftoken}
   })
   .done(function(response){
-    var fragment = demo_article(response.page);
+    var fragment = add_article(response);
     $('#scroll').append(fragment);
     updates_sign();
     //データがあれば追記
@@ -157,28 +157,9 @@ function ajax_open(lastElement){
 
 //-----------------------templateタグ複製-----------------------
 function add_article(data){
-  const article = document.getElementById("article");
-  var article_content;
-  data.forEach(element => {
-    //複製する
-    var article_partial = article.content.cloneNode(true);
-
-    //複製した要素にデータ挿入
-    article_partial.querySelector(".content").setAttribute('data-group', element.groupName);
-    article_partial.querySelector(".content").setAttribute('data-page', element.page);
-    article_partial.querySelector(".user_icon").setAttribute('src', element.userIconPath);
-    article_partial.querySelector(".user_name").innerHTML = element.userName;
-    article_partial.querySelector(".draw").setAttribute('src', element.drawPath);
-    article_partial.querySelector(".diary").innerHTML = element.diary;
-
-    article_content += article_partial;
-  });
-  return article_content;
-}
-
-function demo_article(data){
   console.log("demo_article");
-
+  var page = data.page;
+  var isUserLiked = data.isUserLiked;
   var scroll = document.querySelector("#scroll");
   var fragment = document.createDocumentFragment();
 
@@ -190,6 +171,7 @@ function demo_article(data){
     var like = document.createElement('div');
     var likeBtn = document.createElement('button');
     var likeIcon = document.createElement('i');
+    var likeCount = document.createElement('span');
     var comment = document.createElement('img');
     var drawDiary = document.createElement('section');
     var draw = document.createElement('img');
@@ -201,11 +183,21 @@ function demo_article(data){
     userName.setAttribute("class","user_name");
     userName.innerHTML = "a";
 
-    likeBtn.setAttribute("id","ajax-like");
+    likeBtn.setAttribute("class","ajax-like");
 
-    likeIcon.setAttribute("class","like");
+    //すでにいいねしているか
+    if(data.isUserLiked){
+      likeIcon.setAttribute("class","fas fa-heart text-danger");
+    }else{
+      likeIcon.setAttribute("class","far fa-heart text-danger");
+    }
+
+    likeCount.setAttribute("id","like-count");
+    likeCount.innerHTML = "1";
 
     like.setAttribute("class","like");
+    like.appendChild(likeIcon);
+    like.appendChild(likeCount);
 
     comment.setAttribute("class","comment");
     comment.setAttribute("src","/static/images/test_icon.jpeg");
@@ -228,13 +220,13 @@ function demo_article(data){
 
     content.setAttribute("class","content");
     content.setAttribute("data-group","group");
-    content.setAttribute("data-page",data);
+    content.setAttribute("data-page",page);
     content.appendChild(contentHeader);
     content.appendChild(drawDiary);
 
     fragment.appendChild(content); // fragmentの追加する
 
-    data++;
+    page++;
   }
 
   // 最後に追加！
@@ -243,43 +235,36 @@ function demo_article(data){
 //-----------------------templateタグ複製-----------------------
 
 //-----------------------いいね機能-----------------------
-// document.querySelector('.like').addEventListener('click', e => {
-//   console.log("click");
-//   e.preventDefault();
+document.querySelector('.like').addEventListener('click', e => {
+  alert("click");
+  e.preventDefault();
 
-//   $.ajax({
-//     url: 'ajax_like/',
-//     type: 'POST',
-//     data: {
-//       // 'articleId':'',
-//       // 'userId':'',
-//     },
-//     dataType: 'json',
-//     headers: {'X-CSRFToken': csrftoken}
-//   })
-//   .done(function(response){
-//     // いいね数を書き換える
-//     const counter = document.getElementById('like-count')
-//     counter.textContent = response.like_count
-//     const icon = document.getElementById('like-icon')
-//     // いいねした時はハートを塗る
-//     if (response.method == 'create') {
-//       icon.classList.remove('far')
-//       icon.classList.add('fas')
-//       icon.id = 'like-icon'
-//     } else {
-//       icon.classList.remove('fas')
-//       icon.classList.add('far')
-//       icon.id = 'like-icon'
-//     }})
-//     // Ajax通信が失敗したら発動
-//     .fail( (jqXHR, textStatus, errorThrown) => {
-//       alert('Ajax通信に失敗しました。');
-//       console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-//       console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-//       console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
-//     });
-//   });
-
-
+  $.ajax({
+    url: 'ajax_like/',
+    type: 'POST',
+    data: {
+      'enikkiId':'xxxxx',
+      'userId':'uuuuu',
+    },
+    dataType: 'json',
+    headers: {'X-CSRFToken': csrftoken}
+  })
+  .done(function(response){
+    // いいね数を書き換える
+    // いいねした時はハートを塗る
+    if (response.method == 'create') {
+      e.classList.remove('far')
+      e.classList.add('fas')
+    } else {
+      e.classList.remove('fas')
+      e.classList.add('far')
+    }})
+    // Ajax通信が失敗したら発動
+    .fail( (jqXHR, textStatus, errorThrown) => {
+      alert('Ajax通信に失敗しました。');
+      console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+      console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+      console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
+    });
+  });
 //-----------------------いいね機能-----------------------

@@ -10,21 +10,21 @@
             <img class="group_icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
         </div>
         <div id="scroll">
-            {% for enikki in enikki_list %}
+            {% for enikki in EnikkiModel %}
                 <article class="content" data-group="{{ enikki.group_name }}" data-page="{{ enikki.page_num }}">
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
                         <p class="user_name">{{ enikki.user_name }}</p>
                         <div class="like">
                             {% if is_user_liked %}
-                            <button type="button" id="ajax-like">
+                            <button type="button" class="ajax-like">
                             <!-- すでにいいねしている時はfasクラス -->
-                            <i class="fas fa-heart text-danger" id="like-icon"></i>
+                            <i class="fas fa-heart fa-4x text-danger" style="color:#e54747;"></i>
                             </button>
                             {% else %}
-                            <button type="button" id="ajax-like">
+                            <button type="button" class="ajax-like">
                             <!-- いいねしていないときはfarクラス -->
-                            <i class="far fa-heart text-danger" id="like-icon"></i>
+                            <i class="far fa-heart fa-4x text-danger" style="color:#ffffff;"></i>
                             </button>
                             {% endif %}
                             <!-- いいねの数 -->

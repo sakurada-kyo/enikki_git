@@ -46,6 +46,15 @@ p{
 .like{
     float: left;
     margin-left:600px;
+    margin-top:9px;
+}
+
+.ajax-like{
+    background-color:transparent;
+    border:none;
+    cursor: pointer;
+    outline:none;
+    padding:0px;
 }
 
 .comment{
