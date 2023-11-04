@@ -45,8 +45,13 @@ p{
 
 .like{
     float: left;
-    margin-left:600px;
-    margin-top:9px;
+    margin-left:390px;
+    margin-right:10px;
+}
+
+.like-count{
+    color:white;
+    font-size: 30px;
 }
 
 .ajax-like{

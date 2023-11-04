@@ -19,16 +19,16 @@
                             {% if is_user_liked %}
                             <button type="button" class="ajax-like">
                             <!-- すでにいいねしている時はfasクラス -->
-                            <i class="fas fa-heart fa-4x text-danger" style="color:#e54747;"></i>
+                            <i class="fas fa-heart fa-23 text-danger" style="color:#e54747;"></i>
                             </button>
                             {% else %}
                             <button type="button" class="ajax-like">
                             <!-- いいねしていないときはfarクラス -->
-                            <i class="far fa-heart fa-4x text-danger" style="color:#ffffff;"></i>
+                            <i class="far fa-heart fa-3x text-danger" style="color:#ffffff;"></i>
                             </button>
                             {% endif %}
                             <!-- いいねの数 -->
-                            <span id="like-count">{{ like_count }}</span>
+                            <span class="like-count">{{ enikki.like_count }}</span>
                         </div>
                         <img class="comment" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
                     </div>

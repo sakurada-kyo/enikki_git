@@ -11,7 +11,7 @@ def view_timeline(request):
         "EnikkiModel":model,
         "currentPath":request.path,
         "isUserLiked":"",#ユーザーがいいねしているかどうか
-        "likeCount":"",#いいね数
+        # "likeCount":"1",#いいね数
     }
     return render(request,'timeline.html',context)
 
@@ -29,7 +29,7 @@ def ajax_timeline(request):
         # 絵
         # 日記
         # いいね数
-        "isUserLiked":"",# いいねの有無
+        "isUserLiked":"false",# いいねの有無
         "page":pageNum, # 次付与するページ番号
     }
     return JsonResponse(data)

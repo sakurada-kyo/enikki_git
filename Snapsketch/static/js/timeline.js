@@ -192,7 +192,7 @@ function add_article(data){
       likeIcon.setAttribute("class","far fa-heart text-danger");
     }
 
-    likeCount.setAttribute("id","like-count");
+    likeCount.setAttribute("class","like-count");
     likeCount.innerHTML = "1";
 
     like.setAttribute("class","like");
@@ -236,7 +236,8 @@ function add_article(data){
 
 //-----------------------いいね機能-----------------------
 document.querySelector('.like').addEventListener('click', e => {
-  alert("click");
+  alert("click¥n要素:"+e.target);
+  console.log()
   e.preventDefault();
 
   $.ajax({
@@ -253,11 +254,11 @@ document.querySelector('.like').addEventListener('click', e => {
     // いいね数を書き換える
     // いいねした時はハートを塗る
     if (response.method == 'create') {
-      e.classList.remove('far')
-      e.classList.add('fas')
+      e.target.classList.remove('far')
+      e.target.classList.add('fas')
     } else {
-      e.classList.remove('fas')
-      e.classList.add('far')
+      e.target.classList.remove('fas')
+      e.target.classList.add('far')
     }})
     // Ajax通信が失敗したら発動
     .fail( (jqXHR, textStatus, errorThrown) => {
