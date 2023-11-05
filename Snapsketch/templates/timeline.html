@@ -6,8 +6,20 @@
 {% endblock %}
 
 {% block content %}
-        <div id="group_nav">
-            <img class="group_icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
+        <div id="popup-wrapper">
+            <div id="popup-inside">
+                <div id="close">x</div>
+                <form method="post" id="group-form" action="#">
+                    {% csrf_token %}
+                    <p>グループ作成</p>
+                    <input type="text" id="group-name"><br>
+                    <input type="submit" name="group-name" value="作成">
+                </form>
+            </div>
+        </div>
+        <div id="group-nav">
+            <img class="group-icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
+            <i class="fa-solid fa-plus"></i>
         </div>
         <div id="scroll">
             {% for enikki in EnikkiModel %}
@@ -19,18 +31,21 @@
                             {% if is_user_liked %}
                             <button type="button" class="ajax-like">
                             <!-- すでにいいねしている時はfasクラス -->
-                            <i class="fas fa-heart fa-23 text-danger" style="color:#e54747;"></i>
+                            <i class="fas fa-heart text-danger"></i>
                             </button>
                             {% else %}
                             <button type="button" class="ajax-like">
                             <!-- いいねしていないときはfarクラス -->
-                            <i class="far fa-heart fa-3x text-danger" style="color:#ffffff;"></i>
+                            <i class="far fa-heart text-danger"></i>
                             </button>
                             {% endif %}
                             <!-- いいねの数 -->
                             <span class="like-count">{{ enikki.like_count }}</span>
                         </div>
-                        <img class="comment" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
+                        <div class="comment"><!--グループ名とページ番号送信-->
+                            <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?group=&page="></a>
+                            <span class="comment-count">0</span>
+                        </div>
                     </div>
                     <section class="draw_diary">
                         <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">

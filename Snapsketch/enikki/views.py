@@ -10,7 +10,7 @@ def view_timeline(request):
     context = {
         "EnikkiModel":model,
         "currentPath":request.path,
-        "isUserLiked":"",#ユーザーがいいねしているかどうか
+        "isUserLiked":"false",#ユーザーがいいねしているかどうか
         # "likeCount":"1",#いいね数
     }
     return render(request,'timeline.html',context)
@@ -29,12 +29,12 @@ def ajax_timeline(request):
         # 絵
         # 日記
         # いいね数
-        "isUserLiked":"false",# いいねの有無
+        "isUserLiked":False,# いいねの有無
         "page":pageNum, # 次付与するページ番号
     }
     return JsonResponse(data)
 
-# #いいね機能
+# いいね機能
 def ajax_like(request):
     print("ajax_like")
     enikkiId = request.POST.get('enikkiId')
@@ -62,4 +62,31 @@ def ajax_like(request):
 
     data['like_count'] = 0
 
+    return JsonResponse(data)
+
+# コメントページ表示
+def view_comment(request):
+       
+    groupName = request.GET["group"]
+    page = str(request.GET["page"])
+    
+    
+    
+    context = {}
+    # DBからの情報
+    # ユーザー名
+    # アイコン
+    # コメント数
+    # いいね数
+    # 絵日記
+    # コメントユーザー名
+    # コメントユーザーアイコン
+    # コメント
+    
+    return render(request,'comment.html',context);
+
+# グループ新規作成
+def ajax_group(request):
+    groupName = request.POST.get('groupName')
+    data = {}
     return JsonResponse(data)

@@ -157,11 +157,11 @@ function ajax_open(lastElement){
 
 //-----------------------templateタグ複製-----------------------
 function add_article(data){
-  console.log("demo_article");
   var page = data.page;
   var isUserLiked = data.isUserLiked;
-  var scroll = document.querySelector("#scroll");
   var fragment = document.createDocumentFragment();
+
+  console.log("isUserLiked:"+isUserLiked);
 
   for(var cnt=0;cnt<10;cnt++){
     var content = document.createElement('article');
@@ -172,7 +172,9 @@ function add_article(data){
     var likeBtn = document.createElement('button');
     var likeIcon = document.createElement('i');
     var likeCount = document.createElement('span');
-    var comment = document.createElement('img');
+    var comment = document.createElement('div');
+    var commentIcon = document.createElement('i');
+    var commentCount = document.createElement('span');
     var drawDiary = document.createElement('section');
     var draw = document.createElement('img');
     var diary = document.createElement('p');
@@ -183,24 +185,31 @@ function add_article(data){
     userName.setAttribute("class","user_name");
     userName.innerHTML = "a";
 
-    likeBtn.setAttribute("class","ajax-like");
-
     //すでにいいねしているか
-    if(data.isUserLiked){
+    if(isUserLiked){
       likeIcon.setAttribute("class","fas fa-heart text-danger");
     }else{
       likeIcon.setAttribute("class","far fa-heart text-danger");
     }
 
+    likeBtn.setAttribute("class","ajax-like");
+    likeBtn.appendChild(likeIcon);
+
     likeCount.setAttribute("class","like-count");
-    likeCount.innerHTML = "1";
+    likeCount.innerHTML = "0";
 
     like.setAttribute("class","like");
-    like.appendChild(likeIcon);
+    like.appendChild(likeBtn);
     like.appendChild(likeCount);
 
+    commentIcon.setAttribute("class","fa-regular fa-comment");
+
+    commentCount.setAttribute("class","comment-count");
+    commentCount.innerHTML = "0";
+
     comment.setAttribute("class","comment");
-    comment.setAttribute("src","/static/images/test_icon.jpeg");
+    comment.appendChild(commentIcon);
+    comment.appendChild(commentCount);
 
     contentHeader.setAttribute("class","content_header");
     contentHeader.appendChild(userIcon);
@@ -235,7 +244,7 @@ function add_article(data){
 //-----------------------templateタグ複製-----------------------
 
 //-----------------------いいね機能-----------------------
-document.querySelector('.like').addEventListener('click', e => {
+document.querySelector('.ajax-like').addEventListener('click', e => {
   alert("click¥n要素:"+e.target);
   console.log()
   e.preventDefault();
@@ -269,3 +278,45 @@ document.querySelector('.like').addEventListener('click', e => {
     });
   });
 //-----------------------いいね機能-----------------------
+
+//-----------------------コメント機能-----------------------
+
+//-----------------------コメント機能-----------------------
+
+//-----------------------グループ追加機能-----------------------
+window.addEventListener('load',addGroup());
+function addGroup(){
+  const plusBtn = document.querySelector('.fa-plus');
+  const popupWrapper = document.getElementById('popup-wrapper');
+  const close = document.getElementById('close');
+
+  // ボタンをクリックしたときにポップアップを表示させる
+  plusBtn.addEventListener('click', () => {
+    popupWrapper.style.display = "block";
+  });
+
+  // ポップアップの外側又は「x」のマークをクリックしたときポップアップを閉じる
+  popupWrapper.addEventListener('click', e => {
+    if (e.target.id === popupWrapper.id || e.target.id === close.id) {
+      popupWrapper.style.display = 'none';
+    }
+  });
+
+  $('#group-form').on('submit', function(e) {
+    e.preventDefault();
+
+    $.ajax({
+        'url': 'creategroup/',
+        'type': 'POST',
+        'data': {
+          'groupName':$('#group-name').val(),
+        },
+        'dataType': 'json'
+    })
+    .done(function(response){
+      
+    });
+});
+
+}
+//-----------------------グループ追加機能-----------------------
