@@ -313,10 +313,32 @@ function addGroup(){
         },
         'dataType': 'json'
     })
-    .done(function(response){
-      
+    .done(function(response) {
+      const fragment = addGroup(response);
+      $('#group-nav :nth-of-type(2)').append(fragment);
+    })
+    // Ajax通信が失敗したら発動
+    .fail( (jqXHR, textStatus, errorThrown) => {
+      alert('Ajax通信に失敗しました。');
+      console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+      console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+      console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
     });
 });
+
+}
+
+function addGroup(data) {
+  const groupNav = document.getElementById("group-nav");
+  const groupIcon = document.createElement("img");
+  const fragment = document.createDocumentFragment();
+
+  groupIcon.setAttribute("class","group-icon");
+  groupIcon.setAttribute("src","");
+
+  fragment.appendChild(groupIcon);
+
+  return fragment;
 
 }
 //-----------------------グループ追加機能-----------------------
