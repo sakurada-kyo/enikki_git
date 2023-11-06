@@ -87,6 +87,13 @@ def view_comment(request):
 
 # グループ新規作成
 def ajax_group(request):
+    print("ajax_group")
     groupName = request.POST.get('groupName')
-    data = {}
+    reqFile = request.FILES['imageFile']
+    reqFileName = reqFile.name
+    # Group.objects.create(グループ名とグループアイコン)
+
+    data = {
+        'filePath':reqFileName
+    }
     return JsonResponse(data)

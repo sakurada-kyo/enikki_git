@@ -284,8 +284,8 @@ document.querySelector('.ajax-like').addEventListener('click', e => {
 //-----------------------コメント機能-----------------------
 
 //-----------------------グループ追加機能-----------------------
-window.addEventListener('load',addGroup());
-function addGroup(){
+window.addEventListener('load',showPopup());
+function showPopup(){
   const plusBtn = document.querySelector('.fa-plus');
   const popupWrapper = document.getElementById('popup-wrapper');
   const close = document.getElementById('close');
@@ -304,13 +304,14 @@ function addGroup(){
 
   $('#group-form').on('submit', function(e) {
     e.preventDefault();
+    console.log('送信');
+
+    var formData = new FormData($(this).get(0));
 
     $.ajax({
-        'url': 'creategroup/',
-        'type': 'POST',
-        'data': {
-          'groupName':$('#group-name').val(),
-        },
+        'url': $(this).prop('action'),
+        'type': $(this).prop('method'),
+        'data': formData,
         'dataType': 'json'
     })
     .done(function(response) {
@@ -325,16 +326,16 @@ function addGroup(){
       console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
     });
 });
-
 }
 
 function addGroup(data) {
   const groupNav = document.getElementById("group-nav");
   const groupIcon = document.createElement("img");
   const fragment = document.createDocumentFragment();
+  const groupIconPath = data.filePath;
 
   groupIcon.setAttribute("class","group-icon");
-  groupIcon.setAttribute("src","");
+  groupIcon.setAttribute("src",groupIconPath);
 
   fragment.appendChild(groupIcon);
 
