@@ -9,4 +9,7 @@ urlpatterns = [
     path('timeline/ajax_like/', views.ajax_like, name='ajax_like'),
     path('timeline/creategroup/', views.ajax_group, name='ajax_group'),
     path('comment/', views.view_comment, name='comment'),
+    path('login/', views.view_index, name='login'),
+    path('account/', views.view_account, name='account'),
+    path('complete/', views.view_complete, name='complete'),
 ]
