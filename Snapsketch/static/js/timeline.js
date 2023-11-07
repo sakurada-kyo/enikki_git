@@ -306,14 +306,18 @@ function showPopup(){
     e.preventDefault();
     console.log('送信');
 
-    var formData = new FormData($(this).get(0));
-
+    var formData = new FormData($('#group-form').get(0));
+    if(!formData){
+      console.log("this:"+$(this))
+      console.log(formData)
+    }
     $.ajax({
         'url': $(this).prop('action'),
         'type': $(this).prop('method'),
         'data': formData,
         'dataType': 'json',
         'processData': false,
+        'contentType': false,
     })
     .done(function(response) {
       const fragment = addGroup(response);

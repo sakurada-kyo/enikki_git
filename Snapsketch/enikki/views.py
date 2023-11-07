@@ -89,6 +89,7 @@ def ajax_group(request):
     groupName = request.POST.get('groupName')
     reqFile = request.FILES['imageFile']
     reqFileName = reqFile.name
+    print(reqFile.name)
     # Group.objects.create(グループ名とグループアイコン)
 
     data = {
