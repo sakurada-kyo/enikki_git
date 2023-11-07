@@ -312,7 +312,8 @@ function showPopup(){
         'url': $(this).prop('action'),
         'type': $(this).prop('method'),
         'data': formData,
-        'dataType': 'json'
+        'dataType': 'json',
+        'processData': false,
     })
     .done(function(response) {
       const fragment = addGroup(response);

@@ -66,12 +66,10 @@ def ajax_like(request):
 
 # コメントページ表示
 def view_comment(request):
-       
+
     groupName = request.GET["group"]
     page = str(request.GET["page"])
-    
-    
-    
+
     context = {}
     # DBからの情報
     # ユーザー名
@@ -82,7 +80,7 @@ def view_comment(request):
     # コメントユーザー名
     # コメントユーザーアイコン
     # コメント
-    
+
     return render(request,'comment.html',context);
 
 # グループ新規作成
