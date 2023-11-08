@@ -12,15 +12,23 @@ class EnikkiModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Like(models.Model):
-        user_id = models.CharField(null=False,max_length=100)
-        enikki_id = models.CharField(null=False,max_length=100)
+    user_id = models.CharField(null=False,max_length=100)
+    enikki_id = models.CharField(null=False,max_length=100)
 
-        class Meta:
-            constraints = [
-                #複合ユニーク制約
-                models.UniqueConstraint(fields=['user_id', 'enikki_id'], name='unique_like')
-            ]
+    class Meta:
+        constraints = [
+             #複合ユニーク制約
+            models.UniqueConstraint(fields=['user_id', 'enikki_id'], name='unique_like')
+        ]
 
-        @classmethod
-        def check_duplicate(cls, userId: str, enikkiId: str) -> bool:
-            return cls.objects.filter(user_id=userId, enikki_id=enikkiId).exists()
+    @classmethod
+    def check_duplicate(cls, userId: str, enikkiId: str) -> bool:
+        return cls.objects.filter(user_id=userId, enikki_id=enikkiId).exists()
+
+class Img(models.Model):
+    img_id = models.CharField(primary_key=True,null=False,max_length=100)
+    img = models.ImageField(upload_to='img')
+    
+    @classmethod
+    def check_duplicate(cls, imgId: str) -> bool:
+        return cls.objects.filter(img_id=imgId).exists()

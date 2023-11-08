@@ -1,7 +1,8 @@
 import json
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import get_object_or_404, render
-from .models import EnikkiModel,Like
+from .models import EnikkiModel,Like,Img
+from django.shortcuts import render
 
 # タイムライン画面表示
 def view_timeline(request):
@@ -81,18 +82,22 @@ def view_comment(request):
     # コメントユーザーアイコン
     # コメント
 
-    return render(request,'comment.html',context);
+    return render(request,'comment.html',context)
 
 # グループ新規作成
 def ajax_group(request):
     print("ajax_group")
     groupName = request.POST.get('groupName')
     reqFile = request.FILES['imageFile']
-    reqFileName = reqFile.name
+    reqFileName = '/media/img/'+reqFile.name
     print(reqFile.name)
-    # Group.objects.create(グループ名とグループアイコン)
+    chkFlg = Img.check_duplicate('f')
+    print(chkFlg)
+    if not chkFlg:
+        Img.objects.create(img_id='f',img=reqFile)
 
     data = {
         'filePath':reqFileName
     }
+
     return JsonResponse(data)

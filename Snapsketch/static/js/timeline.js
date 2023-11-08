@@ -320,8 +320,10 @@ function showPopup(){
         'contentType': false,
     })
     .done(function(response) {
-      const fragment = addGroup(response);
-      $('#group-nav :nth-of-type(2)').append(fragment);
+      console.log(response)
+        const fragment = addGroup(response);
+        // $('#group-nav:nth-last-child(2)').append(fragment);
+        $('#group-nav .group-icon:last').after(fragment);
     })
     // Ajax通信が失敗したら発動
     .fail( (jqXHR, textStatus, errorThrown) => {
@@ -334,10 +336,13 @@ function showPopup(){
 }
 
 function addGroup(data) {
+  console.log("addGroup");
   const groupNav = document.getElementById("group-nav");
   const groupIcon = document.createElement("img");
   const fragment = document.createDocumentFragment();
   const groupIconPath = data.filePath;
+
+  console.log(groupIconPath);
 
   groupIcon.setAttribute("class","group-icon");
   groupIcon.setAttribute("src",groupIconPath);
