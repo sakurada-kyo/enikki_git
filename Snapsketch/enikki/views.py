@@ -101,3 +101,9 @@ def ajax_group(request):
     }
 
     return JsonResponse(data)
+
+def view_canvas(request):
+    
+    context = {}
+    
+    return render(request,'canvas.html',context)

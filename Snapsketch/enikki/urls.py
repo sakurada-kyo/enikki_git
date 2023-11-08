@@ -9,5 +9,5 @@ urlpatterns = [
     path('timeline/ajax_like/', views.ajax_like, name='ajax_like'),
     path('timeline/creategroup/', views.ajax_group, name='ajax_group'),
     path('timeline/comment/', views.view_comment, name='comment'),
-    
+    path('canvas/', views.view_canvas, name='canvas'),
 ]
