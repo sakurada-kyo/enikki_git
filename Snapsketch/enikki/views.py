@@ -40,9 +40,12 @@ def ajax_like(request):
     print("ajax_like")
     enikkiId = request.POST.get('enikkiId')
     userId = request.POST.get('userId')
+    likeCount = request.POST.get('likeCount')
 
-    print("enikkiId:"+enikkiId)
-    print("userId:"+userId)
+    if likeCount.isdigit():
+        likeCount = int(likeCount)
+    else :
+        print("likeCount"+likeCount)
 
     data = {}
 
@@ -57,11 +60,14 @@ def ajax_like(request):
     if isLike:
         like.delete()
         data['method'] = 'delete'
+        likeCount -= 1
     else:
         like.create(user_id=userId,enikki_id=enikki)
         data['method'] = 'create'
+        likeCount += 1
 
-    data['like_count'] = 0
+    EnikkiModel.objects.create(like_count=likeCount)
+    data['like_count'] = likeCount
 
     return JsonResponse(data)
 
@@ -103,7 +109,7 @@ def ajax_group(request):
     return JsonResponse(data)
 
 def view_canvas(request):
-    
+
     context = {}
-    
+
     return render(request,'canvas.html',context)

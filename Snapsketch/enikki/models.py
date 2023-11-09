@@ -28,7 +28,7 @@ class Like(models.Model):
 class Img(models.Model):
     img_id = models.CharField(primary_key=True,null=False,max_length=100)
     img = models.ImageField(upload_to='img')
-    
+
     @classmethod
     def check_duplicate(cls, imgId: str) -> bool:
         return cls.objects.filter(img_id=imgId).exists()

@@ -245,8 +245,8 @@ function add_article(data){
 
 //-----------------------いいね機能-----------------------
 document.querySelector('.ajax-like').addEventListener('click', e => {
-  alert("click¥n要素:"+e.target);
-  console.log()
+  var parent = e.currentTarget;
+  var likeCount = parent.nextElementSibling.innerHTML;
   e.preventDefault();
 
   $.ajax({
@@ -255,6 +255,7 @@ document.querySelector('.ajax-like').addEventListener('click', e => {
     data: {
       'enikkiId':'xxxxx',
       'userId':'uuuuu',
+      'likeCount':likeCount,
     },
     dataType: 'json',
     headers: {'X-CSRFToken': csrftoken}
@@ -307,10 +308,11 @@ function showPopup(){
     console.log('送信');
 
     var formData = new FormData($('#group-form').get(0));
-    if(!formData){
-      console.log("this:"+$(this))
-      console.log(formData)
+    
+    if(formData != null){
+      console.log("form-data");
     }
+
     $.ajax({
         'url': $(this).prop('action'),
         'type': $(this).prop('method'),
