@@ -1,0 +1,81 @@
+body{
+    width: 1920px;
+}
+
+#draw_nav{
+    float:left;
+    width: 15%;
+}
+
+#color_nav{
+    padding: 0;
+}
+
+#draw_nav ul li{
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+main{
+    float: right;
+    margin:90px 140px;
+}
+
+body{
+    text-align: center;
+}
+
+.cbox{
+    margin-top:90px;
+    background-color: white;
+    /* width: 250px; */
+}
+
+#color{
+    font-weight: bold;
+    text-align: center;
+    border-style: none;
+    width: 280px;
+}
+
+.farbtastic {
+    position: relative;
+    margin:auto;
+}
+.farbtastic * {
+    position: absolute;
+    cursor: crosshair;
+}
+.farbtastic, .farbtastic .wheel {
+    width: 195px;
+    height: 195px;
+}
+.farbtastic .color, .farbtastic .overlay {
+    top: 47px;
+    left: 47px;
+    width: 101px;
+    height: 101px;
+}
+.farbtastic .wheel {
+    background: url(../image/wheel.png) no-repeat;
+    width: 195px;
+    height: 195px;
+}
+.farbtastic .overlay {
+    background: url(../image/mask.png) no-repeat;
+}
+.farbtastic .marker {
+    width: 17px;
+    height: 17px;
+    margin: -8px 0 0 -8px;
+    overflow: hidden; 
+    background: url(../image/marker.png) no-repeat;
+}
+
+#clear{
+    width: 100%;
+}
+
+#eraser{
+    width:100%;
+}
