@@ -3,7 +3,6 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>base</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block css %}{% endblock %}
     
@@ -14,11 +13,16 @@
             <div id = "logo">Snap Sketch</div>
     </header>
     <main>
-        <div id = "foot">
+        <div id="foot">
+            <a href="/Snapsketch/templates/myPage.html" class="mypage" target="_self"><p>マイページ</p></a>
+            <a href="/Snapsketch/templates/myPage.html" class="mypage" target="_self"><p>カレンダー</p></a>
+            <a href="/Snapsketch/templates/myPage.html" class="mypage" target="_self"><p>ログアウト</p></a>
+        </div>
+        <!-- <div id = "foot">
             <p>マイページ</p><br>
             <p>カレンダー</p><br>
-            <p>ガチャ</p>
-        </div>
+            <p>ログアウト</p>
+        </div> -->
         <!-- ここから中身作成 -->
         <div id = "box">
             {% block content %}
@@ -26,11 +30,7 @@
         </div>
     </main>
     {% block footer %}
-    {% comment %} <footer>
-        <div id = "kotei">
-            <small>&copy;2023 SnapSketch</small>
-        </div>
-    </footer> {% endcomment %}
+    
     {% endblock footer %}
 </div>
 {% block js %}{% endblock %}
