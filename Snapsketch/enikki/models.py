@@ -7,7 +7,7 @@ from django.core.validators import validate_email,RegexValidator
 # アイコンパスを定義
 def directory_path(instance, filename):
     cls_name = instance.__class__.__name__
-    
+
     if cls_name == 'User':
         return 'icon&draw/{0}/{1}'.format(instance.user_id, filename)
     elif cls_name == 'PostMaster':
@@ -17,31 +17,31 @@ def directory_path(instance, filename):
 
 # 電話番号チェック
 def validator_tel(val):
-    
+
     pattern = r'[(]?\d{2,4}[-)]?\d{2,4}-\d{3,4}'
     res = re.findall(pattern,val)
-    
+
     return res
 
 # 電話番号チェック
 def validator_birthday(val):
-    
+
     pattern = r'\d{4}/\d{1,2}/\d{1,2}'
     res = re.findall(pattern,val)
-    
+
     return res
 
 # ユーザーマスタ
 class User(AbstractUser):
-    
+
     username_validator = UnicodeUsernameValidator()
-    
+
     # 不要なフィールドはNoneにすることができる
     first_name = None
     last_name = None
     date_joined = None
     groups = None
-    
+
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(
         max_length=255,
@@ -50,7 +50,7 @@ class User(AbstractUser):
     )
     email = models.CharField(max_length=254, unique=True,validators=validate_email)
     tel = models.CharField(
-            max_length=15, 
+            max_length=15,
             unique=True,
             validators=validator_tel
         )
@@ -86,8 +86,6 @@ class PostMaster(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True,null=True)
-    
-    
 
 # ユーザーグループテーブル
 class UserGroupTable(models.Model):
@@ -98,7 +96,7 @@ class UserGroupTable(models.Model):
 class Follower(models.Model):
     follower  = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower_user')
     followee  = models.ForeignKey(User,  on_delete=models.CASCADE, related_name='followee_user')
-    
+
     def __str__(self):
         return "{} : {}".format(self.follower.username, self.followee.username)
 
@@ -128,4 +126,3 @@ class GroupPostTable(models.Model):
            # group_idとpost_idでユニーク制約
            models.UniqueConstraint(fields=['group_id', 'post_id'], name='unique_GroupPost')
         ]
-        
