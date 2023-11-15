@@ -83,7 +83,7 @@ DATABASES = {
 }
 
 
-# AUTH_USER_MODEL = 'enikki.User'
+AUTH_USER_MODEL = 'login_app.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -129,3 +129,7 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/login_app/login/'
+
+AUTH_USER_MODEL = 'login_app.User'

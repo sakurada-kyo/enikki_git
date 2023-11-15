@@ -403,6 +403,6 @@ jQuery._farbtastic = function (container, callback) {
 //-------------------保存ボタン------------------
 $('#save').addEventListener('click', save);
 function save() {
-  
+  console.log("save");
 }
 //-------------------保存ボタン------------------
