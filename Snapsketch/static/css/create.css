@@ -11,6 +11,8 @@ header{
     height: 120px;
 }
 
+
+
 header #logo{
     font-size: 50px;
     color: #ffffff;
@@ -18,12 +20,9 @@ header #logo{
     border: none;
 
 }
-header #logo:visited{
-    #ffffff
-}
 
 main{
-text-align: center;
+    text-align: center;
 }
 
 main #box{
@@ -53,26 +52,30 @@ main #box{
     box-sizing: border-box;
 }
 
-.enikki{
+#post-form{
+    width: 100%;
+}
+
+#enikki{
+    display: block;
+    padding-top:200px;
+    width: 60%;
     font-size:20px;
+    background-color: #000000;
+    color: #ffffff;
 }
 
 textarea, .enikki{
     height: 400px;
-    width: 400px;
+    width: 40%;
 }
 
-textarea{
-    margin-left: 100px;
-}
-
-#haba{
-    margin: auto;
-    width: 45%;
-}
+/* textarea{
+    margin-left: 10px;
+} */
 
 #flex{
-    margin-top: 200px;
+    margin-top: 50px;
     display: flex;
 }
 
