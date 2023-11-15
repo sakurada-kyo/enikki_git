@@ -39,11 +39,11 @@ function colorChange(colorCode){
  }
 
 // canvasを画像で保存
-$("#download").click(function(){
-  var canvas = document.getElementById('canvas');
-  var base64 = canvas.toDataURL("image/jpeg");
-  document.getElementById("download").href = base64;
-});
+// $("#download").click(function(){
+//   var canvas = document.getElementById('canvas');
+//   var base64 = canvas.toDataURL("image/jpeg");
+//   document.getElementById("download").href = base64;
+// });
 
 function setBgColor(){
   // canvasの背景色を設定(指定がない場合にjpeg保存すると背景が黒になる)
@@ -401,8 +401,8 @@ jQuery._farbtastic = function (container, callback) {
 }
 
 //-------------------保存ボタン------------------
-
-function save(params) {
+$('#save').addEventListener('click', save);
+function save() {
   
 }
 //-------------------保存ボタン------------------
