@@ -2,13 +2,18 @@ body{
     width: 1920px;
 }
 
+/* #wrapper{
+    
+} */
+
 #draw_nav{
     float:left;
     width: 15%;
 }
 
 #color_nav{
-    padding: 0;
+    margin-left: 16px;
+    padding: 0px;
 }
 
 #draw_nav ul li{
@@ -26,7 +31,7 @@ body{
 }
 
 .cbox{
-    margin-top:90px;
+    /* margin-top:90px; */
     background-color: white;
     /* width: 250px; */
 }
@@ -35,7 +40,7 @@ body{
     font-weight: bold;
     text-align: center;
     border-style: none;
-    width: 280px;
+    width:100%;
 }
 
 .farbtastic {
@@ -57,19 +62,19 @@ body{
     height: 101px;
 }
 .farbtastic .wheel {
-    background: url(../image/wheel.png) no-repeat;
+    background: url(/static/images/wheel.png) no-repeat;
     width: 195px;
     height: 195px;
 }
 .farbtastic .overlay {
-    background: url(../image/mask.png) no-repeat;
+    background: url(/static/images/mask.png) no-repeat;
 }
 .farbtastic .marker {
     width: 17px;
     height: 17px;
     margin: -8px 0 0 -8px;
-    overflow: hidden; 
-    background: url(../image/marker.png) no-repeat;
+    overflow: hidden;
+    background: url(/static/images/marker.png) no-repeat;
 }
 
 #clear{
@@ -78,4 +83,9 @@ body{
 
 #eraser{
     width:100%;
+}
+
+#canvas{
+    width: 800px;
+    float:left;
 }
