@@ -399,3 +399,10 @@ jQuery._farbtastic = function (container, callback) {
     fb.linkTo(callback);
   }
 }
+
+//-------------------保存ボタン------------------
+
+function save(params) {
+  
+}
+//-------------------保存ボタン------------------

@@ -1,44 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <link href="css\create.css" rel="stylesheet">
-    <title>create</title>
-</head>
-<body>
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/create.css' %}">
+{% endblock  %}
 
-<header>
-	<div id = "logo">Snap Sketch</div>
-</header>
-
-    <div id = "foot">
-        <p>マイページ</p><br>
-        <p>カレンダー</p><br>
-        <p>ガチャ</p>
+{% block content %}
+<div id = "haba">
+    <div id = "flex">
+        <input type = "submit" class="enikki" value="絵日記を作成する+">
+        <textarea name = "sentence"></textarea>
     </div>
+    <input type = "submit" class = "toukou" value = "投稿">
+</div>
+{% endblock  %}
 
-<div class="wrapper">
-<main>
-
-    <div id = "haba">
-        <div id = "flex">
-            <input type = "submit" class="enikki" value="絵日記を作成する
-+">
-            <textarea name = "sentence"></textarea>
-        </div>
-        <input type = "submit" class = "toukou" value = "投稿">
-
-    </div>
-
-
-</a>
-</main>
+{% block footer %}
 <footer>
     <div id = "kotei">
         <small>&copy;2023 SnapSketch</small>
     </div>
 </footer>
-</div>
-</body>
-</html>
+{% endblock %}
+
