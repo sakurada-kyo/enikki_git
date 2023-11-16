@@ -3,7 +3,7 @@ body {
     margin: 0;
     background-color: #222222;
 }
-/*ここからヘッダー*/
+
 header{
     background-color: #555555;
     height: 120px;
@@ -14,25 +14,22 @@ header #logo{
     color: #ffffff;
     padding: 30px;
 }
-/*ここまでがヘッダー*/
-/*ここからメイン*/
+
 main{
     text-align: center;
 }
 
 main #box{
     margin: auto;
-    width: 60%;
+    width: 50%;
+    display: flex;
 }
 
 main #foot{
     margin-top:50px;
-    margin-right: 150px;
+    margin-right: 130px;
     float: right;
-    font-size: 30px;
-}
-.mypage {
-    text-decoration: none;
+    font-size: 25px;
     color: #ffffff;
 }
 .wrapper{
@@ -41,8 +38,29 @@ main #foot{
     padding-bottom: 120px;/*←footerの高さ*/
     box-sizing: border-box;
 }
-/*ここまでがメイン*/
-/*ここからフッター*/
+form {
+    margin-top: 80px;
+    margin-left: 80px;
+}
+
+button {
+    margin-right: 70px;
+}
+
+.post-btn {
+    float: right;
+    background: blue;
+    color: #ffffff;
+    width: 180px;
+    text-align: center;
+    margin-right: 400px;
+    margin-top: 70px;
+}
+
+.btn1:hover {
+ opacity: 0.7;
+}
+
 footer{
     width: 100%;
     background-color: #555555;
@@ -55,4 +73,3 @@ footer{
 footer  small{
     color: #ffffff;
 }
-
