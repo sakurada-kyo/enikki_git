@@ -4,12 +4,14 @@ body {
     background-color: #222222;
     color: #ffffff;
 }
+
+
 dl.search2{
 	position:relative;
 	background-color:#fff;
 	border:1px solid #aaa;
 	border-radius:6px;
-    margin-top: 30px;
+    margin-top: 60px;
     /* width: 850px; */
 }
 dl.search2 dt{
