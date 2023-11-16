@@ -1,3 +1,5 @@
+from django.views.generic import TemplateView
+from .forms import CreateForm
 import json
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import get_object_or_404, render
@@ -107,15 +109,55 @@ from django.shortcuts import get_object_or_404, render
 
 #     return JsonResponse(data)
 
-def view_canvas(request):
+# キャンバス画面
+class CanvasView(TemplateView):
+    
+    template_name = 'canvas.html'
+    
+    def get(self, request, *args, **kwargs):
+        print('GET')
+            
+        return render(request,self.template_name)
 
-    context = {}
+# 絵日記作成画面
+class CreateView(TemplateView):
+    
+    template_name = 'create.html'
+    
+    def get(self, request, *args, **kwargs):
+        print('GET')
+        return render(request,self.template_name)
 
-    return render(request,'canvas.html',context)
+    def post(self, request, *args, **kwargs):
+        print('POST')
+        
+        reqFile = request.FILES['img']
+        reqFileName = 'img/'+reqFile.name
+        
+        context = {
+                'canvasFilePath':reqFileName
+            }
+        # form = CreateForm(request.POST,request.FILES)
+        
+        # if form.is_valid():    
+        #     context = {
+        #         'canvasFile':request.FILES['img']
+        #     }
+            
+        return render(request,self.template_name,context)
+ 
 
 
-def view_createEnikki(request):
+# def view_createEnikki(request):
 
-    context = {}
+#     context = {}
 
-    return render(request,'create.html',context)
+#     return render(request,'create.html',context)
+
+# def view_saveEnikki(request):
+#     print('view_saveEnikki')
+#     canvasFile = request.FILES['img']
+#     context = {
+#         'canvasFile':canvasFile,
+#     }
+#     return render(request,'create.html',context)

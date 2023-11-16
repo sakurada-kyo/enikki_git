@@ -7,7 +7,12 @@
 {% block content %}
 <form id="post-form" action="" method="post">
     <div id = "flex">
-        <a id="enikki">絵日記を作成<br>＋</a>
+        {% if canvasFile %}
+        <a id="sketch">絵日記を作成<br>＋</a>
+        {% else %}
+        <img id="sketch" src="{% static '{{ MEDIA_URL }}{{ canvasFilePath }}' %}">
+        {% endif %}
+        
         <textarea name = "sentence"></textarea>
     </div>
     <input type = "submit" class = "toukou" value = "投稿">

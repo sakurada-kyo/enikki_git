@@ -78,7 +78,10 @@
 # # 投稿マスタ
 # class PostMaster(models.Model):
 #     post_id = models.CharField(primary_key=True,max_length=255)
-#     sketch_path = models.ImageField(upload_to=directory_path)
+#     sketch_path = models.ImageField(
+        # upload_to=directory_path,
+        # validators=[FileExtensionValidator(['jpg', 'png'])]
+    # )
 #     diary = models.CharField(blank=True,null=True,max_length=255)
 #     user = models.ForeignKey(User,on_delete=models.CASCADE)
 #     likeCount = models.IntegerField(default=0,null=True)
