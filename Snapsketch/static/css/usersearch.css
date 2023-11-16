@@ -1,0 +1,43 @@
+body {
+    font-family: "MS Mincho";
+    margin: 0;
+    background-color: #222222;
+    color: #ffffff;
+}
+dl.search2{
+	position:relative;
+	background-color:#fff;
+	border:1px solid #aaa;
+	border-radius:6px;
+    margin-top: 30px;
+    /* width: 850px; */
+}
+dl.search2 dt{
+	padding:3px;
+}
+dl.search2 dt input{
+	width:90%;
+	height:30px;
+	line-height:30px;
+	background:none;
+    margin-right: 30px;
+}
+dl.search2 dd{
+	position:absolute;
+	top:0;
+	right:0;
+}
+dl.search2 dd button{
+	display:block;
+	padding:6px;
+	background:none;
+	border:none;
+
+}
+dl.search2 dd button span{
+	display:block;
+	width:30px;
+	height:30px;
+	background:url('../images/search_ic.png') no-repeat scroll 0 0;
+    margin-right: 15px;
+}
