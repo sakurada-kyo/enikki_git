@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/timeline.css' %}">
+{% endblock %}
+
+{% block content %}
+        <div id="scroll">
+                <article class="content" data-group="{{ enikki.group_name }}" data-page="{{ enikki.page_num }}">
+                    <div class="content_header">
+                        <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
+                        <p class="user_name">{{ enikki.user_name }}</p>
+                        <div class="like">
+                            <!-- {% if is_user_liked %} -->
+                            <!-- <button type="button" class="ajax-like"> -->
+                            <!-- すでにいいねしている時はfasクラス -->
+                            <!-- <i class="fas fa-heart text-danger"></i> -->
+                            <!-- </button> -->
+                            <!-- {% else %} -->
+                            <button type="button" class="ajax-like">
+                                <!-- いいねしていないときはfarクラス -->
+                                <i class="far fa-heart text-danger"></i>
+                                </button>
+                                <!-- {% endif %} -->
+                                <!-- いいねの数 -->
+                                <span class="like-count">{{ enikki.like_count }}</span>
+                        </div>
+                        <div class="comment"><!--グループ名とページ番号送信-->
+                            <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?group=&page="></a>
+                            <span class="comment-count">0</span>
+                        </div>
+                    </div>
+                    <section class="draw_diary">
+                        <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
+                        <p class="diary">{{ enikki.diary }}</p>
+                    </section>
+                </article>
+        </div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

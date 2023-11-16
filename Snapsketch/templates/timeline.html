@@ -11,9 +11,21 @@
                 <div id="close">x</div>
                 <form method="post" id="group-form" action="#">
                     {% csrf_token %}
-                    <p>グループ作成</p>
-                    <input type="text" id="group-name"><br>
-                    <input type="submit" name="group-name" value="作成">
+                    <h3>グループ作成</h3>
+                    <table class="margin">
+                        <tr>
+                            <th>グループ名:</th>
+                            <td><input type="text" id="group-name"></td>
+                        </tr>
+                        <tr>
+                            <th>概要:</th>
+                            <td><input type="text" id="group-name"></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td><input type="submit" id="button" name="group-name" value="作成"></td>
+                        </tr>
+                    </table>
                 </form>
             </div>
         </div>
