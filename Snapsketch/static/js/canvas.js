@@ -21,7 +21,7 @@ function setup() {
 function draw() {
   console.log("draw()");
   console.log(mouseIsPressed);
-  
+
    if (mouseIsPressed) {
      stroke(drawColor);//色
      strokeWeight(18);//線の太さ
@@ -401,10 +401,13 @@ jQuery._farbtastic = function (container, callback) {
 }
 
 //-------------------保存ボタン------------------
-$('#save').addEventListener('click', save);
+$('#save').addEventListener('submit', function(e) {
+  e.preventDefault();
+  save();
+});
 function save() {
 
-  let form_elem   = "#post-form";
+  let form_elem   = "#save-form";
 
   let data    = new FormData( $(form_elem).get(0));
   let url     = $(form_elem).prop("action");
@@ -428,32 +431,13 @@ function save() {
   let filename = dt.toLocaleString().replace(/\/| |:/g,"");
 
   //バイナリでファイルを作る
-  var file = new File([buffer.buffer], filename + ".jpeg", { type: 'image/png' });
+  file = new File([buffer.buffer], filename + ".jpeg", { type: 'image/png' });
 
   data.append("img",file);
   for (let v of data.entries() ){
-    console.log(v); 
+    console.log(v);
   }
 
-  //===================canvasの画像化処理==================================================
-    
-  $.ajax({
-      url: url,
-      type: method,
-      data: data,
-      processData: false,
-      contentType: false,
-      dataType: 'json'
-  }).done( function(data, status, xhr ) {
-
-      if (!data.error){
-            //リダイレクト
-            window.location.replace("");
-        }
-
-    }).fail( function(xhr, status, error) {
-        console.log(status + ":" + error );
-    });
-
+  data.submit();
 }
 //-------------------保存ボタン------------------

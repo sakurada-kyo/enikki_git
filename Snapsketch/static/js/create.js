@@ -32,7 +32,6 @@ function send(){
     for (let v of data.entries() ){ console.log(v); }
 
     //===================canvasの画像化処理==================================================
-    
     $.ajax({
         url: url,
         type: method,
