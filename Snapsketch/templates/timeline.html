@@ -3,17 +3,31 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/timeline.css' %}">
+    <link rel="stylesheet" href="{% static 'css/groupCreate.css' %}">
 {% endblock %}
 
 {% block content %}
         <div id="popup-wrapper">
             <div id="popup-inside">
                 <div id="close">x</div>
-                <form method="post" id="group-form" action="#">
+                <form method="post" id="group-form" action="{% url 'enikki:ajax_group' %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <p>グループ作成</p>
-                    <input type="text" id="group-name"><br>
-                    <input type="submit" name="group-name" value="作成">
+                        <h1>グループ作成</h1>
+                        <table>
+                            <tr>
+                                <th>グループ名:</th>
+                                <td><input type="text" id="text" value=""></td>
+                            </tr>
+                            <tr>
+                                <th>アイコン:</th>
+                                <td><input type="file" name="imageFile"/></td>
+                            </tr>
+                            <tr>
+                                <th>概要:</th>
+                                <td><input type="text" class="text2" value=""></td>
+                            </tr>
+                        </table>
+                        <input type="submit" id="createBtn" value="作成する">
                 </form>
             </div>
         </div>

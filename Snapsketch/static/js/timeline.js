@@ -245,8 +245,8 @@ function add_article(data){
 
 //-----------------------いいね機能-----------------------
 document.querySelector('.ajax-like').addEventListener('click', e => {
-  alert("click¥n要素:"+e.target);
-  console.log()
+  var parent = e.currentTarget;
+  var likeCount = parent.nextElementSibling.innerHTML;
   e.preventDefault();
 
   $.ajax({
@@ -255,6 +255,7 @@ document.querySelector('.ajax-like').addEventListener('click', e => {
     data: {
       'enikkiId':'xxxxx',
       'userId':'uuuuu',
+      'likeCount':likeCount,
     },
     dataType: 'json',
     headers: {'X-CSRFToken': csrftoken}
@@ -284,8 +285,8 @@ document.querySelector('.ajax-like').addEventListener('click', e => {
 //-----------------------コメント機能-----------------------
 
 //-----------------------グループ追加機能-----------------------
-window.addEventListener('load',addGroup());
-function addGroup(){
+window.addEventListener('load',showPopup());
+function showPopup(){
   const plusBtn = document.querySelector('.fa-plus');
   const popupWrapper = document.getElementById('popup-wrapper');
   const close = document.getElementById('close');
@@ -304,18 +305,27 @@ function addGroup(){
 
   $('#group-form').on('submit', function(e) {
     e.preventDefault();
+    console.log('送信');
+
+    var formData = new FormData($('#group-form').get(0));
+    
+    if(formData != null){
+      console.log("form-data");
+    }
 
     $.ajax({
-        'url': 'creategroup/',
-        'type': 'POST',
-        'data': {
-          'groupName':$('#group-name').val(),
-        },
-        'dataType': 'json'
+        'url': $(this).prop('action'),
+        'type': $(this).prop('method'),
+        'data': formData,
+        'dataType': 'json',
+        'processData': false,
+        'contentType': false,
     })
     .done(function(response) {
-      const fragment = addGroup(response);
-      $('#group-nav :nth-of-type(2)').append(fragment);
+      console.log(response)
+        const fragment = addGroup(response);
+        // $('#group-nav:nth-last-child(2)').append(fragment);
+        $('#group-nav .group-icon:last').after(fragment);
     })
     // Ajax通信が失敗したら発動
     .fail( (jqXHR, textStatus, errorThrown) => {
@@ -325,16 +335,19 @@ function addGroup(){
       console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
     });
 });
-
 }
 
 function addGroup(data) {
+  console.log("addGroup");
   const groupNav = document.getElementById("group-nav");
   const groupIcon = document.createElement("img");
   const fragment = document.createDocumentFragment();
+  const groupIconPath = data.filePath;
+
+  console.log(groupIconPath);
 
   groupIcon.setAttribute("class","group-icon");
-  groupIcon.setAttribute("src","");
+  groupIcon.setAttribute("src",groupIconPath);
 
   fragment.appendChild(groupIcon);
 

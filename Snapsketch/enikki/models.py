@@ -1,26 +1,131 @@
-from django.db import models
+# import uuid,re
+# from django.db import models
+# from django.contrib.auth.models import AbstractUser
+# from django.contrib.auth.validators import UnicodeUsernameValidator
+# from django.core.validators import validate_email,RegexValidator
 
-class EnikkiModel(models.Model):
-    enikki_id = models.CharField(primary_key=True,max_length=100)
-    user_name = models.CharField(max_length=100)
-    user_icon = models.ImageField(upload_to="icons/")
-    draw = models.ImageField(upload_to="draws/")
-    diary = models.CharField(max_length=100)
-    like_count = models.IntegerField(default=0)
-    group_name = models.CharField(max_length=100,default='group')
-    page_num = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-class Like(models.Model):
-        user_id = models.CharField(null=False,max_length=100)
-        enikki_id = models.CharField(null=False,max_length=100)
-        
-        class Meta:
-            constraints = [
-                #複合ユニーク制約
-                models.UniqueConstraint(fields=['user_id', 'enikki_id'], name='unique_like')
-            ]
-            
-        @classmethod
-        def check_duplicate(cls, userId: str, enikkiId: str) -> bool:
-            return cls.objects.filter(user_id=userId, enikki_id=enikkiId).exists()
+# # アイコンパスを定義
+# def directory_path(instance, filename):
+#     cls_name = instance.__class__.__name__
+
+#     if cls_name == 'User':
+#         return 'icon&draw/{0}/{1}'.format(instance.user_id, filename)
+#     elif cls_name == 'PostMaster':
+#         return 'icon&draw/{0}/{1}'.format(instance.user.user_id, filename)
+#     else:
+#         return 'group/{0}/{1}'.format(instance.groupname,filename)
+
+# # 電話番号チェック
+# def validator_tel(val):
+
+#     pattern = r'[(]?\d{2,4}[-)]?\d{2,4}-\d{3,4}'
+#     res = re.findall(pattern,val)
+
+#     return res
+
+# # 電話番号チェック
+# def validator_birthday(val):
+
+#     pattern = r'\d{4}/\d{1,2}/\d{1,2}'
+#     res = re.findall(pattern,val)
+
+#     return res
+
+# # ユーザーマスタ
+# class User(AbstractUser):
+
+#     username_validator = UnicodeUsernameValidator()
+
+#     # 不要なフィールドはNoneにすることができる
+#     first_name = None
+#     last_name = None
+#     date_joined = None
+#     groups = None
+
+#     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     username = models.CharField(
+#         max_length=255,
+#         unique=True,
+#         validators=[username_validator]
+#     )
+#     email = models.CharField(max_length=254, unique=True,validators=validate_email)
+#     tel = models.CharField(
+#             max_length=15,
+#             unique=True,
+#             validators=validator_tel
+#         )
+#     gender = models.CharField(max_length=1)
+#     birthday = models.CharField(max_length=11,validators=validator_birthday)
+#     icon_path = models.ImageField(upload_to=directory_path)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#     deleted_at = models.DateTimeField(blank=True, null=True)
+
+#     # USERNAME_FIELD = "username"
+
+#     class Meta:
+#         ordering = ['username']
+
+#     def __str__(self):
+#         return self.username
+
+# # グループマスタ
+# class GroupMaster(models.Model):
+#     group_id = models.CharField(primary_key=True,max_length=255)
+#     groupname = models.CharField(max_length=255,null=False)
+#     group_icon_path = models.ImageField(upload_to=directory_path)
+
+# # 投稿マスタ
+# class PostMaster(models.Model):
+#     post_id = models.CharField(primary_key=True,max_length=255)
+#     sketch_path = models.ImageField(
+        # upload_to=directory_path,
+        # validators=[FileExtensionValidator(['jpg', 'png'])]
+    # )
+#     diary = models.CharField(blank=True,null=True,max_length=255)
+#     user = models.ForeignKey(User,on_delete=models.CASCADE)
+#     likeCount = models.IntegerField(default=0,null=True)
+#     commentCount = models.IntegerField(default=0,null=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#     deleted_at = models.DateTimeField(blank=True,null=True)
+
+# # ユーザーグループテーブル
+# class UserGroupTable(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='user')
+#     group = models.ForeignKey(GroupMaster, on_delete=models.CASCADE,related_name='group')
+
+# # フォロワーテーブル
+# class Follower(models.Model):
+#     follower  = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower_user')
+#     followee  = models.ForeignKey(User,  on_delete=models.CASCADE, related_name='followee_user')
+
+#     def __str__(self):
+#         return "{} : {}".format(self.follower.username, self.followee.username)
+
+# # いいねテーブル
+# class LikeTable(models.Model):
+#     user_id = models.ForeignKey(User, on_delete=models.CASCADE,related_name='user')
+#     post_id = models.ForeignKey(PostMaster, on_delete=models.CASCADE,related_name='post')
+
+# # コメントマスタ
+# class CommentMaster(models.Model):
+#     comment_id = models.CharField(primary_key=True,max_length=255)
+#     user_id = models.ForeignKey(User, on_delete=models.CASCADE,related_name='user')
+#     post_id = models.ForeignKey(PostMaster, on_delete=models.CASCADE,related_name='post')
+#     comment = models.CharField(max_length=255)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#     deleted_at = models.DateTimeField(blank=True,null=True)
+
+# #グループ投稿テーブル
+# class GroupPostTable(models.Model):
+#     group_id = models.ForeignKey(GroupMaster, on_delete=models.CASCADE,related_name='group')
+#     post_id = models.ForeignKey(PostMaster, on_delete=models.CASCADE,related_name='post')
+#     page = models.IntegerField(max_length=255,default=1)
+
+#     class Meta:
+#         constraints = [
+#            # group_idとpost_idでユニーク制約
+#            models.UniqueConstraint(fields=['group_id', 'post_id'], name='unique_GroupPost')
+#         ]
