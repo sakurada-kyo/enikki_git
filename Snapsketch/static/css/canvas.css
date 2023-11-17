@@ -45,14 +45,17 @@ main{
     position: relative;
     margin:auto;
 }
+
 .farbtastic * {
     position: absolute;
     cursor: crosshair;
 }
+
 .farbtastic, .farbtastic .wheel {
     width: 195px;
     height: 195px;
 }
+
 .farbtastic .color, .farbtastic .overlay {
     top: 47px;
     left: 47px;
