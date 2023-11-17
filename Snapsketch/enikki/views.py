@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from .forms import CanvasForm
 import json
 from django.http import HttpResponse,JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 # from .models import EnikkiModel,Like,Img
 
 # # タイムライン画面表示
@@ -132,7 +132,7 @@ class CanvasPostView(TemplateView):
         #         'canvasFile':request.FILES['img']
         #     }
 
-        return render(request,self.template_name,context)
+        return redirect('timeline')
 
 # 絵日記作成画面
 class CreateView(TemplateView):
