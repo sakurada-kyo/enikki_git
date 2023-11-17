@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'enikki.apps.EnikkiConfig',
-    'login_app.apps.LoginAppConfig',
+    # 'login_app.apps.LoginAppConfig',
 ]
 
 MIDDLEWARE = [

@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView
-from .forms import CreateForm
+from .forms import CanvasForm
 import json
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import get_object_or_404, render
@@ -118,6 +118,21 @@ class CanvasView(TemplateView):
         print('GET')
 
         return render(request,self.template_name)
+    
+class CanvasPostView(TemplateView):
+
+    template_name = 'timeline.html'
+    
+    def post(self, request, *args, **kwargs):
+        print('POST')
+        # form = CreateForm(request.POST)
+
+        # if form.is_valid():
+        #     context = {
+        #         'canvasFile':request.FILES['img']
+        #     }
+
+        return render(request,self.template_name,context)
 
 # 絵日記作成画面
 class CreateView(TemplateView):
@@ -130,14 +145,17 @@ class CreateView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         print('POST')
-
+        print(vars(request))
         reqFile = request.FILES['img']
-        reqFileName = 'img/'+reqFile.name
+        if reqFile:
+            reqFileName = 'img/'+reqFile.name
+        else :
+            reqFileName = None
 
         context = {
                 'canvasFilePath':reqFileName
             }
-        # form = CreateForm(request.POST,request.FILES)
+        # form = CanvasForm(request.POST,request.FILES)
 
         # if form.is_valid():
         #     context = {
