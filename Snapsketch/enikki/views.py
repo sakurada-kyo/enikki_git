@@ -111,41 +111,40 @@ from django.shortcuts import get_object_or_404, render
 
 # キャンバス画面
 class CanvasView(TemplateView):
-    
+
     template_name = 'canvas.html'
-    
+
     def get(self, request, *args, **kwargs):
         print('GET')
-            
+
         return render(request,self.template_name)
 
 # 絵日記作成画面
 class CreateView(TemplateView):
-    
+
     template_name = 'create.html'
-    
+
     def get(self, request, *args, **kwargs):
         print('GET')
         return render(request,self.template_name)
 
     def post(self, request, *args, **kwargs):
         print('POST')
-        
+
         reqFile = request.FILES['img']
         reqFileName = 'img/'+reqFile.name
-        
+
         context = {
                 'canvasFilePath':reqFileName
             }
         # form = CreateForm(request.POST,request.FILES)
-        
-        # if form.is_valid():    
+
+        # if form.is_valid():
         #     context = {
         #         'canvasFile':request.FILES['img']
         #     }
-            
+
         return render(request,self.template_name,context)
- 
 
 
 # def view_createEnikki(request):
