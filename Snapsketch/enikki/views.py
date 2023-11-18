@@ -119,7 +119,7 @@ class CanvasView(TemplateView):
 
         return render(request,self.template_name)
     
-class CanvasPostView(TemplateView):
+class EnikkiPostView(TemplateView):
 
     template_name = 'timeline.html'
     
@@ -128,9 +128,7 @@ class CanvasPostView(TemplateView):
         # form = CreateForm(request.POST)
 
         # if form.is_valid():
-        #     context = {
-        #         'canvasFile':request.FILES['img']
-        #     }
+            # db登録
 
         return redirect('timeline')
 
