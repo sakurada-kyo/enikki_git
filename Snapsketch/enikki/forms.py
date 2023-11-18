@@ -1,12 +1,12 @@
 from django import forms
-# from .models import PostMaster
+from .models import SketchMaster
 
 class CanvasForm(forms.ModelForm):
     class Meta:
-        # model = PostMaster
-        fields = ('sketch_path')
+        models = SketchMaster
+        fields = '__all__'
         
 class CreateForm(forms.ModelForm):
     class Meta:
         # model = PostMaster
-        fields = ()
+        fields = ('diary','')

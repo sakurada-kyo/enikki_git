@@ -1,10 +1,13 @@
 from django.views.generic import TemplateView
 from .forms import CanvasForm
-import json
+import json,base64
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-# from .models import EnikkiModel,Like,Img
-
+from .models import PostMaster
+from django.utils.crypto import get_random_string
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
 # # タイムライン画面表示
 # def view_timeline(request):
 #     # 結合して下記のデータ持ってくる
@@ -129,6 +132,8 @@ class EnikkiPostView(TemplateView):
 
         # if form.is_valid():
             # db登録
+            # PostMaster.objects.create(**form.cleaned_data)
+
 
         return redirect('timeline')
 
@@ -144,35 +149,43 @@ class CreateView(TemplateView):
     def post(self, request, *args, **kwargs):
         print('POST')
         print(vars(request))
+        
+        # if reqFile:
+        #     reqFileName = 'img/'+reqFile.name
+        # else :
+        #     reqFileName = None
+
+        # context = {
+        #         'canvasFilePath':reqFileName
+        #     }
+        # form = CanvasForm(request.POST,request.FILES)
         reqFile = request.FILES['img']
-        if reqFile:
-            reqFileName = 'img/'+reqFile.name
-        else :
-            reqFileName = None
+        reqFileName = reqFile.name
+        reqFileBinary = reqFile.read()
+        
+        # バイナリデータをPIL Imageに変換する
+        image = Image.open(BytesIO(reqFileBinary))
+        
+        # JPEG形式に変換（もしJPEGでない場合は変換が必要です）
+        if image.format != 'JPEG':
+            image = image.convert('RGB')
+        
+        # ランダムファイル名
+        rand = get_random_string(3)
+        
+        # Djangoモデルに保存
+        # model = PostMaster()
+        image_io = BytesIO()
+        image.save(image_io, format='JPEG')  # JPEGとして保存
+        # Djangoモデルに保存
+        imgFileName = f'u{rand}_{reqFileName}.jpg'
+        model_instance = PostMaster(post_id=f'u{rand}|{reqFileName}')# 要検討
+        model_instance.sketch_path.save(imgFileName, ContentFile(image_io.getvalue()), save=True)
+        
 
         context = {
-                'canvasFilePath':reqFileName
-            }
-        # form = CanvasForm(request.POST,request.FILES)
-
-        # if form.is_valid():
-        #     context = {
-        #         'canvasFile':request.FILES['img']
-        #     }
+            'canvasFile':f'sketch/{imgFileName}'# username/sketch/filename
+        }
+            
 
         return render(request,self.template_name,context)
-
-
-# def view_createEnikki(request):
-
-#     context = {}
-
-#     return render(request,'create.html',context)
-
-# def view_saveEnikki(request):
-#     print('view_saveEnikki')
-#     canvasFile = request.FILES['img']
-#     context = {
-#         'canvasFile':canvasFile,
-#     }
-#     return render(request,'create.html',context)

@@ -1,94 +1,36 @@
-# import uuid,re
-# from django.db import models
-# from django.contrib.auth.models import AbstractUser
-# from django.contrib.auth.validators import UnicodeUsernameValidator
-# from django.core.validators import validate_email,RegexValidator
+from django.db import models
 
-# # アイコンパスを定義
-# def directory_path(instance, filename):
-#     cls_name = instance.__class__.__name__
+# アイコンパスを定義
+def directory_path(instance, filename):
+    cls_name = instance.__class__.__name__# instance名取得
+    
+    # User用
+    if cls_name == 'User':
+        return 'icon&draw/{0}/{1}'.format(instance.user_id, filename)
+    
+    # PostMaster用
+    if isinstance(instance, PostMaster):
+        return 'sketch/{0}'.format(filename)
+    # else:
+    #     return 'group/{0}/{1}'.format(instance.groupname,filename)
 
-#     if cls_name == 'User':
-#         return 'icon&draw/{0}/{1}'.format(instance.user_id, filename)
-#     elif cls_name == 'PostMaster':
-#         return 'icon&draw/{0}/{1}'.format(instance.user.user_id, filename)
-#     else:
-#         return 'group/{0}/{1}'.format(instance.groupname,filename)
-
-# # 電話番号チェック
-# def validator_tel(val):
-
-#     pattern = r'[(]?\d{2,4}[-)]?\d{2,4}-\d{3,4}'
-#     res = re.findall(pattern,val)
-
-#     return res
-
-# # 電話番号チェック
-# def validator_birthday(val):
-
-#     pattern = r'\d{4}/\d{1,2}/\d{1,2}'
-#     res = re.findall(pattern,val)
-
-#     return res
-
-# # ユーザーマスタ
-# class User(AbstractUser):
-
-#     username_validator = UnicodeUsernameValidator()
-
-#     # 不要なフィールドはNoneにすることができる
-#     first_name = None
-#     last_name = None
-#     date_joined = None
-#     groups = None
-
-#     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     username = models.CharField(
-#         max_length=255,
-#         unique=True,
-#         validators=[username_validator]
-#     )
-#     email = models.CharField(max_length=254, unique=True,validators=validate_email)
-#     tel = models.CharField(
-#             max_length=15,
-#             unique=True,
-#             validators=validator_tel
-#         )
-#     gender = models.CharField(max_length=1)
-#     birthday = models.CharField(max_length=11,validators=validator_birthday)
-#     icon_path = models.ImageField(upload_to=directory_path)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     deleted_at = models.DateTimeField(blank=True, null=True)
-
-#     # USERNAME_FIELD = "username"
-
-#     class Meta:
-#         ordering = ['username']
-
-#     def __str__(self):
-#         return self.username
-
-# # グループマスタ
-# class GroupMaster(models.Model):
-#     group_id = models.CharField(primary_key=True,max_length=255)
-#     groupname = models.CharField(max_length=255,null=False)
-#     group_icon_path = models.ImageField(upload_to=directory_path)
-
+# グループマスタ
+class GroupMaster(models.Model):
+    group_id = models.CharField(primary_key=True,max_length=255)
+    groupname = models.CharField(max_length=255,null=False)
+    group_icon_path = models.ImageField(upload_to=directory_path)
+    
 # # 投稿マスタ
-# class PostMaster(models.Model):
-#     post_id = models.CharField(primary_key=True,max_length=255)
-#     sketch_path = models.ImageField(
-        # upload_to=directory_path,
-        # validators=[FileExtensionValidator(['jpg', 'png'])]
-    # )
-#     diary = models.CharField(blank=True,null=True,max_length=255)
-#     user = models.ForeignKey(User,on_delete=models.CASCADE)
-#     likeCount = models.IntegerField(default=0,null=True)
-#     commentCount = models.IntegerField(default=0,null=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     deleted_at = models.DateTimeField(blank=True,null=True)
+class PostMaster(models.Model):
+    post_id = models.CharField(primary_key=True,max_length=255)
+    sketch_path = models.ImageField(upload_to=directory_path)
+    diary = models.CharField(blank=True,null=True,max_length=255)
+    # user = models.ForeignKey(User,on_delete=models.CASCADE)
+    likeCount = models.IntegerField(default=0,null=True)
+    commentCount = models.IntegerField(default=0,null=True)
+    created_at = models.DateTimeField(blank=True,null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(blank=True,null=True)
 
 # # ユーザーグループテーブル
 # class UserGroupTable(models.Model):

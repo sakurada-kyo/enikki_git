@@ -1,7 +1,7 @@
 from django.contrib import admin
-# from .models import EnikkiModel,Like,Img
+from .models import SketchMaster
 
 # # Register your models here.
-# admin.site.register(EnikkiModel)
+admin.site.register(SketchMaster)
 # admin.site.register(Like)
 # admin.site.register(Img)
