@@ -1,5 +1,4 @@
 from django.views.generic import TemplateView
-from .forms import CanvasForm
 import json,base64
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -8,17 +7,43 @@ from django.utils.crypto import get_random_string
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
+from .models import *
+
 # # タイムライン画面表示
-# def view_timeline(request):
-#     # 結合して下記のデータ持ってくる
-#     model = EnikkiModel.objects.all()
-#     context = {
-#         "EnikkiModel":model,
-#         "currentPath":request.path,
-#         "isUserLiked":"false",#ユーザーがいいねしているかどうか
-#         # "likeCount":"1",#いいね数
-#     }
-#     return render(request,'timeline.html',context)
+def view_timeline(request):
+    # セッションからユーザーに紐づくグループ取得
+    # 抽出したグループの投稿を持ってくる　下記にセット
+
+    # ログインしているユーザーが所属するグループのgroup_idをセッションから取得
+    groupName = request.session.get('groupName')  # ここで'session_key'は実際のキーに置き換えてください
+
+    # グループが存在するか確認(オブジェクト取得)
+    user_group = get_object_or_404(GroupMaster, groupname=groupName)
+
+    # グループに関連する投稿を取得し、条件に基づいてソート
+    group_posts = GroupPostTable.objects.filter(group_id=user_group).select_related('post_id__user')  # 適切な関連データを取得
+
+    # "PostMaster" モデルを使用して必要な情報を取得し、"updated_at" の昇順でソート
+    posts = PostMaster.objects.filter(id__in=group_posts.values_list('post_id', flat=True)).order_by('updated_at')
+
+    # 取得した投稿情報を利用する（例: テンプレートに渡す）
+    for post in posts:
+        sketch_path = post.sketch_path
+        diary = post.diary
+        like_count = post.likeCount
+        comment_count = post.commentCount
+        # 他の情報も必要に応じて利用できます
+
+
+
+
+    # context = {
+    #     "EnikkiModel":model,
+    #     "currentPath":request.path,
+    #     "isUserLiked":"false",#ユーザーがいいねしているかどうか
+    #     # "likeCount":"1",#いいね数
+    # }
+    # return render(request,'timeline.html',context)
 
 # # タイムラインのajax
 # def ajax_timeline(request):
@@ -128,12 +153,11 @@ class EnikkiPostView(TemplateView):
     
     def post(self, request, *args, **kwargs):
         print('POST')
-        # form = CreateForm(request.POST)
 
-        # if form.is_valid():
-            # db登録
-            # PostMaster.objects.create(**form.cleaned_data)
+        diary = request.POST.get('sentence')
 
+        # request.user+日付から投稿抽出
+        # 日記と作成日を保存
 
         return redirect('timeline')
 
@@ -178,13 +202,14 @@ class CreateView(TemplateView):
         image_io = BytesIO()
         image.save(image_io, format='JPEG')  # JPEGとして保存
         # Djangoモデルに保存
-        imgFileName = f'u{rand}_{reqFileName}.jpg'
-        model_instance = PostMaster(post_id=f'u{rand}|{reqFileName}')# 要検討
+        postId = f'u{rand}_{reqFileName}'
+        imgFileName = f'{postId}.jpg'
+        model_instance = PostMaster(post_id=postId,user=self.request.user.user_id)
         model_instance.sketch_path.save(imgFileName, ContentFile(image_io.getvalue()), save=True)
         
 
         context = {
-            'canvasFile':f'sketch/{imgFileName}'# username/sketch/filename
+            'canvasFilePath':f'{imgFileName}'# username/sketch/filename
         }
             
 
