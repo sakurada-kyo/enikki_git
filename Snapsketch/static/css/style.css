@@ -25,8 +25,8 @@ main #box{
     width: 60%;
 }
 
-main #foot{
-    margin-top:50px;
+#foot{
+    margin-top: 150px;
     margin-right: 150px;
     float: right;
     font-size: 30px;

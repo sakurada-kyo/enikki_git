@@ -72,23 +72,24 @@ from django.shortcuts import get_object_or_404, redirect, render
 #     return JsonResponse(data)
 
 # # コメントページ表示
-# def view_comment(request):
+def view_comment(request):
 
-#     groupName = request.GET["group"]
-#     page = str(request.GET["page"])
+    if request.method == 'POST':
+        groupName = request.GET["group"]
+        page = str(request.GET["page"])
 
-#     context = {}
-#     # DBからの情報
-#     # ユーザー名
-#     # アイコン
-#     # コメント数
-#     # いいね数
-#     # 絵日記
-#     # コメントユーザー名
-#     # コメントユーザーアイコン
-#     # コメント
+    context = {}
+    # DBからの情報
+    # ユーザー名
+    # アイコン
+    # コメント数
+    # いいね数
+    # 絵日記
+    # コメントユーザー名
+    # コメントユーザーアイコン
+    # コメント
 
-#     return render(request,'comment.html',context)
+    return render(request,'comment.html',context)
 
 # # グループ新規作成
 # def ajax_group(request):

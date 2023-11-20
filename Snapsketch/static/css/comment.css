@@ -1,0 +1,284 @@
+body{
+    margin:0;
+    padding:0;
+}
+
+img{
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+}
+
+p{
+    margin: 0;
+}
+
+
+/* main{
+    width: 500px;
+    margin:0 auto;
+} */
+
+#popup-wrapper {
+    background-color: rgba(0, 0, 0, .5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  
+  #popup-inside {
+    margin: auto;
+    margin-top: 350px;
+    text-align: center;
+    height: 200px;
+    width: 30%;
+    max-width: 700px;
+    padding: 10px;
+    position: relative;
+  }
+    
+  #close {
+    position: absolute;
+    top: 0;
+    right: 5px;
+    cursor: pointer;
+  }
+
+#group-nav{
+    width: 10%;
+    float: left;
+    margin-top:70px;
+}
+
+.group-icon{
+    border: solid 3px #000000;
+    margin-bottom: 5px;
+}
+
+.fa-plus{
+    -webkit-text-stroke: 3px #000000;
+    font-size:60px;
+    color:#ffffff;
+    border-radius: 50%;
+    border-color: #ffffff;
+}
+
+#scroll{
+    width: 80%;
+    float: left;
+    /* margin-top:10px; */
+    margin-bottom: 10px;
+}
+
+.content{
+    margin-top:10px;
+}
+
+.user_icon{
+    float:left;
+}
+
+.user_name{
+    color:#ffffff;
+    font-size:25px;
+    padding-top:17px;
+    padding-left:5px;
+    float: left;
+}
+
+.like{
+    float: right;
+    margin-top:10px;
+    margin-right:10px;
+}
+
+.fas{
+    color:#e54747;
+}
+
+.far{
+    color:#ffffff;
+}
+
+.fa-heart{
+    font-size: 35px;
+}
+
+.like-count{
+    color:#ffffff;
+    font-size: 30px;
+}
+
+button{
+    background-color:transparent;
+    border:none;
+    cursor: pointer;
+    outline:none;
+    padding:0px;
+}
+
+.comment{
+    float: right;
+    margin-top: 10px;
+    margin-right:7px;
+    width: 58px;
+}
+
+.fa-comment{
+    font-size: 35px;
+    color:#ffffff;
+    text-decoration: none;
+}
+
+.comment-count{
+    color: #ffffff;
+    font-size: 30px;
+}
+
+.draw_diary{
+    clear: both;
+    
+    width: 100%;
+}
+
+.draw{
+    border-radius: 0%;
+    height: 500px;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.diary{
+    background-color: red;
+    height: 200px;
+    width: 100%;
+}
+/* グループ作成*/
+#popup-inside{
+    background-color: #F0FFFF;
+}
+
+#group-form h3{
+    font-size: 20px;
+}
+.margin{
+    margin: auto;
+}
+#button{
+    float: right;
+    background-color: #165E83;
+    color: #ffffff;
+}
+/*コメント追加*/
+.popup-content{
+    visibility: hidden;
+    opacity : 0;
+}
+
+#open:checked ~ .popup-content{
+    visibility: visible;
+    opacity : 1;
+    transition: .3s;
+}
+#open:checked ~ .overlay {
+    background: rgb(51, 51, 51,.8);
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: .3s;
+    z-index: 9999;
+}
+
+.open-btn {
+    display: block;
+    width: 240px;
+    margin: 20px auto;
+    text-align: center;
+    background-color: #fff;
+    color: #000;
+    padding: 20px 24px;
+    font-size: 16px;
+} 
+
+.fa-times-circle {
+    position: relative;
+    top: -2px;
+    left: -2px;
+    font-size: 1.9em;
+    color: #00bcd4;
+}
+
+.popup-content{
+    font-size: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 400px;
+    height: auto;
+    background-color: aliceblue;
+    z-index: 9999;
+    transition: .1s;
+    padding: 10px;
+}
+
+h2{
+    float: left;
+    border-bottom: 1px solid #000;
+}
+
+@media (orientation: landscape){
+    .popup-content{
+        width: 55%;
+    }
+}
+
+.reply{
+    width: 100;
+}
+
+textarea{
+    height: 200px;
+    width: 95%;
+}
+
+.toukou{
+    margin-top: 10px;
+    float: right;
+    width: 15%;
+    height: 30px;
+}
+
+input#open{display: none;}
+/*コメント返信欄*/
+.comment_area{
+    background-color: #fff;
+    width: 95%;
+    height: 90px;
+    padding: 20px;
+    margin: 0;
+}
+
+.comment_name{
+    font-size: 20px;
+    margin-top: 20px;
+    margin-left: 10px;
+    float: left;
+}
+
+.comment_icon{
+    float: left;
+}
+
+.comment_sentence{
+    font-size: 20px;
+    float: left;
+    margin-top: 40px;
+}
