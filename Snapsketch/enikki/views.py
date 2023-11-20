@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView
-from .forms import CanvasForm
+# from .forms import CanvasForm
 import json
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -110,29 +110,29 @@ from django.shortcuts import get_object_or_404, redirect, render
 #     return JsonResponse(data)
 
 # キャンバス画面
-class CanvasView(TemplateView):
+# class CanvasView(TemplateView):
 
-    template_name = 'canvas.html'
+#     template_name = 'canvas.html'
 
-    def get(self, request, *args, **kwargs):
-        print('GET')
+#     def get(self, request, *args, **kwargs):
+#         print('GET')
 
-        return render(request,self.template_name)
+#         return render(request,self.template_name)
     
-class CanvasPostView(TemplateView):
+# class CanvasPostView(TemplateView):
 
-    template_name = 'timeline.html'
+#     template_name = 'timeline.html'
     
-    def post(self, request, *args, **kwargs):
-        print('POST')
-        # form = CreateForm(request.POST)
+#     def post(self, request, *args, **kwargs):
+#         print('POST')
+#         # form = CreateForm(request.POST)
 
-        # if form.is_valid():
-        #     context = {
-        #         'canvasFile':request.FILES['img']
-        #     }
+#         # if form.is_valid():
+#         #     context = {
+#         #         'canvasFile':request.FILES['img']
+#         #     }
 
-        return redirect('timeline')
+#         return redirect('timeline')
 
 # 絵日記作成画面
 class CreateView(TemplateView):
