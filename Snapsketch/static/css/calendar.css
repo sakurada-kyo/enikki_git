@@ -54,7 +54,7 @@ main #foot{
     height: 500px;
 }
 
-.day {
+.day,.dayOfWeek {
     padding: 15px;
     text-align: center;
     border: 1px solid #ccc;
