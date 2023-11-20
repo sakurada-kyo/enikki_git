@@ -160,3 +160,25 @@ class CreateView(TemplateView):
 #         'canvasFile':canvasFile,
 #     }
 #     return render(request,'create.html',context)
+
+
+def view_LoginView(request):
+
+    context = {}
+
+    return render(request,'login.html',context)
+
+def view_accountConfView(request):
+    # print('view_accountConf')
+    # template_name = 'login.html'
+
+    context = {}
+
+    return render(request,'accountConf.html',context)
+
+def view_accountView(request):
+
+    context = {}
+
+    return render(request,'account.html',context)
+

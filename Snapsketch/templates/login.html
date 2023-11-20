@@ -1,9 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title></title>
-  <link rel="stylesheet" href="css\login.css">
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
   <header>
@@ -12,18 +12,19 @@
 
   <main>
     <div id = "mid">
-      <input type="text" class="text" value="address"><br>
-      <input type="text" class="text2" value="password"><br>
-      <input type="submit" class="button" value="ログイン">
+      <input type="text" name="text" class="text" placeholder="address"><br>
+      <input type="text" name="text2" class="text2" placeholder="password"><br>
+      <input type="submit" name="button" class="button" value="ログイン">
       <p>---お持ちでない方は---</p>
-      <input type="submit" class="button2" value="新規作成">
+      <input type="submit" onclick="location.href='account.html'" class="button2" value="新規作成">
     </div>
 
   </main>
+    <!-- <p><a href = "login.html"></a></p> -->
 
-  <footer>
-  </footer>
-    <p><a href = "login.html"></a></p>
-
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.min.js"></script>
+    <script src="https://unpkg.com/ml5@0.6.0/dist/ml5.min.js"></script>
+    <script src="{% static 'js/login.js' %}"></script>    
   </body>
 </html>

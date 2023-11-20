@@ -11,4 +11,7 @@ urlpatterns = [
     # path('timeline/comment/', views.view_comment, name='comment'),
     path('canvas/', views.CanvasView.as_view(), name='canvas'),
     path('create/', views.CreateView.as_view(), name='create'),
+    path('login/', views.view_LoginView, name='login'),
+    path('accountConf/', views.view_accountConfView, name='accountConf'),
+    path('account/', views.view_accountView, name='account'),
 ]
