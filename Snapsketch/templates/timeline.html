@@ -10,17 +10,17 @@
             <img class="group_icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
         </div>
         <div id="scroll">
-            {% for enikki in enikki_list %}
-                <article class="content" data-group="{{ enikki.group_name }}" data-page="{{ enikki.page_num }}">
+            {% for post in posts %}
+                <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page_num }}">
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
-                        <p class="user_name">{{ enikki.user_name }}</p>
+                        <p class="user_name">{{ post.user_name }}</p>
                         <img class="good" src="{% static 'images/test_icon.jpeg' %}" alt="いいね">
                         <img class="comment" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
                     </div>
                     <section class="draw_diary">
                         <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
-                        <p class="diary">{{ enikki.diary }}</p>
+                        <p class="diary">{{ post.diary }}</p>
                     </section>
                 </article>
             {% endfor %}

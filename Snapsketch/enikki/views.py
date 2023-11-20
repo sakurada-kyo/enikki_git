@@ -1,25 +1,60 @@
 from audioop import reverse
 from django.views.generic import TemplateView
-import json,base64
-from django.http import HttpResponse,JsonResponse
+import json, base64,datetime
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from .models import PostMaster
 from django.utils.crypto import get_random_string
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
+from .models import *
+
+
 # # タイムライン画面表示
-# def view_timeline(request):
-#     # 結合して下記のデータ持ってくる
-#     model = EnikkiModel.objects.all()
-#     context = {
-#         "EnikkiModel":model,
-#         "currentPath":request.path,
-#         "isUserLiked":"false",#ユーザーがいいねしているかどうか
-#         # "likeCount":"1",#いいね数
-#     }
-#     return render(request,'timeline.html',context)
+class TimelineView(TemplateView):
+    template_name = "canvas.html"
+
+    def get(self, request, *args, **kwargs):
+        print("GET")
+        # セッションからグループ名取得
+        session_group = request.session["group"]
+        # グループ内の投稿記事持ってくる
+        if session_group:
+            # グループ名を使って関連する投稿を取得
+            posts = (
+                PostMaster.objects.filter(
+                    groupposttable__group_id__groupname=session_group
+                )
+                .select_related("user")
+                .values(
+                    "sketch_path",
+                    "diary",
+                    "user__username",
+                    "user__icon_path",
+                    "likeCount",
+                    "commentCount",
+                )
+                .distinct()
+                .order_by("updated_at")
+            )
+
+            # 関連する投稿の内容を出力する例
+            for post in posts:
+                print(f"Sketch Path: {post['sketch_path']}")
+                print(f"Diary: {post['diary']}")
+                print(f"Username: {post['user__username']}")
+                print(f"User Icon Path: {post['user__icon_path']}")
+                print(f"Like Count: {post['likeCount']}")
+                print(f"Comment Count: {post['commentCount']}")
+        else:
+            print("セッションからグループ名が取得できませんでした")
+
+        context = {
+            "posts": posts,
+        }
+        return render(request, self.template_name, context)
+
 
 # # タイムラインのajax
 # def ajax_timeline(request):
@@ -76,25 +111,57 @@ from django.core.files.base import ContentFile
 
 #     return JsonResponse(data)
 
+# グループ変更処理
+
+
 # # コメントページ表示
-def view_comment(request):
+class CommentView(TemplateView):
+    def post(self, request, *args, **kwargs):
+        groupName = request.POST["group"]
+        page = str(request.POST["page"])
+        context = {}
+        if groupName:
+            # グループ名を使って関連する投稿を取得
+            post = (
+                PostMaster.objects.filter(
+                    groupposttable__group_id__groupname=groupName,
+                    groupposttable__page=page,
+                )
+                .select_related("user")
+                .values(
+                    "post_id",
+                    "sketch_path",
+                    "diary",
+                    "user__username",
+                    "user__icon_path",
+                    "likeCount",
+                    "commentCount",
+                )
+                .first()
+            )
 
-    if request.method == 'POST':
-        groupName = request.GET["group"]
-        page = str(request.GET["page"])
+            if post:
+                # 投稿IDを取得
+                post_id = post.post_id
 
-    context = {}
-    # DBからの情報
-    # ユーザー名
-    # アイコン
-    # コメント数
-    # いいね数
-    # 絵日記
-    # コメントユーザー名
-    # コメントユーザーアイコン
-    # コメント
+                # 投稿に紐づくコメントを取得
+                comments = (
+                    CommentMaster.objects.filter(post_id=post_id)
+                    .select_related('user')
+                    .values(
+                        "user__username",
+                        "user__icon_path",
+                        "comment",
+                    )
+                )
+                
+                context['post'] = post
 
-    return render(request,'comment.html',context)
+                if comments:
+                    context['comments'] = comments
+                    
+        return render(request, "comment.html", context)
+
 
 # # グループ新規作成
 # def ajax_group(request):
@@ -114,96 +181,90 @@ def view_comment(request):
 
 #     return JsonResponse(data)
 
+
 # キャンバス画面
 class CanvasView(TemplateView):
-
-    template_name = 'canvas.html'
+    template_name = "canvas.html"
 
     def get(self, request, *args, **kwargs):
-        print('GET')
+        print("GET")
 
-        return render(request,self.template_name)
-    
+        return render(request, self.template_name)
+
+
 class EnikkiPostView(TemplateView):
-
-    template_name = 'timeline.html'
+    template_name = "timeline.html"
 
     def post(self, request, *args, **kwargs):
-        print('POST')
-        # form = CreateForm(request.POST)
+        print("POST")
+        
+        # ユーザー取得
+        userId = self.request.user.user_id
+        # 日記取得
+        diary = request.POST['sentence']
+        # 日付取得
+        dateTime = datetime.datetime.today()
+        date = dateTime.date()#yyyy-mm-dd
+        
+        # PostMasterへ追加(条件:userId,date)
+        # GroupPostTableへ追加
+        return render(request, self.template_name)
 
-        # if form.is_valid():
-            # db登録
-            # PostMaster.objects.create(**form.cleaned_data)
-
-
-        return render(request,self.template_name)
 
 # 絵日記作成画面
 class CreateView(TemplateView):
-
-    template_name = 'create.html'
+    template_name = "create.html"
 
     def get(self, request, *args, **kwargs):
-        print('GET')
-        return render(request,self.template_name)
+        print("GET")
+        return render(request, self.template_name)
 
     def post(self, request, *args, **kwargs):
-        print('POST')
+        print("POST")
         print(vars(request))
-        
-        # if reqFile:
-        #     reqFileName = 'img/'+reqFile.name
-        # else :
-        #     reqFileName = None
 
-        # context = {
-        #         'canvasFilePath':reqFileName
-        #     }
-        # form = CanvasForm(request.POST,request.FILES)
-        reqFile = request.FILES['img']
+        reqFile = request.FILES["img"]
         reqFileName = reqFile.name
         reqFileBinary = reqFile.read()
-        
+
         # バイナリデータをPIL Imageに変換する
         image = Image.open(BytesIO(reqFileBinary))
-        
+
         # JPEG形式に変換（もしJPEGでない場合は変換が必要です）
-        if image.format != 'JPEG':
-            image = image.convert('RGB')
-        
+        if image.format != "JPEG":
+            image = image.convert("RGB")
+
         # ランダムファイル名
         rand = get_random_string(3)
-        
+
         # Djangoモデルに保存
-        # model = PostMaster()
         image_io = BytesIO()
-        image.save(image_io, format='JPEG')  # JPEGとして保存
+        image.save(image_io, format="JPEG")  # JPEGとして保存
         # Djangoモデルに保存
-        imgFileName = f'u{rand}_{reqFileName}.jpg'
-        model_instance = PostMaster(post_id=f'u{rand}|{reqFileName}')# 要検討
-        model_instance.sketch_path.save(imgFileName, ContentFile(image_io.getvalue()), save=True)
-        
+        imgFileName = f"u{rand}_{reqFileName}.jpg"
+        model_instance = PostMaster(post_id=f"u{rand}|{reqFileName}")  # 要検討
+        model_instance.sketch_path.save(
+            imgFileName, ContentFile(image_io.getvalue()), save=True
+        )
 
-        context = {
-            'canvasFile':f'sketch/{imgFileName}'# username/sketch/filename
-        }
-            
+        context = {"canvasFile": f"sketch/{imgFileName}"}  # sketch/username/filename
 
-        return render(request,self.template_name,context)
+        return render(request, self.template_name, context)
+
+
 # カレンダー画面
-class CalenderView(TemplateView):
+# class CalenderView(TemplateView):
 
-    template_name = 'calendar.html'
+#     template_name = 'calendar.html'
 
-    def get(self, request, *args, **kwargs):
-        print('GET')
-        return render(request,self.template_name)
+#     def get(self, request, *args, **kwargs):
+#         print('GET')
+#         return render(request,self.template_name)
 
-    def post(self, request, *args, **kwargs):
-        print('POST')
-        print(vars(request))
-        
-        # パラメータを含むURLにリダイレクト
-        url = reverse('timeline') + f'?groupName=1&page=1'
-        return redirect(url)
+#     def post(self, request, *args, **kwargs):
+#         print('POST')
+#         print(vars(request))
+
+#         # パラメータを含むURLにリダイレクト
+#         url = reverse('timeline') + f'?groupName=1&page=1'
+#         return redirect(url)
