@@ -1,0 +1,58 @@
+body{
+    font-family: "Franklin Gothic";
+    text-align: center;
+    background-color: #B0E0E6;
+}
+
+header{
+    margin-top: 200px;
+    color: #ffffff;
+    -webkit-text-stroke: 0.1px #000000;
+    font-size: 30px;
+}
+
+main{
+    font-size: 17px;
+    text-align: center;
+}
+
+main #mid{
+    padding: 40px;
+    margin: auto;
+    width: 30%;
+    background-color: #F0FFFF;
+}
+
+.text{
+    height: 24px;
+    width: 60%;
+}
+
+.text2{
+    height: 24px;
+    width: 60%;
+}
+
+.button{
+    background-color: #165E83;
+    color: #fff;
+    font-size: 13px;
+    height: 24px;
+    width: 25%;
+}
+
+.button2{
+    background-color: #165E83;
+    color: #fff;
+    font-size: 13px;
+    height: 24px;
+    width: 25%;
+}
+
+.text2, .button, p{
+    margin-top: 20px;
+}
+
+main #mid p{
+    color: #000000;
+}

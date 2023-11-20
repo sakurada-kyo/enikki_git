@@ -1,8 +1,8 @@
 from django.views.generic import TemplateView
-from .forms import CreateForm
+from .forms import CanvasForm
 import json
 from django.http import HttpResponse,JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 # from .models import EnikkiModel,Like,Img
 
 # # タイムライン画面表示
@@ -119,6 +119,21 @@ class CanvasView(TemplateView):
         print('GET')
 
         return render(request,self.template_name)
+    
+class CanvasPostView(TemplateView):
+
+    template_name = 'timeline.html'
+    
+    def post(self, request, *args, **kwargs):
+        print('POST')
+        # form = CreateForm(request.POST)
+
+        # if form.is_valid():
+        #     context = {
+        #         'canvasFile':request.FILES['img']
+        #     }
+
+        return redirect('timeline')
 
 # 絵日記作成画面
 class CreateView(TemplateView):
@@ -131,14 +146,17 @@ class CreateView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         print('POST')
-
+        print(vars(request))
         reqFile = request.FILES['img']
-        reqFileName = 'img/'+reqFile.name
+        if reqFile:
+            reqFileName = 'img/'+reqFile.name
+        else :
+            reqFileName = None
 
         context = {
                 'canvasFilePath':reqFileName
             }
-        # form = CreateForm(request.POST,request.FILES)
+        # form = CanvasForm(request.POST,request.FILES)
 
         # if form.is_valid():
         #     context = {
@@ -161,3 +179,25 @@ class CreateView(TemplateView):
 #         'canvasFile':canvasFile,
 #     }
 #     return render(request,'create.html',context)
+
+
+def view_LoginView(request):
+
+    context = {}
+
+    return render(request,'login.html',context)
+
+def view_accountConfView(request):
+    # print('view_accountConf')
+    # template_name = 'login.html'
+
+    context = {}
+
+    return render(request,'accountConf.html',context)
+
+def view_accountView(request):
+
+    context = {}
+
+    return render(request,'account.html',context)
+
