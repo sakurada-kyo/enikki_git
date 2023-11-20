@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/timeline.css' %}">
+    <link rel="stylesheet" href="{% static 'css/comment.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -19,12 +19,12 @@
                             <!-- </button> -->
                             <!-- {% else %} -->
                             <button type="button" class="ajax-like">
-                                <!-- いいねしていないときはfarクラス -->
-                                <i class="far fa-heart text-danger"></i>
-                                </button>
-                                <!-- {% endif %} -->
-                                <!-- いいねの数 -->
-                                <span class="like-count">{{ enikki.like_count }}</span>
+                            <!-- いいねしていないときはfarクラス -->
+                            <i class="far fa-heart text-danger"></i>
+                            </button>
+                            <!-- {% endif %} -->
+                            <!-- いいねの数 -->
+                            <span class="like-count">{{ enikki.like_count }}</span>
                         </div>
                         <div class="comment"><!--グループ名とページ番号送信-->
                             <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?group=&page="></a>
@@ -35,8 +35,32 @@
                         <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
                         <p class="diary">{{ enikki.diary }}</p>
                     </section>
+                    <!--ここからコメント追加ポップ-->
+                    <div class="popup_area">
+                        <div class="popup-wrapper">
+                            <input id="open" type="checkbox">
+                            <label for="open" class="open-btn">コメントをする</label>
+                            <label for="open" class="overlay"></label>
+                        
+                            <div class="popup-content">
+                                <div class="reply">
+                                    <h2>コメント返信</h2>
+                                </div>
+                                <textarea></textarea>
+                                <input type="submit" class="toukou" value="返信">
+                            </div>
+                        </div>
+                    </div>
+                    <!--ここからコメント返信画面-->
+                    <div class="comment_area">
+                        <img class="comment_icon" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
+                        <span class="comment_name">名前</span><br>
+                        <span class="comment_sentence">ここにコメントが表示されます</span>
+                    </div>
+                    
+                    </div>
                 </article>
-        </div>
+            </div>
 {% endblock %}
 
 {% block js %}
