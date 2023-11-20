@@ -1,8 +1,9 @@
+from audioop import reverse
 from django.views.generic import TemplateView
-from .forms import CanvasForm
 import json,base64
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+
 from .models import PostMaster
 from django.utils.crypto import get_random_string
 from PIL import Image
@@ -76,23 +77,24 @@ from django.core.files.base import ContentFile
 #     return JsonResponse(data)
 
 # # コメントページ表示
-# def view_comment(request):
+def view_comment(request):
 
-#     groupName = request.GET["group"]
-#     page = str(request.GET["page"])
+    if request.method == 'POST':
+        groupName = request.GET["group"]
+        page = str(request.GET["page"])
 
-#     context = {}
-#     # DBからの情報
-#     # ユーザー名
-#     # アイコン
-#     # コメント数
-#     # いいね数
-#     # 絵日記
-#     # コメントユーザー名
-#     # コメントユーザーアイコン
-#     # コメント
+    context = {}
+    # DBからの情報
+    # ユーザー名
+    # アイコン
+    # コメント数
+    # いいね数
+    # 絵日記
+    # コメントユーザー名
+    # コメントユーザーアイコン
+    # コメント
 
-#     return render(request,'comment.html',context)
+    return render(request,'comment.html',context)
 
 # # グループ新規作成
 # def ajax_group(request):
@@ -125,7 +127,7 @@ class CanvasView(TemplateView):
 class EnikkiPostView(TemplateView):
 
     template_name = 'timeline.html'
-    
+
     def post(self, request, *args, **kwargs):
         print('POST')
         # form = CreateForm(request.POST)
@@ -135,7 +137,7 @@ class EnikkiPostView(TemplateView):
             # PostMaster.objects.create(**form.cleaned_data)
 
 
-        return redirect('timeline')
+        return render(request,self.template_name)
 
 # 絵日記作成画面
 class CreateView(TemplateView):
@@ -189,3 +191,19 @@ class CreateView(TemplateView):
             
 
         return render(request,self.template_name,context)
+# カレンダー画面
+class CalenderView(TemplateView):
+
+    template_name = 'calendar.html'
+
+    def get(self, request, *args, **kwargs):
+        print('GET')
+        return render(request,self.template_name)
+
+    def post(self, request, *args, **kwargs):
+        print('POST')
+        print(vars(request))
+        
+        # パラメータを含むURLにリダイレクト
+        url = reverse('timeline') + f'?groupName=1&page=1'
+        return redirect(url)

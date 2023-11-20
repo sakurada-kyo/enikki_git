@@ -10,3 +10,4 @@ class CreateForm(forms.ModelForm):
     class Meta:
         # model = PostMaster
         fields = ('diary','')
+
