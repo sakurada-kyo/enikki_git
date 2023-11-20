@@ -401,22 +401,51 @@ jQuery._farbtastic = function (container, callback) {
 }
 
 //-------------------保存ボタン------------------
-$('#save').addEventListener('submit', function(e) {
-  e.preventDefault();
-  save();
-});
-function save() {
+// var saveBtn = document.getElementById("save");
+// saveBtn.addEventListener('submit', function(e) {
+//   e.preventDefault();
+//   console.log("save");
+//   let form_elem = document.getElementById("save-form");
 
-  let form_elem   = "#save-form";
+//   let data    = new FormData(form_elem);
 
-  let data    = new FormData( $(form_elem).get(0));
-  let url     = $(form_elem).prop("action");
-  let method  = $(form_elem).prop("method");
+//   //TODO:何も描いていない場合、そのまま送信されてしまう問題がある。
+//   let context = document.getElementById('defaultCanvas0').getContext('2d');
+//   var base64  = context.canvas.toDataURL('image/jpeg');
 
-  //===================canvasの画像化処理==================================================
+//   // Base64からバイナリへ変換
+//   var bin = atob(base64.replace(/^.*,/, ''));
+//   var buffer = new Uint8Array(bin.length);
+//   for (var i = 0; i < bin.length; i++) {
+//       buffer[i] = bin.charCodeAt(i);
+//   }
+
+//   //ファイル名は日付
+//   let dt = new Date();
+//   let filename = dt.toLocaleString().replace(/\/| |:/g,"");
+
+//   //バイナリでファイルを作る
+//   file = new File([buffer.buffer], filename + ".jpeg", { type: 'image/jpeg' });
+//   // data.append("img",file,filename);
+//   for (let v of data.entries() ){
+//     console.log("entry:"+v);
+//   }
+
+  
+//   // const request = new XMLHttpRequest();
+//   // request.open("POST", "/enikki/create/",false);
+//   // request.send(data);
+// });
+
+var form_elem = document.getElementById("save-form");
+
+form_elem.addEventListener('formdata', (e) => {
+  var fd = e.formData;
+
+  // let data    = new FormData(form_elem);
 
   //TODO:何も描いていない場合、そのまま送信されてしまう問題がある。
-  let context = document.getElementById('canvas').getContext('2d');
+  let context = document.getElementById('defaultCanvas0').getContext('2d');
   var base64  = context.canvas.toDataURL('image/jpeg');
 
   // Base64からバイナリへ変換
@@ -431,13 +460,52 @@ function save() {
   let filename = dt.toLocaleString().replace(/\/| |:/g,"");
 
   //バイナリでファイルを作る
-  file = new File([buffer.buffer], filename + ".jpeg", { type: 'image/png' });
-
-  data.append("img",file);
-  for (let v of data.entries() ){
-    console.log(v);
+  file = new File([buffer.buffer], filename + ".jpeg", { type: 'image/jpeg' });
+  // data.append("img",file,filename);
+  for (let v of fd.entries() ){
+    console.log("entry:"+v);
   }
+  // データをセット
+  fd.append("img",file,filename);
 
-  data.submit();
-}
+  form_elem.submit();
+});
+
+
+
+// function saveForm() {
+//   console.log("save");
+//   let form_elem   = "#save-form";
+
+//   let data    = new FormData( $(form_elem).get(0));
+//   let url     = $(form_elem).prop("action");
+//   let method  = $(form_elem).prop("method");
+
+//   //===================canvasの画像化処理==================================================
+
+//   //TODO:何も描いていない場合、そのまま送信されてしまう問題がある。
+//   let context = document.getElementById('canvas').getContext('2d');
+//   var base64  = context.canvas.toDataURL('image/jpeg');
+
+//   // Base64からバイナリへ変換
+//   var bin = atob(base64.replace(/^.*,/, ''));
+//   var buffer = new Uint8Array(bin.length);
+//   for (var i = 0; i < bin.length; i++) {
+//       buffer[i] = bin.charCodeAt(i);
+//   }
+
+//   //ファイル名は日付
+//   let dt = new Date();
+//   let filename = dt.toLocaleString().replace(/\/| |:/g,"");
+
+//   //バイナリでファイルを作る
+//   file = new File([buffer.buffer], filename + ".jpeg", { type: 'image/png' });
+//   console.log("file"+file);
+//   data.append("img",file);
+//   for (let v of data.entries() ){
+//     console.log("entry:"+v);
+//   }
+
+//   data.submit();
+// }
 //-------------------保存ボタン------------------
