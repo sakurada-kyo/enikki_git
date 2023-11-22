@@ -134,7 +134,7 @@ function ajax_open(lastElement){
     url: 'ajax_timeline/',
     type: 'POST',
     data: {
-        'groupName': $(lastElement).attr('data-group'),
+        'group': $(lastElement).attr('data-group'),
         'page': String($(lastElement).attr('data-page')),
     },
     dataType: 'json',

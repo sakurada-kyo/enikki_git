@@ -4,15 +4,17 @@
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
 {% endblock %}
 {% block content %}
-  <div class="buttonId" id="buttonId">
-    <button class="button1" onclick="showPreviousMonth()">◀</button>
-  </div>
+  <form id="form" action="" method="post">
+    <div class="buttonId" id="buttonId">
+      <button class="button1" onclick="showPreviousMonth()">◀</button>
+    </div>
 
-  <div class="calendar" id="calendar"></div>
+    <div class="calendar" id="calendar"></div>
 
-  <div class="buttonId" id="buttonId">
-    <button class="button2" onclick="showNextMonth()">▶</button>
-  </div>
+    <div class="buttonId" id="buttonId">
+      <button class="button2" onclick="showNextMonth()">▶</button>
+    </div>
+  </form>
 {% endblock %}
 
 {% block js %}

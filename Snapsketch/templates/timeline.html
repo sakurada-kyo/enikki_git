@@ -25,9 +25,10 @@
                 </article>
             {% endfor %}
         </div>
-    {% block js %}
-        <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
-        {% comment %} <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script> {% endcomment %}
-        <script src="{% static 'js\timeline.js' %}"></script>
-    {% endblock %}
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
+    {% comment %} <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script> {% endcomment %}
+    <script src="{% static 'js\timeline.js' %}"></script>
 {% endblock %}
