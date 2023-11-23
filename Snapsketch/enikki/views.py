@@ -10,6 +10,7 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 from .models import *
 from django.core.paginator import Paginator
+from django.core import serializers
 
 
 # # タイムライン画面表示
@@ -70,52 +71,50 @@ class TimelineView(TemplateView):
 # タイムラインのajax
 def ajax_timeline(request):
     if request.method == 'POST':
-        group = str(request.POST['group']) # グループ名
-        page = str(request.POST.get('page',1)) # 現在のページ番号
+        group_name = request.POST['group']  # グループ名
+        page_number = int(request.POST.get('page', 1))  # 現在のページ番号
         page_size = 10  # 1ページあたりの要素数
-        start_post_id = page * page_size # ページ番号に応じた投稿IDの閾値を計算
-        
-        if group and page:
-            # 指定したグループ名とページ番号より大きいpost_idを持つPostMasterを取得
-            posts_greater_than_page = PostMaster.objects.filter(
-                group__group=group,
-                post_id__gt=start_post_id
-            ).order_by('post_id')[:page_size]  # 10件取得
 
-            paginator = Paginator(posts_greater_than_page, page_size)
-            # 指定ページのPostMasterオブジェクトを取得
-            posts_for_requested_page = paginator.get_page(page)
+        if group_name and page_number:
+            # 指定されたグループに関連する投稿を取得
+            posts = PostMaster.objects.filter(groupposttable__group_id__groupname=group_name, groupposttable__page__gt=page_number).distinct()
 
-            # ページに含まれるオブジェクト数が指定サイズ未満の場合、追加で残りのオブジェクトを取得
-            if posts_for_requested_page.has_next() and len(posts_for_requested_page) < page_size:
-                remaining_posts_count = page_size - len(posts_for_requested_page)
-                remaining_posts = PostMaster.objects.filter(
-                    group__group=group,
-                    post_id__gt=posts_for_requested_page[-1].post_id
-                ).order_by('post_id')[:remaining_posts_count]
+            if posts:
+                # ログイン中のユーザーが各投稿に対していいねしているかどうかを取得するサブクエリ
+                liked_posts = LikeTable.objects.filter(user=request.user, post__in=posts).values_list('post', flat=True)
+                
+                # Paginatorを使用してページ分割
+                paginator = Paginator(posts, page_size,orphans=1)
 
-                for post in remaining_posts:
-                    posts_for_requested_page.append(post)
-
-            return posts_for_requested_page  # ページ番号に応じたPostMasterオブジェクトを返す
+                all_pages_data = []
+                for page_num in paginator.page_range:
+                    page_data = paginator.page(page_num)
+                    
+                    # 投稿データのシリアライズ
+                    serialized_data = serializers.serialize('json', page_data, ensure_ascii=False)
+                    
+                    # ユーザーがいいねしているかどうかを投稿データに追加
+                    for entry in serialized_data:
+                        post_id = entry['pk']
+                        entry['fields']['is_liked'] = post_id in liked_posts
+                    
+                    all_pages_data.append({
+                        'data': serialized_data,
+                        'has_next': page_data.has_next(),
+                        'has_previous': page_data.has_previous(),
+                        'number': page_data.number,# ページ番号
+                    })
+                    
+                return JsonResponse({
+                    'all_pages_data': all_pages_data,
+                    'total_pages': paginator.num_pages,
+                })
+            else:
+                return JsonResponse({'all_pages_data': None, 'total_pages': 0}, status=404)
         else:
             # groupかpageのいずれかが空または存在しない場合のエラー処理など
             return
         
-        
-
-        # グループ名+page番号より上の行を持ってくる（更新データのみ）
-        data = {
-            # ユーザー名
-            # ユーザーアイコン
-            # 絵
-            # 日記
-            # いいね数
-            "isUserLiked":False,# いいねの有無
-            "page":pageNum, # 次付与するページ番号
-        }
-        
-        return JsonResponse(data)
 
 # いいね機能
 def ajax_like(request):

@@ -67,7 +67,7 @@ class CommentMaster(models.Model):
 class GroupPostTable(models.Model):
     group = models.ForeignKey(GroupMaster, on_delete=models.CASCADE,related_name='group')
     post = models.ForeignKey(PostMaster, on_delete=models.CASCADE,related_name='post')
-    page = models.CharField(max_length=255,default=1)
+    page = models.IntegerField(default=1)
 
     class Meta:
         constraints = [
