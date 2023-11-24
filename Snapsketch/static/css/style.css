@@ -23,14 +23,16 @@ main{
 main #box{
     margin: auto;
     width: 60%;
-    background-color: #ffffff;
 }
 
-main #foot{
-    margin-top:50px;
+#foot{
+    margin-top: 150px;
     margin-right: 150px;
     float: right;
-    font-size: 25px;
+    font-size: 30px;
+}
+.mypage {
+    text-decoration: none;
     color: #ffffff;
 }
 .wrapper{

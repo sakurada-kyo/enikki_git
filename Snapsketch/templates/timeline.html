@@ -3,67 +3,24 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/timeline.css' %}">
-    <link rel="stylesheet" href="{% static 'css/groupCreate.css' %}">
 {% endblock %}
 
 {% block content %}
-        <div id="popup-wrapper">
-            <div id="popup-inside">
-                <div id="close">x</div>
-                <form method="post" id="group-form" action="{% url 'enikki:ajax_group' %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                        <h1>グループ作成</h1>
-                        <table>
-                            <tr>
-                                <th>グループ名:</th>
-                                <td><input type="text" id="text" value=""></td>
-                            </tr>
-                            <tr>
-                                <th>アイコン:</th>
-                                <td><input type="file" name="imageFile"/></td>
-                            </tr>
-                            <tr>
-                                <th>概要:</th>
-                                <td><input type="text" class="text2" value=""></td>
-                            </tr>
-                        </table>
-                        <input type="submit" id="createBtn" value="作成する">
-                </form>
-            </div>
-        </div>
-        <div id="group-nav">
-            <img class="group-icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
-            <i class="fa-solid fa-plus"></i>
+        <div id="group_nav">
+            <img class="group_icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
         </div>
         <div id="scroll">
-            {% for enikki in EnikkiModel %}
-                <article class="content" data-group="{{ enikki.group_name }}" data-page="{{ enikki.page_num }}">
+            {% for post in posts %}
+                <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page_num }}">
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
-                        <p class="user_name">{{ enikki.user_name }}</p>
-                        <div class="like">
-                            {% if is_user_liked %}
-                            <button type="button" class="ajax-like">
-                            <!-- すでにいいねしている時はfasクラス -->
-                            <i class="fas fa-heart text-danger"></i>
-                            </button>
-                            {% else %}
-                            <button type="button" class="ajax-like">
-                            <!-- いいねしていないときはfarクラス -->
-                            <i class="far fa-heart text-danger"></i>
-                            </button>
-                            {% endif %}
-                            <!-- いいねの数 -->
-                            <span class="like-count">{{ enikki.like_count }}</span>
-                        </div>
-                        <div class="comment"><!--グループ名とページ番号送信-->
-                            <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?group=&page="></a>
-                            <span class="comment-count">0</span>
-                        </div>
+                        <p class="user_name">{{ post.user_name }}</p>
+                        <img class="good" src="{% static 'images/test_icon.jpeg' %}" alt="いいね">
+                        <img class="comment" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
                     </div>
                     <section class="draw_diary">
                         <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
-                        <p class="diary">{{ enikki.diary }}</p>
+                        <p class="diary">{{ post.diary }}</p>
                     </section>
                 </article>
             {% endfor %}
@@ -71,7 +28,7 @@
 {% endblock %}
 
 {% block js %}
-        <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
-        {% comment %} <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script> {% endcomment %}
-        <script src="{% static 'js\timeline.js' %}"></script>
+    <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
+    {% comment %} <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script> {% endcomment %}
+    <script src="{% static 'js\timeline.js' %}"></script>
 {% endblock %}

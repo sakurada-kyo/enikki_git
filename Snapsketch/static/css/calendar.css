@@ -1,0 +1,93 @@
+body {
+    font-family: "MS Mincho";
+    margin: 0;
+    background-color: #222222;
+    color: #ffffff;
+}
+
+main{
+    text-align: center;
+}
+
+main #box{
+    margin: auto;
+    width: 60%;
+    background-color: #ffffff;
+    margin-top: 100px;
+    display: flex;
+    padding: 40px 0;
+}
+
+main #foot{
+    margin-top:50px;
+    margin-right: 150px;
+    float: right;
+    font-size: 25px;
+    color: #ffffff;
+}
+
+.wrapper{
+    min-height: 100vh;
+    position: relative;/*←相対位置*/
+    padding-bottom: 120px;/*←footerの高さ*/
+    box-sizing: border-box;
+}
+
+.calendar {
+    max-width: 800px;
+    max-height: 580px;
+    margin: 0 auto;
+    color: black;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    height: 500px;
+}
+
+.day,.dayOfWeek {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    margin: 3px;
+}
+
+.day:hover {
+    background-color: #f2f2f2;
+}
+
+.current-month {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.buttonId {
+    text-align: center;
+    padding-top: 30px;
+    height: 50px;
+    width: 270px;
+    margin: auto;
+
+}
+
+.buttonId button {
+    width: 50px;
+    margin-right: 150px;
+    margin-left: 150px;
+}
+
+.buttonId .button2 {
+    margin-left: 70px;
+}
+
+

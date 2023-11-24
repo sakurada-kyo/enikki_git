@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
+{% endblock %}
+{% block content %}
+  <form id="form" action="" method="post">
+    <div class="buttonId" id="buttonId">
+      <button class="button1" onclick="showPreviousMonth()">◀</button>
+    </div>
+
+    <div class="calendar" id="calendar"></div>
+
+    <div class="buttonId" id="buttonId">
+      <button class="button2" onclick="showNextMonth()">▶</button>
+    </div>
+  </form>
+{% endblock %}
+
+{% block js %}
+  <script src="{% static 'js/calendar.js' %}"></script>
+{% endblock %}
+
+{% block footer %}
+  <footer>
+    <div id="kotei">
+      <small>&copy;2023 SnapSketch</small>
+    </div>
+  </footer>
+{% endblock %}

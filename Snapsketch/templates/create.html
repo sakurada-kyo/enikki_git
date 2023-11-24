@@ -7,10 +7,10 @@
 {% block content %}
 <form id="post-form" action="" method="post">
     <div id = "flex">
-        {% if canvasFile %}
-        <a id="sketch">絵日記を作成<br>＋</a>
+        {% if not canvasFile %}
+        <a id="sketch" href="{% url 'enikki:canvas' %}">絵日記を作成<br>＋</a>
         {% else %}
-        <img id="sketch" src="{% static '{{ MEDIA_URL }}{{ canvasFilePath }}' %}">
+        <img id="sketch" src="/media/{{ canvasFile }}" style="padding:0px;">
         {% endif %}
         <textarea name = "sentence"></textarea>
     </div>
