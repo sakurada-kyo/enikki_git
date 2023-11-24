@@ -39,8 +39,8 @@ class PostMaster(models.Model):
 
 # # ユーザーグループテーブル
 class UserGroupTable(models.Model):
-    user = models.ForeignKey(userInstance, on_delete=models.CASCADE,related_name='user')
-    group = models.ForeignKey(GroupMaster, on_delete=models.CASCADE,related_name='group')
+    user = models.ForeignKey(userInstance, on_delete=models.CASCADE,related_name='usergroup_user')
+    group = models.ForeignKey(GroupMaster, on_delete=models.CASCADE,related_name='usergroup_group')
 
 # # フォロワーテーブル
 class Follower(models.Model):
@@ -52,14 +52,14 @@ class Follower(models.Model):
 
 # # いいねテーブル
 class LikeTable(models.Model):
-    user = models.ForeignKey(userInstance, on_delete=models.CASCADE,related_name='user')
-    post = models.ForeignKey(PostMaster, on_delete=models.CASCADE,related_name='post')
+    user = models.ForeignKey(userInstance, on_delete=models.CASCADE,related_name='like_user')
+    post = models.ForeignKey(PostMaster, on_delete=models.CASCADE,related_name='like_post')
 
 # # コメントマスタ
 class CommentMaster(models.Model):
     comment_id = models.CharField(primary_key=True,max_length=255)
-    user = models.ForeignKey(userInstance, on_delete=models.CASCADE,related_name='user')
-    post = models.ForeignKey(PostMaster, on_delete=models.CASCADE,related_name='post')
+    user = models.ForeignKey(userInstance, on_delete=models.CASCADE,related_name='comment_user')
+    post = models.ForeignKey(PostMaster, on_delete=models.CASCADE,related_name='comment_post')
     comment = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -67,8 +67,8 @@ class CommentMaster(models.Model):
 
 # #グループ投稿テーブル
 class GroupPostTable(models.Model):
-    group = models.ForeignKey(GroupMaster, on_delete=models.CASCADE,related_name='group')
-    post = models.ForeignKey(PostMaster, on_delete=models.CASCADE,related_name='post')
+    group = models.ForeignKey(GroupMaster, on_delete=models.CASCADE,related_name='grouppost_group')
+    post = models.ForeignKey(PostMaster, on_delete=models.CASCADE,related_name='grouppost_post')
     page = models.CharField(max_length=255,default=1)
 
     class Meta:
