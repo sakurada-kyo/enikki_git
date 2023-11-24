@@ -5,7 +5,6 @@ userInstance = get_user_model()
 
 # アイコンパスを定義
 def directory_path(instance, filename):
-    cls_name = instance.__class__.__name__# instance名取得
     
     # User用
     if isinstance(instance, userInstance):
