@@ -7,8 +7,8 @@ userInstance = get_user_model()
 def directory_path(instance, filename):
     # User用
     if isinstance(instance, userInstance):
-        return 'icon/{0}/{1}'.format(instance.user_id, filename)
-    
+        # return 'icon/{0}/{1}'.format(instance.user_id, filename)
+        return 'icon/{0}'.format(filename)
     # PostMaster用
     if isinstance(instance, PostMaster):
         return 'sketch/{0}/{1}'.format(instance.user.username,filename)
@@ -29,8 +29,8 @@ class PostMaster(models.Model):
     sketch_path = models.ImageField(upload_to=directory_path)
     diary = models.CharField(blank=True,null=True,max_length=255)
     user = models.ForeignKey(userInstance,on_delete=models.CASCADE)
-    likeCount = models.IntegerField(default=0,null=True)
-    commentCount = models.IntegerField(default=0,null=True)
+    like_count = models.IntegerField(default=0,null=True)
+    comment_count = models.IntegerField(default=0,null=True)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True,null=True)

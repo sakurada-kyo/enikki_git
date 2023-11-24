@@ -165,6 +165,7 @@ function add_article(allPagesData) {
   if (Array.isArray(allPagesData)) {
     for (const pageData of allPagesData) {
       const posts = JSON.parse(pageData.data);// 'data' をJavaScriptオブジェクトに変換
+      const group = pageData.group;
 
       // このページの投稿データを処理
       posts.forEach(post => {
@@ -173,6 +174,7 @@ function add_article(allPagesData) {
         const postUserName = post.fields.user.username; // ユーザー名情報を取得
         const postLikeCount = post.fields.likeCount; // いいね数情報を取得
         const postCommentCount = post.fields.commentCount; // コメント数情報を取得
+        const page = post.fields.page
         const isLiked = post.fields.is_liked; // いいね情報を取得
         
         var content = createAndAppendElement('article', 'content', '');
@@ -218,7 +220,7 @@ function add_article(allPagesData) {
         var diary = createAndAppendElement('p', 'diary', postDiary);
         drawDiary.appendChild(diary);
 
-        content.setAttribute('data-group', 'group');//グループ名追加
+        content.setAttribute('data-group', group);
         content.setAttribute('data-page', page);
 
         fragment.appendChild(content); // fragmentの追加する
@@ -249,6 +251,8 @@ function createAndAppendElement(tagName, className = '', textContent = '') {
 //-----------------------いいね機能-----------------------
 document.querySelector('.ajax-like').addEventListener('click', e => {
   var parent = e.currentTarget;
+  var parentContent = parent.closest(".content");
+  console.log(parent);
   var likeCount = parent.nextElementSibling.innerHTML;
   e.preventDefault();
 
@@ -256,8 +260,8 @@ document.querySelector('.ajax-like').addEventListener('click', e => {
     url: 'ajax_like/',
     type: 'POST',
     data: {
-      'enikkiId': 'xxxxx',
-      'userId': 'uuuuu',
+      'page':$(parentContent).attr('data-page'),
+      'group':$(parentContent).attr('data-group'),
       'likeCount': likeCount,
     },
     dataType: 'json',
