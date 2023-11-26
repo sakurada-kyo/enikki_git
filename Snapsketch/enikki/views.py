@@ -17,16 +17,17 @@ from django.db.models import F, Max, Subquery, OuterRef
 
 # # タイムライン画面表示
 class TimelineView(TemplateView):
-    template_name = "canvas.html"
+    template_name = "timeline.html"
 
     def get(self, request, *args, **kwargs):
         print("GET")
+        context = {}
         # ページ番号
         page = request.GET.get('page', 1)
         if 'group' in request.session:
             # セッションからグループ名取得
             session_group = request.session["group"]
-        
+            context['group'] = session_group
             
             # グループ内の投稿記事持ってくる
             if session_group:
@@ -38,7 +39,7 @@ class TimelineView(TemplateView):
                     "sketch_path",
                     "diary",
                     "user__username",
-                    "user__group_icon_path",
+                    # "user__icon_path",
                     "like_count",
                     "comment_count",
                 ).order_by("updated_at")
@@ -58,20 +59,20 @@ class TimelineView(TemplateView):
         else:
             # グループに関係なく投稿記事を持ってくる
             print("セッションからグループ名が取得できませんでした")
-            posts = PostMaster.objects.filter(post_id__in=post_ids).values(
+            posts = PostMaster.objects.values(
                     "sketch_path",
                     "diary",
                     "user__username",
-                    "user__group_icon_path",
+                    # "user__icon_path",
                     "like_count",
                     "comment_count",
                 ).order_by("updated_at")
 
         context = {
             "posts": posts,
-            "group":session_group,
             "page":page
         }
+        
         return render(request, self.template_name, context)
 
 
@@ -409,21 +410,32 @@ class CalenderView(TemplateView):
         date = request.POST['date']
         # ユーザー取得
         userId = self.request.user.user_id
+        
         # グループ取得
         groupName = request.session['group']
 
-        # user_id,date
-        # ユーザーと日付で該当する投稿の post_id を取得
-        page = GroupPostTable.objects.filter(
-            post__user_id=userId,
-            post__created_at__date=date,
-            group__groupname=groupName,
-        ).values_list('page', flat=True).first()
+        if groupName:
+            # ユーザーと日付で該当する投稿の post_id を取得
+            page = GroupPostTable.objects.filter(
+                post__user_id=userId,
+                post__created_at__date=date,
+                group__groupname=groupName,
+            ).values_list('page', flat=True).first()
 
-        # 最初に該当する投稿の page を取得する
-        if page is not None:
-            url = reverse('timeline') + f'?page={page}'
-            return redirect(url)
-        else:
-            return None  # 該当する投稿が見つからなかった場合の処理
+            # 最初に該当する投稿の page を取得する
+            if page is not None:
+                url = reverse('timeline') + f'?page={page}'
+                return redirect(url)
+            else:
+                return None  # 該当する投稿が見つからなかった場合の処理
 
+def ajax_calendar(request):
+    if request.method == 'POST':
+        userId = request.user.user_id
+        date = request.POST['date']
+        if date:
+            try:
+                post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
+            except Http404:
+                # 投稿がなかった時の処理
+                return 

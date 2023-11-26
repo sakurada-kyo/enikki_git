@@ -14,5 +14,5 @@ urlpatterns = [
     # path('mypage/',, name='mypage'),
     # path('friend/',, name='mypage'),
     # path("account/", views.view_accountView, name="account"),
-    path("calendar/", views.CalenderView.as_view(), name="calender"),
+    path("calendar/", views.CalenderView.as_view(), name="calendar"),
 ]

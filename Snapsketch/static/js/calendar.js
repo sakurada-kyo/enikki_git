@@ -78,16 +78,18 @@ currentMonth = currentDate.getMonth();
 generateCalendar(currentYear, currentMonth);
 generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
 
-var form = document.getElementById("save-form");
+var form = document.getElementById("form");
 
-var dayTag = document.querySelector(".day");
-console.log(dayTag);
-dayTag.addEventListener("click", function (e) {
-    date = e.target.getAttribute("data-date");
-    const fd = new FormData(form);
-    fd.append('date', date);
-    for (let d of fd) {
-        console.log(`${d[0]}: ${d[1]}`);
-    }
-    form.submit()
+var dayTags = document.querySelectorAll(".day");
+console.log(dayTags);
+dayTags.forEach(element => {
+    element.addEventListener("click", () => {
+        date = e.target.getAttribute("data-date");
+        const fd = new FormData(form);
+        fd.append('date', date);
+        for (let d of fd) {
+            console.log(`${d[0]}: ${d[1]}`);
+        }
+        form.submit()
+    });
 });

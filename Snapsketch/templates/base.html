@@ -4,27 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="data:,">
     {% block css %}{% endblock %}
     
 </head>
 <body>
-<div id="foot">
-    <a href="/Snapsketch/templates/myPage.html" class="mypage" target="_self"><p>マイページ</p></a>
-    <a href="/Snapsketch/templates/myPage.html" class="mypage" target="_self"><p>カレンダー</p></a>
-    <a href="/Snapsketch/templates/myPage.html" class="mypage" target="_self"><p>ログアウト</p></a>
-</div>
+
 <div class="wrapper">
     <header>
             <div id = "logo">Snap Sketch</div>
     </header>
     <main>
-        
-        <!-- <div id = "foot">
-            <p>マイページ</p><br>
-            <p>カレンダー</p><br>
-            <p>ログアウト</p>
-        </div> -->
-        <!-- ここから中身作成 -->
+        <ul id="side">
+            {% block side %}
+            {% endblock %}
+        </ul>
         <div id = "box">
             {% block content %}
             {% endblock %}
@@ -32,10 +26,11 @@
     </main>
     {% block footer %}
     
-    {% endblock footer %}
+    {% endblock %}
 </div>
 
-<script src="{%static 'js/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+<script src="https://kit.fontawesome.com/706c0011db.js" crossorigin="anonymous"></script>
 {% block js %}{% endblock %}
 </body>
 </html>

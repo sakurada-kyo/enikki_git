@@ -44,12 +44,9 @@ function loadScroll() {
   let url = new URL(window.location.href);
   console.log(url);
   let pathname = location.pathname;
-  // console.log(pathname);
   let params = url.searchParams;
-  // console.log(params);
   let param1 = params.get('groupName');
   let param2 = params.get('page');
-  console.log("画面スクロール：" + param1 + ":" + param2);
   if (param1 != null && param2 != null) {
     var element = document.querySelector('[data-group="' + param1 + '"][data-page="' + param2 + '"]');
     console.log("element:" + element);
@@ -65,8 +62,12 @@ function loadScroll() {
 //-----------------------intersection observer api-----------------------
 
 
-window.addEventListener('load', updates_sign());
+window.addEventListener('scroll', updates_sign());
 function updates_sign() {
+  const parent = document.getElementById("scroll");
+  var target = parent.lastElementChild;
+  if(!target) return;
+  console.log("target:" + target);
   const options = {
     root: null,
     rootMargin: "0px 0px 200px 0px", // 上 右 下 左
@@ -86,10 +87,6 @@ function updates_sign() {
   }
 
   const observer = new IntersectionObserver(callback, options);
-  const parent = document.getElementById("scroll");
-  if (!parent) return;
-  var target = parent.lastElementChild;
-  console.log("target:" + target);
   observer.observe(target);
 }
 //-----------------------intersection observer api-----------------------
@@ -176,14 +173,14 @@ function add_article(allPagesData) {
         const postCommentCount = post.fields.commentCount; // コメント数情報を取得
         const page = post.fields.page
         const isLiked = post.fields.is_liked; // いいね情報を取得
-        
+
         var content = createAndAppendElement('article', 'content', '');
 
         var contentHeader = createAndAppendElement('div', 'content_header', '');
         content.appendChild(contentHeader);
 
         var userIcon = createAndAppendElement('img', 'user_icon');
-        userIcon.setAttribute('src','');//ユーザーアイコン
+        userIcon.setAttribute('src', '');//ユーザーアイコン
         contentHeader.appendChild(userIcon);
 
         var userName = createAndAppendElement('p', 'user_name', postUserName);
@@ -249,43 +246,47 @@ function createAndAppendElement(tagName, className = '', textContent = '') {
 //-----------------------templateタグ複製-----------------------
 
 //-----------------------いいね機能-----------------------
-document.querySelector('.ajax-like').addEventListener('click', e => {
-  var parent = e.currentTarget;
-  var parentContent = parent.closest(".content");
-  console.log(parent);
-  var likeCount = parent.nextElementSibling.innerHTML;
-  e.preventDefault();
+var likeBtn = document.querySelector('.ajax-like');
+if (likeBtn) {
+  likeBtn.addEventListener('click', e => {
+    var parent = e.currentTarget;
+    var parentContent = parent.closest(".content");
+    console.log(parent);
+    var likeCount = parent.nextElementSibling.innerHTML;
+    e.preventDefault();
 
-  $.ajax({
-    url: 'ajax_like/',
-    type: 'POST',
-    data: {
-      'page':$(parentContent).attr('data-page'),
-      'group':$(parentContent).attr('data-group'),
-      'likeCount': likeCount,
-    },
-    dataType: 'json',
-    headers: { 'X-CSRFToken': csrftoken }
-  })
-    .done(function (response) {
-      // いいね数を書き換える
-      // いいねした時はハートを塗る
-      if (response.method == 'create') {
-        e.target.classList.remove('far')
-        e.target.classList.add('fas')
-      } else {
-        e.target.classList.remove('fas')
-        e.target.classList.add('far')
-      }
+    $.ajax({
+      url: 'ajax_like/',
+      type: 'POST',
+      data: {
+        'page': $(parentContent).attr('data-page'),
+        'group': $(parentContent).attr('data-group'),
+        'likeCount': likeCount,
+      },
+      dataType: 'json',
+      headers: { 'X-CSRFToken': csrftoken }
     })
-    // Ajax通信が失敗したら発動
-    .fail((jqXHR, textStatus, errorThrown) => {
-      alert('Ajax通信に失敗しました。');
-      console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-      console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-      console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
-    });
-});
+      .done(function (response) {
+        // いいね数を書き換える
+        // いいねした時はハートを塗る
+        if (response.method == 'create') {
+          e.target.classList.remove('far')
+          e.target.classList.add('fas')
+        } else {
+          e.target.classList.remove('fas')
+          e.target.classList.add('far')
+        }
+      })
+      // Ajax通信が失敗したら発動
+      .fail((jqXHR, textStatus, errorThrown) => {
+        alert('Ajax通信に失敗しました。');
+        console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+        console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+        console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
+      });
+  });
+}
+
 //-----------------------いいね機能-----------------------
 
 //-----------------------コメント機能-----------------------
@@ -331,9 +332,11 @@ function showPopup() {
     })
       .done(function (response) {
         console.log(response)
-        const fragment = addGroup(response);
-        // $('#group-nav:nth-last-child(2)').append(fragment);
-        $('#group-nav .group-icon:last').after(fragment);
+        if(response){
+          const fragment = addGroup(response);
+          // $('#group-nav:nth-last-child(2)').append(fragment);
+          $('#group-nav .group-icon:last').after(fragment);
+        }
       })
       // Ajax通信が失敗したら発動
       .fail((jqXHR, textStatus, errorThrown) => {
@@ -365,5 +368,4 @@ function addGroup(data) {
 }
 //-----------------------グループ追加機能-----------------------
 //-----------------------グループ切り替え機能-----------------------
-
 //-----------------------グループ切り替え機能-----------------------

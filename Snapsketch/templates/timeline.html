@@ -32,7 +32,9 @@
             </div>
         </div>
         <div id="group-nav">
+            {% if group %}
             <img class="group-icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
+            {% endif %}
             <i class="fa-solid fa-plus"></i>
         </div>
         <div id="scroll">
@@ -68,6 +70,14 @@
                 </article>
             {% endfor %}
         </div>
+{% endblock %}
+
+{% block side %}
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">マイページ</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">絵日記作成</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">フレンド一覧</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">グループ一覧</a></li>
 {% endblock %}
 
 {% block js %}
