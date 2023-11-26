@@ -351,6 +351,7 @@ function addGroup(data) {
   const groupIcon = document.createElement("img");
   const fragment = document.createDocumentFragment();
   const groupIconPath = data.filePath;
+  const groupIndex = data.addGroupIndex;
 
   console.log(groupIconPath);
 
@@ -363,3 +364,6 @@ function addGroup(data) {
 
 }
 //-----------------------グループ追加機能-----------------------
+//-----------------------グループ切り替え機能-----------------------
+
+//-----------------------グループ切り替え機能-----------------------

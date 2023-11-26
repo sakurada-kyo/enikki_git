@@ -36,11 +36,11 @@
             <i class="fa-solid fa-plus"></i>
         </div>
         <div id="scroll">
-            {% for enikki in EnikkiModel %}
-                <article class="content" data-group="{{ enikki.group_name }}" data-page="{{ enikki.page_num }}">
+            {% for post in posts %}
+                <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page }}">
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
-                        <p class="user_name">{{ enikki.user_name }}</p>
+                        <p class="user_name">{{ post.user_name }}</p>
                         <div class="like">
                             {% if is_user_liked %}
                             <button type="button" class="ajax-like">
@@ -54,16 +54,16 @@
                             </button>
                             {% endif %}
                             <!-- いいねの数 -->
-                            <span class="like-count">{{ enikki.like_count }}</span>
+                            <span class="like-count">{{ post.like_count }}</span>
                         </div>
                         <div class="comment"><!--グループ名とページ番号送信-->
-                            <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?group=&page="></a>
-                            <span class="comment-count">0</span>
+                            <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?page={{ post.page }}"></a>
+                            <span class="comment-count">{{ post.comment_count }}</span>
                         </div>
                     </div>
                     <section class="draw_diary">
                         <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
-                        <p class="diary">{{ enikki.diary }}</p>
+                        <p class="diary">{{ post.diary }}</p>
                     </section>
                 </article>
             {% endfor %}

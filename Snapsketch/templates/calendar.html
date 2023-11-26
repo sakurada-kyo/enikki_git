@@ -5,6 +5,7 @@
 {% endblock %}
 {% block content %}
   <form id="form" action="" method="post">
+    {% csrf_token %}
     <div class="buttonId" id="buttonId">
       <button class="button1" onclick="showPreviousMonth()">◀</button>
     </div>
