@@ -6,6 +6,7 @@
 {% block content %}
 
 <form action="#" name="search2" method="post">
+	{% csrf_token %}
 	<dl class="search2">
 		<dt><input type="text" name="search" value="" placeholder="アカウント名を入力...." /></dt>
 		<dd><button><span></span></button></dd>
