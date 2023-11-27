@@ -461,3 +461,24 @@ def view_accountView(request):
     return render(request,'account.html',context)
 
 #フォローリクエスト機能
+
+# マイページ機能
+class MypageView(TemplateView):
+    template_name = 'myPage.html'
+    def get(self, request, *args, **kwargs):
+        print("GET")
+        context = {}
+        if self.request.user.is_authenticated:
+            print("ログイン成功")
+            try:
+                User = get_user_model()
+                user = get_object_or_404(User,username = self.request.user.username)
+                context['username'] = user.username
+                context['email'] = user.email
+                # context['introduction'] = user.introduction
+                # context['icon_path'] = user.icon_path
+            except Http404:
+                context['error'] = 'ユーザーが見つかりません'
+            return render(request,self.template_name,context)
+        else:
+            redirect('login_app:login')

@@ -22,6 +22,14 @@
   <script src="{% static 'js/calendar.js' %}"></script>
 {% endblock %}
 
+{% block side %}
+<li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">タイムライン</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">絵日記作成</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">フレンド一覧</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">グループ一覧</a></li>
+{% endblock %}
+
 {% block footer %}
   <footer>
     <div id="kotei">
