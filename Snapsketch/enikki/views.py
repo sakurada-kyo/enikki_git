@@ -334,3 +334,57 @@ class CalenderView(TemplateView):
         else:
             return None  # 該当する投稿が見つからなかった場合の処理
 
+# カレンダー画面
+class RequestView(TemplateView):
+
+    template_name = 'calendar.html'
+
+    def get(self, request, *args, **kwargs):
+        print('GET')
+        return render(request,self.template_name)
+
+    def post(self, request, *args, **kwargs):
+        print('POST')
+        print(vars(request))
+
+        # POSTリクエスト(日付)取得
+        date = request.POST['date']
+        # ユーザー取得
+        userId = self.request.user.user_id
+        # グループ取得
+        groupName = request.session['group']
+
+        # user_id,date
+        # ユーザーと日付で該当する投稿の post_id を取得
+        posts = GroupPostTable.objects.filter(
+            post__user_id=userId,
+            post__created_at__date=date,
+            group__groupname=groupName,
+        ).values('post_id','group_id')
+
+        # 最初に該当する投稿の page を取得する
+        if posts.exists():
+        # ユーザーと日付、グループ名に該当する最初の投稿の post_id と group_id を取得
+            post_id = posts.first().post_id
+            group_id = posts.first().group_id
+            # 該当する post_id と group_id の page を取得
+            page_number = GroupPostTable.objects.filter(post_id=post_id, group_id=group_id).values_list('page', flat=True).first()
+            # パラメータを含むURLにリダイレクト
+            url = reverse('timeline') + f'?page={page_number[1]}'
+            return redirect(url)
+        else:
+            return None  # 該当する投稿が見つからなかった場合の処理
+
+#ユーザー検索機能
+class SearchView(TemplateView):
+
+    template_name = "search.html"
+
+    #sqlでユーザー検索をかける
+    sql = "select * from "
+    
+    #該当するユーザーがいた場合
+    def if sql!=null():
+        #ユーザーを表示する
+        
+
