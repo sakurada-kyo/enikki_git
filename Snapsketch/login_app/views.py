@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from .forms import SignupForm, LoginForm
 from django.contrib.auth import login
 from django.contrib.auth import login,logout
-from enikki.views import view_timeline
 
 
 #アカウント登録の関数
@@ -40,7 +39,7 @@ def login_view(request):
 
             if user:
                 login(request, user)
-                return redirect('timeline')
+                return redirect('enikki:timeline')
 
     else:
         form = LoginForm()

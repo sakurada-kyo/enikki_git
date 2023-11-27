@@ -1,12 +1,7 @@
-# from django import forms
-# # from .models import PostMaster
+from django import forms
+from .models import GroupMaster
 
-# class CanvasForm(forms.ModelForm):
-#     class Meta:
-#         # model = PostMaster
-#         fields = ('sketch_path')
-        
-# class CreateForm(forms.ModelForm):
-#     class Meta:
-#         # model = PostMaster
-#         fields = ()
+class UploadForm(forms.ModelForm):
+    class Meta:
+        model = GroupMaster
+        fields = ['image']
