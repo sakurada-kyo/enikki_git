@@ -48,7 +48,7 @@ p{
   }
 
 #group-nav{
-    width: 10%;
+    /* width: 5%; */
     float: left;
     margin-top:70px;
 }
@@ -67,7 +67,7 @@ p{
 #scroll{
     width: 80%;
     float: left;
-    /* margin-top:10px; */
+    margin-top:10px;
     margin-bottom: 10px;
 }
 

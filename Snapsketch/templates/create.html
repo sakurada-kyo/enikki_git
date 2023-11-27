@@ -6,6 +6,7 @@
 
 {% block content %}
 <form id="post-form" action="" method="post">
+    {% csrf_token %}
     <div id = "flex">
         {% if not canvasFile %}
         <a id="sketch" href="{% url 'enikki:canvas' %}">絵日記を作成<br>＋</a>
@@ -17,7 +18,7 @@
     <input type = "submit" class = "toukou" value = "投稿">
 </form>
 {% endblock %}
-    
+
 {% block footer %}
 <footer>
     <div id = "kotei">

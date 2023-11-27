@@ -40,7 +40,7 @@ function generateCalendar(year, month) {
         const dayElement = document.createElement("div");
         dayElement.classList.add("day");
         dayElement.textContent = i;
-        dayElement.setAttribute("data-date",`${currentYear}${currentMonth+1}${i}`);
+        dayElement.setAttribute("data-date", `${currentYear}${currentMonth + 1}${i}`);
         daysContainer.appendChild(dayElement);
     }
 
@@ -77,3 +77,19 @@ currentYear = currentDate.getFullYear();
 currentMonth = currentDate.getMonth();
 generateCalendar(currentYear, currentMonth);
 generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+
+var form = document.getElementById("form");
+
+var dayTags = document.querySelectorAll(".day");
+console.log(dayTags);
+dayTags.forEach(element => {
+    element.addEventListener("click", () => {
+        date = e.target.getAttribute("data-date");
+        const fd = new FormData(form);
+        fd.append('date', date);
+        for (let d of fd) {
+            console.log(`${d[0]}: ${d[1]}`);
+        }
+        form.submit()
+    });
+});
