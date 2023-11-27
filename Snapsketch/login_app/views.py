@@ -35,7 +35,7 @@ def login_view(request):
 
             if user:
                 login(request, user)
-                return redirect('timeline')
+                return redirect('enikki:timeline')
 
     else:
         form = LoginForm()

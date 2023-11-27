@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="{% static 'css\account.css' %}">
+</head>
+<body>
+  <header>
+    <h1>アカウント作成</h1>
+  </header>
+
+  <main>
+      <div class ="wrapper">
+          <div id = "mid">
+            <table>
+                <tr><th>名前(漢字):</th>
+                <td class="input-cont"><input type="text" class="required text" value=""></td>
+            </tr>
+            <tr>
+                <th>名前(ｶﾀｶﾅ):</th>
+                <td class="input-cont"><input type="text" class="required text2" name="フリガナ" value=""></td>
+            </tr>
+            <tr>
+                <th>ユーザ名:</th>
+                <td class="input-cont"><input type="text" class="required text2" name="id" value=""></td>
+            </tr>
+            <tr>
+                <th>生年月日:</th>
+                <td>
+                    <div class="form-select-wrap">
+                        <select class="birthday-year">
+                        </select>
+                        /
+                        <select class="birthday-month">
+                        </select>
+                        /
+                        <select class="birthday-day">
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+
+                <th>性別:</th>
+                <td>
+                    <div id = "radio">
+                        <input type="radio" name="1">男
+                        <input type="radio" name="1">女
+                        <input type="radio" name="1">その他
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>メールアドレス:</th>
+                <td class="input-cont"><input type="email" class="required text2" value=""></td>
+            </tr>
+            <tr>
+                <th>パスワード:</th>
+                <td><input type="text" class="required text2" name="pass" value=""></td>
+            </tr>
+            <tr>
+                <th>パスワード(確認):</th>
+                <td><input type="text" class="required text2" name="pass" value=""></td>
+            </tr>
+
+        </table>
+        <input type="submit" onclick="history.back()" class="button" value="戻る">
+        <input type="submit" onclick="location.href='accountConf.html'" class="button2" value="作成する">
+    </div>
+    </div>
+  </main>
+
+  <footer>
+  </footer>
+    <p><a href = "index.html"></a></p>
+    <script src="{% static 'js/app.js' %}"></script>
+
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.min.js"></script>
+    <script src="https://unpkg.com/ml5@0.6.0/dist/ml5.min.js"></script>
+    <script src="{% static 'js/account.js' %}"></script>    
+  </body>
+</html>

@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <title></title>
-  <link rel="stylesheet" href="css\accountConf.css">
+  <link rel="stylesheet" href="{% static 'css/accountConf.css' %}">
 </head>
 <body>
   <header>
@@ -49,7 +50,7 @@
             </tr>
 
         </table>
-        <input type="submit" class="button" value="戻る">
+        <input type="submit" onclick="history.back()" class="button" value="戻る">
         <input type="submit" class="button2" value="作成する">
     </div>
     </div>

@@ -1,0 +1,95 @@
+body{
+    width: 1920px;
+}
+
+/* #wrapper{
+    
+} */
+
+#draw_nav{
+    float:left;
+    width: 15%;
+    margin: 104px 0 120px 300px;
+}
+
+#color_nav{
+    margin-left: 16px;
+    padding: 0px;
+}
+
+#draw_nav ul li{
+    list-style: none;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+main{
+    float: right;
+    margin:90px 140px;
+}
+
+.cbox{
+    /* margin-top:90px; */
+    background-color: white;
+    /* width: 250px; */
+}
+
+#color{
+    font-weight: bold;
+    text-align: center;
+    border-style: none;
+    width:100%;
+}
+
+.farbtastic {
+    position: relative;
+    margin:auto;
+}
+
+.farbtastic * {
+    position: absolute;
+    cursor: crosshair;
+}
+
+.farbtastic, .farbtastic .wheel {
+    width: 195px;
+    height: 195px;
+}
+
+.farbtastic .color, .farbtastic .overlay {
+    top: 47px;
+    left: 47px;
+    width: 101px;
+    height: 101px;
+}
+.farbtastic .wheel {
+    background: url(/static/images/wheel.png) no-repeat;
+    width: 195px;
+    height: 195px;
+}
+.farbtastic .overlay {
+    background: url(/static/images/mask.png) no-repeat;
+}
+.farbtastic .marker {
+    width: 17px;
+    height: 17px;
+    margin: -8px 0 0 -8px;
+    overflow: hidden;
+    background: url(/static/images/marker.png) no-repeat;
+}
+
+#clear{
+    width: 100%;
+}
+
+#eraser{
+    width:100%;
+}
+
+#canvas{
+    width: 800px;
+    float:left;
+    position: absolute;
+    left: 50%;
+    margin: 120px 0 0 -300px;
+}
