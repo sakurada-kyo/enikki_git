@@ -1,67 +1,69 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/comment.css' %}">
+  <link rel="stylesheet" href="{% static 'css/comment.css' %}" />
 {% endblock %}
 
 {% block content %}
-        <div id="scroll">
-                <article class="content" data-group="{{ enikki.group_name }}" data-page="{{ enikki.page_num }}">
-                    <div class="content_header">
-                        <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
-                        <p class="user_name">{{ enikki.user_name }}</p>
-                        <div class="like">
-                            <!-- {% if is_user_liked %} -->
-                            <!-- <button type="button" class="ajax-like"> -->
-                            <!-- すでにいいねしている時はfasクラス -->
-                            <!-- <i class="fas fa-heart text-danger"></i> -->
-                            <!-- </button> -->
-                            <!-- {% else %} -->
-                            <button type="button" class="ajax-like">
-                            <!-- いいねしていないときはfarクラス -->
-                            <i class="far fa-heart text-danger"></i>
-                            </button>
-                            <!-- {% endif %} -->
-                            <!-- いいねの数 -->
-                            <span class="like-count">{{ enikki.like_count }}</span>
-                        </div>
-                        <div class="comment"><!--グループ名とページ番号送信-->
-                            <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?group=&page="></a>
-                            <span class="comment-count">0</span>
-                        </div>
-                    </div>
-                    <section class="draw_diary">
-                        <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
-                        <p class="diary">{{ enikki.diary }}</p>
-                    </section>
-                    <!--ここからコメント追加ポップ-->
-                    <div class="popup_area">
-                        <div class="popup-wrapper">
-                            <input id="open" type="checkbox">
-                            <label for="open" class="open-btn">コメントをする</label>
-                            <label for="open" class="overlay"></label>
-                        
-                            <div class="popup-content">
-                                <div class="reply">
-                                    <h2>コメント返信</h2>
-                                </div>
-                                <textarea></textarea>
-                                <input type="submit" class="toukou" value="返信">
-                            </div>
-                        </div>
-                    </div>
-                    <!--ここからコメント返信画面-->
-                    <div class="comment_area">
-                        <img class="comment_icon" src="{% static 'images/test_icon.jpeg' %}" alt="コメント">
-                        <span class="comment_name">名前</span><br>
-                        <span class="comment_sentence">ここにコメントが表示されます</span>
-                    </div>
-                    
-                    </div>
-                </article>
-            </div>
-{% endblock %}
+  <div id="scroll">
+    <article class="content" data-group="{{ enikki.group_name }}" data-page="{{ enikki.page_num }}">
+      <div class="content_header">
+        <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン" />
+        <p class="user_name">{{ enikki.user_name }}</p>
+        <div class="like">
+          <!-- {% if is_user_liked %} -->
+          <!-- <button type="button" class="ajax-like"> -->
+          <!-- すでにいいねしている時はfasクラス -->
+          <!-- <i class="fas fa-heart text-danger"></i> -->
+          <!-- </button> -->
+          <!-- {% else %} -->
+          <button type="button" class="ajax-like">
+            <!-- いいねしていないときはfarクラス -->
+            <i class="far fa-heart text-danger"></i>
+          </button>
+          <!-- {% endif %} -->
+          <!-- いいねの数 -->
+          <span class="like-count">{{ enikki.like_count }}</span>
+        </div>
+        <div class="comment">
+          <!-- グループ名とページ番号送信 -->
+          <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?group=&page="></a>
+          <span class="comment-count">0</span>
+        </div>
+      </div>
+      <section class="draw_diary">
+        <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵" />
+        <p class="diary">{{ enikki.diary }}</p>
+      </section>
+      <!-- ここからコメント追加ポップ -->
+      <div class="popup_area">
+        <div class="popup-wrapper">
+          <input id="open" type="checkbox" />
+          <label for="open" class="open-btn">コメントをする</label>
+          <label for="open" class="overlay"></label>
 
+          <div class="popup-content">
+            <div class="reply">
+              <h2>コメント返信</h2>
+            </div>
+            <textarea name="comment"></textarea>
+            <input type="submit" class="toukou" value="返信" />
+          </div>
+        </div>
+      </div>
+      <!-- ここからコメント返信画面 -->
+      <div class="comment_area">
+        {% comment %} <div class="comment_content">
+          <img class="comment_icon" src="{% static 'images/test_icon.jpeg' %}" alt="コメント" />
+          <span class="comment_name">名前</span><br />
+          <span class="comment_sentence">ここにコメントが表示されます</span>
+        </div> {% endcomment %}
+      </div>
+    </article>
+  </div>
+{% endblock %}
 {% block js %}
+  <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
+  <script src="{% static 'js\comment.js' %}"></script>
 {% endblock %}

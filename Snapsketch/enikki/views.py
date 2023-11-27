@@ -439,3 +439,25 @@ def ajax_calendar(request):
             except Http404:
                 # 投稿がなかった時の処理
                 return 
+            
+def view_friendView(request):
+
+    context = {}
+
+    return render(request,'friend.html',context)
+
+def view_accountConfView(request):
+    # print('view_accountConf')
+    # template_name = 'login.html'
+
+    context = {}
+
+    return render(request,'accountConf.html',context)
+
+def view_accountView(request):
+
+    context = {}
+
+    return render(request,'account.html',context)
+
+#フォローリクエスト機能
