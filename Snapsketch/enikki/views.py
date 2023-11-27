@@ -459,3 +459,5 @@ def view_accountView(request):
     context = {}
 
     return render(request,'account.html',context)
+
+#フォローリクエスト機能
