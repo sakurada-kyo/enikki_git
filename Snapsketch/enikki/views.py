@@ -304,12 +304,13 @@ class CanvasView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         print("GET")
-        return redirect('canvas')
+        return render(request,self.template_name)
     
     def post(self, request, *args, **kwargs):
         print("POST")
         print(vars(request))
 
+        template_name = "create.html"
         reqFile = request.FILES["img"]
         reqFileName = reqFile.name
         reqFileBinary = reqFile.read()
@@ -340,10 +341,10 @@ class CanvasView(TemplateView):
 
 # 絵日記作成画面
 class CreateView(TemplateView):
-
+    template_name = 'create.html'
     def get(self, request, *args, **kwargs):
         print("GET")
-        return redirect('create')
+        return render(request,self.template_name)
     
     def post(self, request, *args, **kwargs):
         print("POST")
@@ -388,7 +389,7 @@ class CreateView(TemplateView):
                 for group_id in group_ids.annotate(max_page=Subquery(max_pages))
             )
         
-        return redirect('timeline')
+        return redirect('enikki:timeline')
 
     
 
@@ -486,8 +487,21 @@ class MypageView(TemplateView):
 # コメントのAjax
 def comment_group(request):
     print("ajax_comment")
-    comment = str(request.POST.get('comment'))
+    comment = request.POST.get('comment')
     data = {
         
     }
     return JsonResponse(data)
+
+class GroupView(TemplateView):
+    template_name = 'group.html'
+    def get(self, request, *args, **kwargs):
+        print('GET')
+        context = {}
+        try:
+            groups = get_object_or_404(UserGroupTable,user__username = self.request.user.username)
+            context['groups'] = groups
+        except Http404:
+            context['error'] = 'グループに所属していません'
+                
+        return render(request,self.template_name,context)

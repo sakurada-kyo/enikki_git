@@ -12,8 +12,9 @@ urlpatterns = [
     path('canvas/', views.CanvasView.as_view(), name='canvas'),
     path('create/', views.CreateView.as_view(), name='create'),
     path('mypage/',views.MypageView.as_view(), name='mypage'),
-     path('account/', views.view_accountView, name='account'),
-     path("calendar/", views.CalenderView.as_view(), name="calendar"),
-    #  path('comment/ajax_comment/',views.comment_group, name='ajax_comment'),
-     path('friend/', views.view_friendView, name='friend'),
+    path('account/', views.view_accountView, name='account'),
+    path("calendar/", views.CalenderView.as_view(), name="calendar"),
+    path('comment/ajax_comment/',views.comment_group, name='ajax_comment'),
+    path('friend/', views.view_friendView, name='friend'),
+    path('group/',views.GroupView.as_view(), name='group'),
 ]

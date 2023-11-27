@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import SignupForm, LoginForm
 from django.contrib.auth import login,logout
-from enikki.views import view_timeline
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 
