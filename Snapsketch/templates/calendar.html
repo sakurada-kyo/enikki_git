@@ -15,6 +15,23 @@
     <div class="buttonId" id="buttonId">
       <button class="button2" onclick="showNextMonth()">▶</button>
     </div>
+
+    
+    <div class="popup_area">
+      <div class="popup-wrapper">
+        <input id="open" type="checkbox" />
+        <label for="open" class="open-btn">コメントをする</label>
+        <label for="open" class="overlay"></label>
+
+        <div class="popup-content">
+          <div class="reply">
+            <h2>コメント返信</h2>
+          </div>
+          <textarea name="comment"></textarea>
+          <input type="submit" class="toukou" value="返信" />
+        </div>
+      </div>
+    </div>
   </form>
 {% endblock %}
 

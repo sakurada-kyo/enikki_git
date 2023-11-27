@@ -459,3 +459,12 @@ def view_accountView(request):
     context = {}
 
     return render(request,'account.html',context)
+
+# コメントのAjax
+def comment_group(request):
+    print("ajax_comment")
+    comment = str(request.POST.get('comment'))
+    data = {
+        
+    }
+    return JsonResponse(data)
