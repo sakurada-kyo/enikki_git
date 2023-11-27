@@ -364,7 +364,7 @@ class CreateView(TemplateView):
             post.save()  # 変更を保存
         except Http404:
             PostMaster.objects.create(diary=diary,user=userId)
-            return 
+            return
         
         
         #存在判定
