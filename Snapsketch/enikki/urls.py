@@ -14,4 +14,7 @@ urlpatterns = [
     # path('mypage/',, name='mypage'),
     # path('friend/',, name='mypage'),
      path('account/', views.view_accountView, name='account'),
+     path('comment/', views.view_commentView, name='comment'),
+     path('comment/ajax_comment/',views.comment_group, name='ajax_comment'),
+     path('friend/', views.view_friendView, name='friend'),
 ]

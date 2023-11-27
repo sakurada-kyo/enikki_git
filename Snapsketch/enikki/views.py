@@ -201,3 +201,25 @@ def view_accountView(request):
 
     return render(request,'account.html',context)
 
+def view_commentView(request):
+
+    context = {}
+
+    return render(request,'comment.html',context)
+
+# コメントのAjax
+def comment_group(request):
+    print("ajax_comment")
+    comment = str(request.POST.get('comment'))
+    data = {
+        
+    }
+
+    return JsonResponse(data)
+
+def view_friendView(request):
+
+    context = {}
+
+    return render(request,'friend.html',context)
+

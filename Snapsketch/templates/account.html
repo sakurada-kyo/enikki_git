@@ -16,15 +16,15 @@
           <div id = "mid">
             <table>
                 <tr><th>名前(漢字):</th>
-                <td><input type="text" class="required text" value=""></td>
+                <td class="input-cont"><input type="text" class="required text" value=""></td>
             </tr>
             <tr>
                 <th>名前(ｶﾀｶﾅ):</th>
-                <td><input type="text" class="required text2" value=""></td>
+                <td class="input-cont"><input type="text" class="required text2" name="フリガナ" value=""></td>
             </tr>
             <tr>
                 <th>ユーザ名:</th>
-                <td><input type="text" class="required text2" value=""></td>
+                <td class="input-cont"><input type="text" class="required text2" name="id" value=""></td>
             </tr>
             <tr>
                 <th>生年月日:</th>
@@ -47,8 +47,8 @@
                 <td>
                     <div id = "radio">
                         <input type="radio" name="1">男
-                        <input type="radio" name="2">女
-                        <input type="radio" name="3">その他
+                        <input type="radio" name="1">女
+                        <input type="radio" name="1">その他
                     </div>
                 </td>
             </tr>
@@ -58,11 +58,11 @@
             </tr>
             <tr>
                 <th>パスワード:</th>
-                <td><input type="text" class="required text2" value=""></td>
+                <td><input type="text" class="required text2" name="pass" value=""></td>
             </tr>
             <tr>
                 <th>パスワード(確認):</th>
-                <td><input type="text" class="required text2" value=""></td>
+                <td><input type="text" class="required text2" name="pass" value=""></td>
             </tr>
 
         </table>
@@ -75,7 +75,7 @@
   <footer>
   </footer>
     <p><a href = "index.html"></a></p>
-    <script src="js/app.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
 
     <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.min.js"></script>
