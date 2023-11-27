@@ -482,3 +482,12 @@ class MypageView(TemplateView):
             return render(request,self.template_name,context)
         else:
             redirect('login_app:login')
+            
+# コメントのAjax
+def comment_group(request):
+    print("ajax_comment")
+    comment = str(request.POST.get('comment'))
+    data = {
+        
+    }
+    return JsonResponse(data)

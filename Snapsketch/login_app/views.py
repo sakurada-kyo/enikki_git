@@ -1,17 +1,20 @@
 from django.shortcuts import render, redirect
 from .forms import SignupForm, LoginForm
-from django.contrib.auth import login
 from django.contrib.auth import login,logout
+from enikki.views import view_timeline
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 
 
 #アカウント登録の関数
+@ensure_csrf_cookie
 def signup_view(request):
     if request.method == 'POST':
 
         form = SignupForm(request.POST)
         if form.is_valid():
             form.save()
-
+            return redirect('login')
     else:
         form = SignupForm()
 
@@ -21,15 +24,8 @@ def signup_view(request):
 
     return render(request,'signup.html',param)
 
-# #ログイン画面表示用関数
-# def login_view(request):
-#     if request.method == 'POST':
-#         form = LoginForm(request, data=request.POST)
-    
-#     return render(request, 'login.html')
-
-
 #ログインの関数
+@ensure_csrf_cookie
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
