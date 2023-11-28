@@ -1,5 +1,4 @@
 from django.views.generic import TemplateView
-from .forms import CanvasForm
 import json
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
