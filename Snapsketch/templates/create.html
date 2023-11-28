@@ -6,18 +6,27 @@
 
 {% block content %}
 <form id="post-form" action="" method="post">
+    {% csrf_token %}
     <div id = "flex">
-        {% if not canvasFilePath %}
+        {% if not canvasFile %}
         <a id="sketch" href="{% url 'enikki:canvas' %}">絵日記を作成<br>＋</a>
         {% else %}
-        <img id="sketch" src="{{ MEDIA_URL }}{{ canvasFilePath }}">
+        <img id="sketch" src="/media/{{ canvasFile }}" style="padding:0px;">
         {% endif %}
         <textarea name = "sentence"></textarea>
     </div>
     <input type = "submit" class = "toukou" value = "投稿">
 </form>
 {% endblock %}
-    
+
+{% block side %}
+    <li><a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a></li>
+    <li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
+    <li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
+    <li><a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a></li>
+    <li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
+{% endblock %}
+
 {% block footer %}
 <footer>
     <div id = "kotei">
