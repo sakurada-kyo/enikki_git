@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>base</title>
+  <link rel="stylesheet" href="{% static "css/request.css" %}">
+</head>
+<body>
+<header>
+        <div id = "logo">Snap Sketch</div>
+</header>
+
+<div class="wrapper">
+    <div id = "foot">
+        <p>マイページ</p><br>
+        <p>カレンダー</p><br>
+        <p>ガチャ</p>
+    </div>
+<main>
+    <!-ここから中身作成->
+    <div id = "box">
+
+        <div class="search">
+            <input type="text">
+            <input type="button" value="検索">
+        </div>
+
+        <div class="request">
+            <div class="top">
+                <img src="../img/fruitoji.png" width="110px" height="110px">
+            </div>
+            <div class="who">
+                <p>*****************************<br>があなたをフォローしました。</p>
+            </div>
+
+            <div class="approve">
+                <button class="allow" type="button" value="1">承認</button>
+                <button class="delete" type="button" value="2">削除</button>
+            </div>
+        </div>
+    </div>
+</main>
+<footer>
+    <div id = "kotei">
+        <small>&copy;2023 SnapSketch</small>
+    </div>
+</footer>
+</div>
+</body>
+</html>

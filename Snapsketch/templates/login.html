@@ -1,29 +1,17 @@
-<!DOCTYPE html>
+{% load static %}
+<!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title></title>
-  <link rel="stylesheet" href="css\login.css">
+    <meta charset="utf-8">
+    <title>ログイン</title>
+    <link rel="icon" href="data:,">
 </head>
 <body>
-  <header>
-    <h1>Snap Sketch</h1>
-  </header>
-
-  <main>
-    <div id = "mid">
-      <input type="text" class="text" value="address"><br>
-      <input type="text" class="text2" value="password"><br>
-      <input type="submit" class="button" value="ログイン">
-      <p>---お持ちでない方は---</p>
-      <input type="submit" class="button2" value="新規作成">
-    </div>
-
-  </main>
-
-  <footer>
-  </footer>
-    <p><a href = "login.html"></a></p>
-
-  </body>
+    <h1>ログイン</h1>
+    <form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="ログイン"></p>
+    </form>
+</body>
 </html>

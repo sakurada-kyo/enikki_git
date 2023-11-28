@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/usersearch.css' %}">
+{% endblock %}
+{% block content %}
+
+<form action="#" name="search2" method="post">
+	{% csrf_token %}
+	<dl class="search2">
+		<dt><input type="text" name="search" value="" placeholder="アカウント名を入力...." /></dt>
+		<dd><button><span></span></button></dd>
+	</dl>
+</form>
+
+{% endblock %}
+{% block footer %}
+<footer>
+    <div id = "kotei">
+        <small>&copy;2023 SnapSketch</small>
+    </div>
+</footer>
+{% endblock %}

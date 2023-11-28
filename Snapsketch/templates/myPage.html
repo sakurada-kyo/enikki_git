@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/myPage.css' %}" />
+{% endblock %}
+{% block content %}
+  <div class="myPageLeft">
+    <div class="profile">
+      <div class="profilePhoto">
+        <div class="photo">
+          <h3>プロフィール</h3>
+        </div>
+
+        <div class="avatar">
+          <img class="user_icon" src="{{ mypage.user_icon.url }}" alt="アバター表示" wight="130" height="193" />
+        </div>
+
+        <div class="avatarChange">
+          <button class="change" type="button">アイコン変更</button>
+        </div>
+      </div>
+
+      <div class="friend">
+        <button class="friendButton" type="button">友達一覧</button>
+      </div>
+    </div>
+
+    <div class="address">
+      <div class="detail">
+        <table>
+          <tr>
+            <th>ユーザ名：</th>
+            <td>
+              <p>{{ mypage.user_name }}</p>
+            </td>
+            <td>
+              <button class="detailChange1" type="button" value="1">編集</button>
+            </td>
+          </tr>
+          <tr>
+            <th>メールアドレス：</th>
+            <td>
+              <p>{{ mypage.address }}</p>
+            </td>
+            <td>
+              <button class="detailChange1" type="button" value="2">編集</button>
+            </td>
+          </tr>
+          <tr>
+            <th>パスワード：</th>
+            <td>
+              <p>・・・・・・・・</p>
+            </td>
+            <td>
+              <button class="detailChange1" type="button" value="3">編集</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- <button onclick="location.href='user.html'">編集</button> -->
+    </div>
+  </div>
+
+  <div class="myPageRight">
+    <div class="introduction">
+      <h3>自己紹介</h3>
+
+      <div class="memo">
+        <textarea name="comment" cols="40" rows="8">{{ mypage.profile }}</textarea>
+        <button class="memoReserve" type="button" value="4">保存</button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block side %}
+  <li>
+    <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a>
+  </li>
+{% endblock %}
+
+{% block footer %}
+  <footer>
+    <div id="kotei">
+      <small>&copy;2023 SnapSketch</small>
+    </div>
+  </footer>
+{% endblock %}

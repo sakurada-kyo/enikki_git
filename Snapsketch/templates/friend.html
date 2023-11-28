@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-  <link rel="stylesheet" href="{% static 'css\group.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/friend.css' %}" />
 {% endblock %}
 {% block content %}
-  <h2>グループ一覧</h2>
-  {% for group in groups %}
-    <div class="grp">
-      <img src="{% static '/media/group/{{ group.group_icon_path }}' %}" />
-      <p>{{ group.groupname }}</p>
-    </div>
-  {% endfor %}
-  {% if error %}
-    <p>{{ error }}</p>
-  {% endif %}
+  <div id="register">
+    <h3>フレンド一覧</h3><br />
+
+    {% for friend in friends %}
+      <div class="account-form">
+        <div class="circle">{{ friend.icon_id.url }}</div>
+        <h4>{{ friend.name }}</h4>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}
+
 {% block side %}
   <li>
     <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
@@ -29,16 +30,14 @@
     <a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a>
   </li>
   <li>
-    <a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a>
+    <a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a>
   </li>
 {% endblock %}
+
 {% block footer %}
   <footer>
     <div id="kotei">
       <small>&copy;2023 SnapSketch</small>
     </div>
   </footer>
-{% endblock %}
-{% block js %}
-  <script src="{% static 'js/group.js' %}"></script>
 {% endblock %}

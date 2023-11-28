@@ -1,22 +1,71 @@
-/**
- * Farbtastic Color Picker 1.2
- * © 2008 Steven Wittens
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+var colorStr = document.getElementById("color");
+var drawColor = colorStr.value;//ペンの色
+console.log('+'+drawColor);
 
+//カラーピッカー設定
+$(document).ready(function() {
+  $('#picker').farbtastic('#color');
+});
+
+//キャンバスの設定
+function setup() {
+  let canvasPlace = document.getElementById('canvas');
+  canvas = createCanvas(800, 600);//Canvasを作成
+  canvas.parent(canvasPlace);
+ background(255); //Canvasの背景を白にする
+//  clearButton = createButton('消す');//ボタンを作成
+//  clearButton.mousePressed(clearCanvas);//ボタンクリックの関数を指定
+}
+
+//マウスで絵を描くための関数
+function draw() {
+  console.log("draw()");
+  console.log(mouseIsPressed);
+
+   if (mouseIsPressed) {
+     stroke(drawColor);//色
+     strokeWeight(18);//線の太さ
+     line(mouseX, mouseY, pmouseX, pmouseY);
+   }
+}
+
+function colorChange(colorCode){
+  drawColor = colorCode;
+}
+
+ //消しゴムツール
+ function kesigomu(){
+  drawColor = "#ffffff";
+ }
+
+// canvasを画像で保存
+// $("#download").click(function(){
+//   var canvas = document.getElementById('canvas');
+//   var base64 = canvas.toDataURL("image/jpeg");
+//   document.getElementById("download").href = base64;
+// });
+
+function setBgColor(){
+  // canvasの背景色を設定(指定がない場合にjpeg保存すると背景が黒になる)
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0,0,cnvWidth,cnvHeight);
+}
+
+function colorChange(colorCode){
+  drawColor = colorCode;
+}
+
+ //消しゴムツール
+ function eraser(){
+  drawColor = "#ffffff";
+ }
+
+//絵を全て消すボタンの動作
+function clearCanvas() {
+  background(255);
+ }
+
+//  farbastic.js
 jQuery.fn.farbtastic = function (callback) {
   $.farbtastic(this, callback);
   return this;
@@ -350,3 +399,113 @@ jQuery._farbtastic = function (container, callback) {
     fb.linkTo(callback);
   }
 }
+
+//-------------------保存ボタン------------------
+// var saveBtn = document.getElementById("save");
+// saveBtn.addEventListener('submit', function(e) {
+//   e.preventDefault();
+//   console.log("save");
+//   let form_elem = document.getElementById("save-form");
+
+//   let data    = new FormData(form_elem);
+
+//   //TODO:何も描いていない場合、そのまま送信されてしまう問題がある。
+//   let context = document.getElementById('defaultCanvas0').getContext('2d');
+//   var base64  = context.canvas.toDataURL('image/jpeg');
+
+//   // Base64からバイナリへ変換
+//   var bin = atob(base64.replace(/^.*,/, ''));
+//   var buffer = new Uint8Array(bin.length);
+//   for (var i = 0; i < bin.length; i++) {
+//       buffer[i] = bin.charCodeAt(i);
+//   }
+
+//   //ファイル名は日付
+//   let dt = new Date();
+//   let filename = dt.toLocaleString().replace(/\/| |:/g,"");
+
+//   //バイナリでファイルを作る
+//   file = new File([buffer.buffer], filename + ".jpeg", { type: 'image/jpeg' });
+//   // data.append("img",file,filename);
+//   for (let v of data.entries() ){
+//     console.log("entry:"+v);
+//   }
+
+  
+//   // const request = new XMLHttpRequest();
+//   // request.open("POST", "/enikki/create/",false);
+//   // request.send(data);
+// });
+
+var form_elem = document.getElementById("save-form");
+
+form_elem.addEventListener('formdata', (e) => {
+  var fd = e.formData;
+
+  // let data    = new FormData(form_elem);
+
+  //TODO:何も描いていない場合、そのまま送信されてしまう問題がある。
+  let context = document.getElementById('defaultCanvas0').getContext('2d');
+  var base64  = context.canvas.toDataURL('image/jpeg');
+
+  // Base64からバイナリへ変換
+  var bin = atob(base64.replace(/^.*,/, ''));
+  var buffer = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) {
+      buffer[i] = bin.charCodeAt(i);
+  }
+
+  //ファイル名は日付
+  let dt = new Date();
+  let filename = dt.toLocaleString().replace(/\/| |:/g,"");
+
+  //バイナリでファイルを作る
+  file = new File([buffer.buffer], filename + ".jpeg", { type: 'image/jpeg' });
+  // data.append("img",file,filename);
+  for (let v of fd.entries() ){
+    console.log("entry:"+v);
+  }
+  // データをセット
+  fd.append("img",file,filename);
+
+  form_elem.submit();
+});
+
+
+
+// function saveForm() {
+//   console.log("save");
+//   let form_elem   = "#save-form";
+
+//   let data    = new FormData( $(form_elem).get(0));
+//   let url     = $(form_elem).prop("action");
+//   let method  = $(form_elem).prop("method");
+
+//   //===================canvasの画像化処理==================================================
+
+//   //TODO:何も描いていない場合、そのまま送信されてしまう問題がある。
+//   let context = document.getElementById('canvas').getContext('2d');
+//   var base64  = context.canvas.toDataURL('image/jpeg');
+
+//   // Base64からバイナリへ変換
+//   var bin = atob(base64.replace(/^.*,/, ''));
+//   var buffer = new Uint8Array(bin.length);
+//   for (var i = 0; i < bin.length; i++) {
+//       buffer[i] = bin.charCodeAt(i);
+//   }
+
+//   //ファイル名は日付
+//   let dt = new Date();
+//   let filename = dt.toLocaleString().replace(/\/| |:/g,"");
+
+//   //バイナリでファイルを作る
+//   file = new File([buffer.buffer], filename + ".jpeg", { type: 'image/png' });
+//   console.log("file"+file);
+//   data.append("img",file);
+//   for (let v of data.entries() ){
+//     console.log("entry:"+v);
+//   }
+
+//   data.submit();
+// }
+//-------------------保存ボタン------------------

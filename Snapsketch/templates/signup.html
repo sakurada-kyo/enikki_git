@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>アカウント作成</title>
+    <link href="{% static "css/signup.css" %}" rel="stylesheet">
+    <link rel="icon" href="data:,">
+</head>
+<body>
+    <h1>新規登録</h1>
+    <form action="/login_app/signup/" method="post">
+      {% csrf_token %}
+    <input type="hidden" name="csrfmiddlewaretoken" value="lsw7bnir8xGFFK87fT4UW9SENHeB9K3iCjL2H2ZIk1Ly77LUi4X87tsRWWrbzi3S">
+        <p>
+    <label for="id_username">ユーザー名:</label>
+    <input type="text" name="username" maxlength="150" autofocus required id="id_username">
+      <span class="helptext"></span>
+  </p>
+
+  
+  <p>
+    <label for="id_email">メールアドレス:</label>
+    <input type="email" name="email" maxlength="254" id="id_email">
+  </p>
+
+  
+  <p>
+    <label for="id_password1">パスワード:</label>
+    <input type="password" name="password1" autocomplete="new-password" required id="id_password1">
+      <span class="helptext"></span>
+  </p>
+
+  
+  <p>
+    <label for="id_password2">確認用パスワード:</label>
+    <input type="password" name="password2" autocomplete="new-password" required id="id_password2">
+      <span class="helptext"></span>
+  </p>
+        <p><input type="submit" value="登録"></p>
+    </form>
+</body>
+</html>
