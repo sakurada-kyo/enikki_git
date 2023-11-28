@@ -73,11 +73,11 @@
 {% endblock %}
 
 {% block side %}
-<li><a href="{% url 'enikki:calendar' %}" class="side-list">マイページ</a></li>
+<li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
 <li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
-<li><a href="{% url 'enikki:calendar' %}" class="side-list">絵日記作成</a></li>
-<li><a href="{% url 'enikki:calendar' %}" class="side-list">フレンド一覧</a></li>
-<li><a href="{% url 'enikki:calendar' %}" class="side-list">グループ一覧</a></li>
+<li><a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a></li>
+<li><a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a></li>
+<li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
 {% endblock %}
 
 {% block js %}

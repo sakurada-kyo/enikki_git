@@ -23,7 +23,7 @@ class GroupMaster(models.Model):
     group_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     groupname = models.CharField(max_length=255,null=False)
     group_icon_path = models.ImageField(upload_to=directory_path)
-    
+     
 # # 投稿マスタ
 class PostMaster(models.Model):
     post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

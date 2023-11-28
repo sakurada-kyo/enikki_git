@@ -1,46 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>base</title>
-  <link rel="stylesheet" href="css\group.css">
-</head>
-<body>
-<header>
-        <div id = "logo">Snap Sketch</div>
-</header>
-
-<div class="wrapper">
-
-    <div id = "foot">
-        <p>マイページ</p><br>
-        <p>カレンダー</p><br>
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css\group.css' %}" />
+{% endblock %}
+{% block content %}
+  <h2>グループ一覧</h2>
+  {% for group in groups %}
+    <div class="grp">
+      <img src="{% static '/media/group/{{ group.group_icon_path }}' %}" />
+      <p>{{ group.groupname }}</p>
     </div>
-
-    <main>
-    <!-ここから中身作成->
-    <div id = "box">
-        <h2>グループ一覧</h2>
-        <div class="grp">
-            <img src = "images/idol_koisuru_boy_man.png">
-            <p>グループ1</p>
-        </div>
-        <div class="grp">
-            <img src = "images/idol_koisuru_boy_man.png">
-            <p>グループ1</p>
-        </div>
-        <div class="grp">
-            <img src = "images/idol_koisuru_boy_man.png">
-            <p>グループ1</p>
-        </div>
+  {% endfor %}
+  {% if error %}
+    <p>{{ error }}</p>
+  {% endif %}
+{% endblock %}
+{% block side %}
+  <li>
+    <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a>
+  </li>
+{% endblock %}
+{% block footer %}
+  <footer>
+    <div id="kotei">
+      <small>&copy;2023 SnapSketch</small>
     </div>
-</main>
-<footer>
-    <div id = "kotei">
-        <small>&copy;2023 SnapSketch</small>
-    </div>
-</footer>
-</div>
-<script src="js/group.js"></script>
-</body>
-</html>
+  </footer>
+{% endblock %}
+{% block js %}
+  <script src="{% static 'js/group.js' %}"></script>
+{% endblock %}

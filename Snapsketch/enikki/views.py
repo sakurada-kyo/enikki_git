@@ -304,12 +304,13 @@ class CanvasView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         print("GET")
-        return redirect('canvas')
+        return render(request,self.template_name)
     
     def post(self, request, *args, **kwargs):
         print("POST")
         print(vars(request))
 
+        template_name = "create.html"
         reqFile = request.FILES["img"]
         reqFileName = reqFile.name
         reqFileBinary = reqFile.read()
@@ -340,10 +341,10 @@ class CanvasView(TemplateView):
 
 # 絵日記作成画面
 class CreateView(TemplateView):
-
+    template_name = 'create.html'
     def get(self, request, *args, **kwargs):
         print("GET")
-        return redirect('create')
+        return render(request,self.template_name)
     
     def post(self, request, *args, **kwargs):
         print("POST")
@@ -364,7 +365,7 @@ class CreateView(TemplateView):
             post.save()  # 変更を保存
         except Http404:
             PostMaster.objects.create(diary=diary,user=userId)
-            return 
+            return
         
         
         #存在判定
@@ -388,7 +389,7 @@ class CreateView(TemplateView):
                 for group_id in group_ids.annotate(max_page=Subquery(max_pages))
             )
         
-        return redirect('timeline')
+        return redirect('enikki:timeline')
 
     
 
@@ -479,3 +480,47 @@ class RequestView(TemplateView):
     
     user = get_user_model()
         #デフォルトのuserモデルを参照して情報を引っ張る
+#フォローリクエスト機能
+
+# マイページ機能
+class MypageView(TemplateView):
+    template_name = 'myPage.html'
+    def get(self, request, *args, **kwargs):
+        print("GET")
+        context = {}
+        if self.request.user.is_authenticated:
+            print("ログイン成功")
+            try:
+                User = get_user_model()
+                user = get_object_or_404(User,username = self.request.user.username)
+                context['username'] = user.username
+                context['email'] = user.email
+                # context['introduction'] = user.introduction
+                # context['icon_path'] = user.icon_path
+            except Http404:
+                context['error'] = 'ユーザーが見つかりません'
+            return render(request,self.template_name,context)
+        else:
+            redirect('login_app:login')
+            
+# コメントのAjax
+def comment_group(request):
+    print("ajax_comment")
+    comment = request.POST.get('comment')
+    data = {
+        
+    }
+    return JsonResponse(data)
+
+class GroupView(TemplateView):
+    template_name = 'group.html'
+    def get(self, request, *args, **kwargs):
+        print('GET')
+        context = {}
+        try:
+            groups = get_object_or_404(UserGroupTable,user__username = self.request.user.username)
+            context['groups'] = groups
+        except Http404:
+            context['error'] = 'グループに所属していません'
+                
+        return render(request,self.template_name,context)
