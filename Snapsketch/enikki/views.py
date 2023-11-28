@@ -460,4 +460,22 @@ def view_accountView(request):
 
     return render(request,'account.html',context)
 
-#フォローリクエスト機能
+#ユーザー検索機能
+class RequestView(TemplateView):
+
+    template_name = 'request.html'
+    
+    try:
+            #検索入力されたデータが存在するなら取得する
+            userId = user.objects.filter(user_id='入力内容')
+            # 指定した日付とログインユーザーに基づいてレコードを抽出
+            post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
+            post.diary = diary  # 日記を更新する場合
+            post.user = userId
+            post.save()  # 変更を保存
+        except Http404:
+            PostMaster.objects.create(diary=diary,user=userId)
+            return 
+    
+    user = get_user_model()
+        #デフォルトのuserモデルを参照して情報を引っ張る
