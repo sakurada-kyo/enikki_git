@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/canvas.css' %}">
+    <link rel="icon" href="data:,">
 </head>
 <body style="background-color: darkgray;">
    <header>
@@ -31,7 +32,7 @@
                   <input type="submit" id="save" value="保存する">
                </li>
                <li>
-                  <input type="button" id="end" value="終了する">
+                  <input type="button" id="end" value="終了する" onclick="window.history.back();">
                </li>
             </ul>
          </div>
