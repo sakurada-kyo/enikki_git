@@ -330,10 +330,15 @@ class CanvasView(TemplateView):
         image.save(image_io, format="JPEG")  # JPEGとして保存
         # Djangoモデルに保存
         imgFileName = f"u{rand}_{reqFileName}.jpg"
-        model_instance = PostMaster(post_id=f"u{rand}|{reqFileName}")  # 要検討
-        model_instance.sketch_path.save(
-            imgFileName, ContentFile(image_io.getvalue()), save=True
-        )
+        
+        user = request.user
+        # ユーザーがログインしているか確認
+        if user.is_authenticated:
+            # PostMasterモデルのインスタンスを作成し、ユーザーと画像パスを関連付ける
+            PostMaster.objects.create(
+                sketch_path=f"sketch/{imgFileName}",
+                user=user
+            )
 
         context = {"canvasFile": f"sketch/{imgFileName}"}  # sketch/username/filename
 
