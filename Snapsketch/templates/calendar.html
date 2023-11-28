@@ -6,6 +6,7 @@
 {% block content %}
   <form id="form" action="" method="post">
     {% csrf_token %}
+    <div class="btn">
     <div class="buttonId" id="buttonId">
       <button class="button1" onclick="showPreviousMonth()">◀</button>
     </div>
@@ -15,23 +16,55 @@
     <div class="buttonId" id="buttonId">
       <button class="button2" onclick="showNextMonth()">▶</button>
     </div>
+    </div>
 
     
-    <div class="popup_area">
-      <div class="popup-wrapper">
-        <input id="open" type="checkbox" />
-        <label for="open" class="open-btn">コメントをする</label>
-        <label for="open" class="overlay"></label>
 
-        <div class="popup-content">
-          <div class="reply">
-            <h2>コメント返信</h2>
-          </div>
-          <textarea name="comment"></textarea>
-          <input type="submit" class="toukou" value="返信" />
+    <!-- ポップアップ表示 --> 
+    <section id="popup" class="popup">
+      <div id="popBg" class="popBg"></div>
+      <div class="popWrapper">
+        <div class="popContents">
+          <div id="scroll">
+            {% comment %} {% for post in posts %} {% endcomment %}
+                <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page }}">
+                    <div class="content_header">
+                        <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
+                        <p class="user_name">post.user_name </p>
+                        <div class="like">
+                            {% if is_user_liked %}
+                            <button type="button" class="ajax-like">
+                            <!-- すでにいいねしている時はfasクラス -->
+                            <i class="fas fa-heart text-danger"></i>
+                            </button>
+                            {% else %}
+                            <button type="button" class="ajax-like">
+                            <!-- いいねしていないときはfarクラス -->
+                            <i class="far fa-heart text-danger"></i>
+                            </button>
+                            {% endif %}
+                            <!-- いいねの数 -->
+                            <span class="like-count">{{ post.like_count }}</span>
+                        </div>
+                        <div class="comment"><!--グループ名とページ番号送信-->
+                            <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?page={{ post.page }}"></a>
+                            <span class="comment-count">{{ post.comment_count }}</span>
+                        </div>
+                    </div>
+                    <section class="draw_diary">
+                        <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
+                        <p class="diary">aaaaaa</p>
+                    </section>
+                </article>
+            {% comment %} {% endfor %} {% endcomment %}
+        </div>
+        </div>
+        <div id="close" class="close">
+          ×
         </div>
       </div>
-    </div>
+    </section>
+
   </form>
 {% endblock %}
 
