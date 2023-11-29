@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>ログイン</h1>
-    <form action="{% url 'login' %}" method="post">
+    <form action="{% url 'login' %}?groupname=&page=1" method="post">
     {% csrf_token %}
         {{ form.as_p }}
         <p><input type="submit" value="ログイン"></p>

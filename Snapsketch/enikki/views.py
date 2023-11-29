@@ -1,6 +1,8 @@
 from audioop import reverse
 from django.views.generic import TemplateView
-import json, base64,datetime
+import json
+import base64
+import datetime
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import PostMaster
@@ -12,7 +14,7 @@ from .models import *
 from django.core.paginator import Paginator
 from django.core import serializers
 from django.db.models import F, Max, Subquery, OuterRef
-
+from .forms import UpLoadProfileImgForm
 
 
 # # タイムライン画面表示
@@ -28,13 +30,14 @@ class TimelineView(TemplateView):
             # セッションからグループ名取得
             session_group = request.session["group"]
             context['group'] = session_group
-            
+
             # グループ内の投稿記事持ってくる
             if session_group:
                 # グループ名を使って関連する投稿を取得
-                group_posts = GroupPostTable.objects.filter(group__groupname=session_group)
+                group_posts = GroupPostTable.objects.filter(
+                    group__groupname=session_group)
                 post_ids = group_posts.values_list('post__post_id', flat=True)
-                
+
                 posts = PostMaster.objects.filter(post_id__in=post_ids).values(
                     "sketch_path",
                     "diary",
@@ -52,27 +55,16 @@ class TimelineView(TemplateView):
                 #     print(f"User Icon Path: {post['user__icon_path']}")
                 #     print(f"Like Count: {post['likeCount']}")
                 #     print(f"Comment Count: {post['commentCount']}")
-                    
+
                 # GroupPostTable内のpage情報をpostsに追加
                 for post, group_post in zip(posts, group_posts):
                     post['page'] = group_post.page
-        else:
-            # グループに関係なく投稿記事を持ってくる
-            print("セッションからグループ名が取得できませんでした")
-            posts = PostMaster.objects.values(
-                    "sketch_path",
-                    "diary",
-                    "user__username",
-                    # "user__icon_path",
-                    "like_count",
-                    "comment_count",
-                ).order_by("updated_at")
 
-        context = {
-            "posts": posts,
-            "page":page
-        }
-        
+                context = {
+                    "posts": posts,
+                    "page": page
+                }
+
         return render(request, self.template_name, context)
 
 
@@ -84,22 +76,23 @@ def ajax_timeline(request):
         page_size = 10  # 1ページあたりの要素数
 
         if group_name and page_number:
-            
+
             # グループ名を使って関連する投稿を取得
-            group_posts = GroupPostTable.objects.filter(group__groupname=group_name,page__gt=page_number)
+            group_posts = GroupPostTable.objects.filter(
+                group__groupname=group_name, page__gt=page_number)
             post_ids = group_posts.values_list('post__post_id', flat=True)
-            
+
             posts = (PostMaster.objects.filter(post_id__in=post_ids)
-                    .values(
-                        "sketch_path",
-                        "diary",
-                        "user__username",
-                        "user__group_icon_path",
-                        "like_count",
-                        "commentCount",
-                    )
-                    .order_by("updated_at")
-                    .distinct())
+                     .values(
+                "sketch_path",
+                "diary",
+                "user__username",
+                "user__group_icon_path",
+                "like_count",
+                "commentCount",
+            )
+                .order_by("updated_at")
+                .distinct())
 
             # 関連する投稿の内容を出力する例
             # for post in posts:
@@ -109,38 +102,40 @@ def ajax_timeline(request):
             #     print(f"User Icon Path: {post['user__icon_path']}")
             #     print(f"Like Count: {post['likeCount']}")
             #     print(f"Comment Count: {post['commentCount']}")
-                
-             # GroupPostTable内のpage情報をpostsに追加
+
+            # GroupPostTable内のpage情報をpostsに追加
             for post, group_post in zip(posts, group_posts):
                 post['page'] = group_post.page
 
             if posts:
                 # ログイン中のユーザーが各投稿に対していいねしているかどうかを取得するサブクエリ
-                liked_posts = LikeTable.objects.filter(user=request.user, post__in=posts).values_list('post', flat=True)
+                liked_posts = LikeTable.objects.filter(
+                    user=request.user, post__in=posts).values_list('post', flat=True)
 
                 # Paginatorを使用してページ分割
-                paginator = Paginator(posts, page_size,orphans=1)
+                paginator = Paginator(posts, page_size, orphans=1)
 
                 all_pages_data = []
                 for page_num in paginator.page_range:
                     page_data = paginator.page(page_num)
-                    
+
                     # 投稿データのシリアライズ
-                    serialized_data = serializers.serialize('json', page_data, ensure_ascii=False)
-                    
+                    serialized_data = serializers.serialize(
+                        'json', page_data, ensure_ascii=False)
+
                     # ユーザーがいいねしているかどうかを投稿データに追加
                     for entry in serialized_data:
                         post_id = entry['pk']
                         entry['fields']['is_liked'] = post_id in liked_posts
-                    
+
                     all_pages_data.append({
                         'data': serialized_data,
                         'has_next': page_data.has_next(),
                         'has_previous': page_data.has_previous(),
-                        'number': page_data.number,# ページ番号
-                        'group':group_name
+                        'number': page_data.number,  # ページ番号
+                        'group': group_name
                     })
-                    
+
                 return JsonResponse({
                     'all_pages_data': all_pages_data,
                     'total_pages': paginator.num_pages,
@@ -150,7 +145,7 @@ def ajax_timeline(request):
         else:
             # groupかpageのいずれかが空または存在しない場合のエラー処理など
             return
-        
+
 
 # いいね機能
 def ajax_like(request):
@@ -159,20 +154,21 @@ def ajax_like(request):
     group = request.POST.get('group')
     page = request.POST.get('page')
     userId = request.user.user_id
-    
+
     # GroupPostTableから投稿を特定
-    postId = GroupPostTable.objects.filter(group=group,page=page).values_list('post', flat=True)
+    postId = GroupPostTable.objects.filter(
+        group=group, page=page).values_list('post', flat=True)
 
     if likeCount.isdigit():
         likeCount = int(likeCount)
-    else :
+    else:
         print("likeCount"+likeCount)
 
     data = {}
-    
+
     # likeテーブルから対象記事IDとユーザーIDが同じ行を持ってくる
     like = LikeTable.objects.filter(user_id=userId, post=postId)
-    
+
     # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか)
     if like.exists():
         like.delete()
@@ -184,7 +180,8 @@ def ajax_like(request):
         likeCount += 1
 
     # 対応するPostMasterのlike_countを更新する
-    PostMaster.objects.filter(post_id__in=postId).update(like_count=F('like_count') + 1)
+    PostMaster.objects.filter(post_id__in=postId).update(
+        like_count=F('like_count') + 1)
     data['like_count'] = likeCount
 
     return JsonResponse(data)
@@ -199,14 +196,15 @@ class CommentView(TemplateView):
         page = request.POST["page"]
         if page.isdigit():
             page = int(page)
-        else :
+        else:
             print("likeCount"+page)
-            
+
         context = {}
-        
-         # グループ名を使って関連する投稿を取得
-        group_post = GroupPostTable.objects.filter(group__groupname=groupName,page__gt=page)
-        
+
+        # グループ名を使って関連する投稿を取得
+        group_post = GroupPostTable.objects.filter(
+            group__groupname=groupName, page__gt=page)
+
         if group_post:
             # グループ名を使って関連する投稿を取得
             post = (
@@ -249,54 +247,29 @@ class CommentView(TemplateView):
 
         return render(request, "comment.html", context)
 
-
-# # グループ新規作成
 def ajax_group(request):
     if request.method == 'POST':
-        print("ajax_group")
-        groupName = request.POST.get('groupName')
-        reqFile = request.FILES['imageFile']
-        reqFileName = '/media/group/'+groupName+reqFile.name
-        
-        # JPEG形式かどうかをチェックする
-        if is_jpeg(reqFile):
-            print("JPEG形式です")
-            GroupMaster.objects.create(group_id='',groupname=groupName,group_icon_path=reqFile)
+        user = request.user
+        form = UpLoadProfileImgForm(request.POST, request.FILES)
+        if form.is_valid():
+            groupName = form.cleaned_data['groupname']
+            imageFile = form.cleaned_data['avator']
+            imageFileName = f'/media/group/{groupName}{imageFile.name}'
             
-            # セッション内のリストを取得します。もしリストがなければ新しいリストを作成します。
-            sessionGroupList = request.session.get('group', [])
-            sessionGroupList.append(groupName)
-            request.session['group'] = sessionGroupList
-            request.session.modified = True
-            
-            addGroupIndex = sessionGroupList.index(groupName)
+            group = GroupMaster.objects.create(groupname=groupName, group_icon_path=imageFile)
+            UserGroupTable.objects.create(user=user, group=group)
             
             context = {
-                'filePath': reqFileName,
-                'message':'グループ作成完了',
-                'addGroupIndex':addGroupIndex
+                'groupName': groupName,
+                'imageFileName': imageFileName,
+                'msg': 'グループ作成完了'
             }
+            
+            return JsonResponse(context)
         else:
-            print("JPEG形式ではありません")
-            context = {
-                'message': 'jpeg形式でお願いします'
-            }
-
-        return JsonResponse(context)
-
-def is_jpeg(file):
-    try:
-        # JPEGのシグネチャはバイト文字列として表現されます
-        jpeg_signature = b'\xFF\xD8\xFF\xE0\x00\x10JFIF'
-
-        # ファイルの最初の数バイトを読み込みます
-        file_signature = file.read(6)
-
-        # ファイルの先頭がJPEGのシグネチャと一致するかを確認します
-        return file_signature == jpeg_signature
-    except Exception as e:
-        print(f"エラーが発生しました: {e}")
-        return False
+            # バリデーションエラーの場合、エラーメッセージをJSONとして返す
+            errors = form.errors.as_json()
+            return JsonResponse({'errors': errors}, status=400)
 
 # キャンバス画面
 class CanvasView(TemplateView):
@@ -304,8 +277,8 @@ class CanvasView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         print("GET")
-        return render(request,self.template_name)
-    
+        return render(request, self.template_name)
+
     def post(self, request, *args, **kwargs):
         print("POST")
         print(vars(request))
@@ -330,7 +303,7 @@ class CanvasView(TemplateView):
         image.save(image_io, format="JPEG")  # JPEGとして保存
         # Djangoモデルに保存
         imgFileName = f"u{rand}_{reqFileName}.jpg"
-        
+
         user = request.user
         # ユーザーがログインしているか確認
         if user.is_authenticated:
@@ -340,40 +313,42 @@ class CanvasView(TemplateView):
                 user=user
             )
 
-        context = {"canvasFile": f"sketch/{imgFileName}"}  # sketch/username/filename
+        # sketch/username/filename
+        context = {"canvasFile": f"sketch/{imgFileName}"}
 
         return render(request, self.template_name, context)
 
 # 絵日記作成画面
 class CreateView(TemplateView):
     template_name = 'create.html'
+
     def get(self, request, *args, **kwargs):
         print("GET")
-        return render(request,self.template_name)
-    
+        return render(request, self.template_name)
+
     def post(self, request, *args, **kwargs):
         print("POST")
-        
+
         # ユーザー取得
         userId = self.request.user.user_id
         # 日記取得
         diary = request.POST.get('sentence', '')
         # 日付取得
         dateTime = datetime.datetime.today()
-        date = dateTime.date()#yyyy-mm-dd
-        
+        date = dateTime.date()  # yyyy-mm-dd
+
         try:
             # 指定した日付とログインユーザーに基づいてレコードを抽出
-            post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
+            post = get_object_or_404(
+                PostMaster, user_id=userId, created_at=date)
             post.diary = diary  # 日記を更新する場合
             post.user = userId
             post.save()  # 変更を保存
         except Http404:
-            PostMaster.objects.create(diary=diary,user=userId)
+            PostMaster.objects.create(diary=diary, user=userId)
             return
-        
-        
-        #存在判定
+
+        # 存在判定
         if 'group' in request.session:
             group = request.session['group']
 
@@ -393,10 +368,8 @@ class CreateView(TemplateView):
                 GroupPostTable(group_id=group_id['id'], page=F('max_page') + 1)
                 for group_id in group_ids.annotate(max_page=Subquery(max_pages))
             )
-        
-        return redirect('enikki:timeline')
 
-    
+        return redirect('enikki:timeline')
 
 
 # カレンダー画面
@@ -406,7 +379,7 @@ class CalenderView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         print('GET')
-        return render(request,self.template_name)
+        return render(request, self.template_name)
 
     def post(self, request, *args, **kwargs):
         print('POST')
@@ -416,7 +389,7 @@ class CalenderView(TemplateView):
         date = request.POST['date']
         # ユーザー取得
         userId = self.request.user.user_id
-        
+
         # グループ取得
         groupName = request.session['group']
 
@@ -435,22 +408,26 @@ class CalenderView(TemplateView):
             else:
                 return None  # 該当する投稿が見つからなかった場合の処理
 
+
 def ajax_calendar(request):
     if request.method == 'POST':
         userId = request.user.user_id
         date = request.POST['date']
         if date:
             try:
-                post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
+                post = get_object_or_404(
+                    PostMaster, user_id=userId, created_at=date)
             except Http404:
                 # 投稿がなかった時の処理
-                return 
-            
+                return
+
+
 def view_friendView(request):
 
     context = {}
 
-    return render(request,'friend.html',context)
+    return render(request, 'friend.html', context)
+
 
 def view_accountConfView(request):
     # print('view_accountConf')
@@ -458,19 +435,23 @@ def view_accountConfView(request):
 
     context = {}
 
-    return render(request,'accountConf.html',context)
+    return render(request, 'accountConf.html', context)
+
 
 def view_accountView(request):
 
     context = {}
 
-    return render(request,'account.html',context)
+    return render(request, 'account.html', context)
 
-#フォローリクエスト機能
+# フォローリクエスト機能
 
 # マイページ機能
+
+
 class MypageView(TemplateView):
     template_name = 'myPage.html'
+
     def get(self, request, *args, **kwargs):
         print("GET")
         context = {}
@@ -478,35 +459,41 @@ class MypageView(TemplateView):
             print("ログイン成功")
             try:
                 User = get_user_model()
-                user = get_object_or_404(User,username = self.request.user.username)
+                user = get_object_or_404(
+                    User, username=self.request.user.username)
                 context['username'] = user.username
                 context['email'] = user.email
                 # context['introduction'] = user.introduction
                 # context['icon_path'] = user.icon_path
             except Http404:
                 context['error'] = 'ユーザーが見つかりません'
-            return render(request,self.template_name,context)
+            return render(request, self.template_name, context)
         else:
             redirect('login_app:login')
-            
+
 # コメントのAjax
+
+
 def comment_group(request):
     print("ajax_comment")
     comment = request.POST.get('comment')
     data = {
-        
+
     }
     return JsonResponse(data)
 
+
 class GroupView(TemplateView):
     template_name = 'group.html'
+
     def get(self, request, *args, **kwargs):
         print('GET')
         context = {}
         try:
-            groups = get_object_or_404(UserGroupTable,user__username = self.request.user.username)
+            groups = get_object_or_404(
+                UserGroupTable, user__username=self.request.user.username)
             context['groups'] = groups
         except Http404:
             context['error'] = 'グループに所属していません'
-                
-        return render(request,self.template_name,context)
+
+        return render(request, self.template_name, context)
