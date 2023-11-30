@@ -453,6 +453,8 @@ class RequestView(TemplateView):
     #検索されたuserIdを取得する
     frId = request.POST["frId"]
 
+    #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
+
     try:
         # 指定した日付とログインユーザーに基づいてレコードを抽出
         post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
@@ -466,6 +468,8 @@ class RequestView(TemplateView):
     
     user = get_user_model()
         #デフォルトのuserモデルを参照して情報を引っ張る
+
+
 # マイページ機能
 
 
