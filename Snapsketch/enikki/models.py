@@ -78,5 +78,5 @@ class GroupPostTable(models.Model):
 
 # #友達申請テーブル
 class RequestTable(models.Model):
-    request_user_id = models.ForeignKey()
-    user_id = models.ForeignKey()
+    request_user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='request_user_id')
+    user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='user_id')
