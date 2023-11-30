@@ -12,7 +12,7 @@
       <div id = "logo">Snap Sketch</div>
    </header>
    <div id = "wrapper">
-      <form id="save-form" action="{% url 'enikki:create' %}" method="post" enctype="multipart/form-data">
+      <form id="save-form" action="{% url 'enikki:canvas' %}" method="post" enctype="multipart/form-data">
          {% csrf_token %}
          <div id="draw_nav">
             <ul id="color_nav">

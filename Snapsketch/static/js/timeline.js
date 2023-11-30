@@ -61,7 +61,6 @@ function loadScroll() {
 
 //-----------------------intersection observer api-----------------------
 
-
 window.addEventListener('scroll', updates_sign());
 function updates_sign() {
   const parent = document.getElementById("scroll");
@@ -334,16 +333,20 @@ function showPopup() {
         console.log(response)
         if(response){
           const fragment = addGroup(response);
-          // $('#group-nav:nth-last-child(2)').append(fragment);
           $('#group-nav .group-icon:last').after(fragment);
         }
       })
       // Ajax通信が失敗したら発動
       .fail((jqXHR, textStatus, errorThrown) => {
-        alert('Ajax通信に失敗しました。');
-        console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-        console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-        console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
+        if (jqXHR.status === 400) {
+          // 400エラーの場合の処理
+          alert('400エラーが発生しました。');
+        }else{
+          alert('Ajax通信に失敗しました。');
+        }
+        console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
+        console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+        console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
       });
   });
 }
