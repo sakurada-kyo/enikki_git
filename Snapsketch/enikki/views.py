@@ -467,26 +467,32 @@ def view_accountView(request):
 
 #フォローリクエスト機能
 #ユーザー検索機能
-# class RequestView(TemplateView):
+class RequestView(TemplateView):
 
-#     template_name = 'request.html'
     
-#     #検索されたuserIdを取得する
-#     frId = request.POST["frId"]
+    template_name = 'request.html'
+    
+    def post(self, request, *args, **kwargs):
+        #検索されたuserIdを取得する
+        frId = request.POST["frId"]
 
-#     try:
-#         # 指定した日付とログインユーザーに基づいてレコードを抽出
-#         post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
-#         #データが存在するか調べる
-#         friend = user.objects.filter(user_id__exact=frId)
-#         #Requestmodelにデータを追加する
-        
-#         except Http404:
-#             PostMaster.objects.create(diary=diary,user=userId)
-#             return 
+        #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
+
+        try:
+            # 指定した日付とログインユーザーに基づいてレコードを抽出
+            post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
+            #データが存在するか調べる
+            friend = user.objects.filter(user_id__exact=frId)
+            #Requestmodelにデータを追加する
+            
+        except Http404:
+                PostMaster.objects.create(diary=diary,user=userId)
+                return 
     
-#     user = get_user_model()
+    user = get_user_model()
         #デフォルトのuserモデルを参照して情報を引っ張る
+
+
 # マイページ機能
 
 
