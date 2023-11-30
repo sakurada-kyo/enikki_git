@@ -1,4 +1,5 @@
 from audioop import reverse
+from django.conf import settings
 from django.views.generic import TemplateView
 import json,os,base64,tempfile,datetime
 from django.http import Http404, HttpResponse, JsonResponse
@@ -299,7 +300,7 @@ class CanvasView(TemplateView):
     def get(self, request, *args, **kwargs):
         print("GET")
         return render(request, self.template_name)
-
+   
     def post(self, request, *args, **kwargs):
         print("POST")
         print(vars(request))
@@ -330,7 +331,7 @@ class CanvasView(TemplateView):
         
         # PostMasterモデルのインスタンスを作成し、ユーザーと画像パスを関連付ける
         PostMaster.objects.create(
-            sketch_path=f"sketch/{imgFileName}",
+            sketch_path=,
             user=user
         )
         
