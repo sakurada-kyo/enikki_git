@@ -1,11 +1,16 @@
+html{
+    min-height: 100%;
+    position: relative;
+}
+
 body {
     font-family: "MS Mincho";
     margin: 0;
-    background-color: #222222;
+    background-image: url(../images/main.png);
 }
 /*ここからヘッダー*/
 header{
-    background-color: #555555;
+    background-image: url(../images/header.jpg);
     height: 120px;
 }
 
@@ -36,24 +41,23 @@ main #box{
 
 .side-list {
     text-decoration: none;
-    color: #ffffff;
+    color: #000;
     /* width: 5%; */
 }
 
 .wrapper{
-    min-height: 100vh;
-    position: relative;/*←相対位置*/
     box-sizing: border-box;
 }
 /*ここまでがメイン*/
 /*ここからフッター*/
 footer{
-    width: 100%;
-    background-color: #555555;
-    text-align: center;
     position: absolute;
     bottom: 0;
-}
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background-image: url(../images/footer.png);
+  }
 
 footer  small{
     color: #ffffff;
