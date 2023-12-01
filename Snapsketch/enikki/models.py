@@ -76,7 +76,7 @@ class GroupPostTable(models.Model):
            models.UniqueConstraint(fields=['group_id', 'post_id'], name='unique_GroupPost')
         ]
 
-# #友達申請テーブル
-class RequestTable(models.Model):
-    request_user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='request_user_id')
-    user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='user_id')
+# # #友達申請テーブル
+# class RequestTable(models.Model):
+#     request_user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='request_user_id')
+#     user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='user_id')
