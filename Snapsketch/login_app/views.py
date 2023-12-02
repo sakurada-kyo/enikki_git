@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.http import Http404
+from django.shortcuts import get_object_or_404, render, redirect
 from .forms import SignupForm, LoginForm
 from django.contrib.auth import login,logout
 from django.views.decorators.csrf import ensure_csrf_cookie
+from enikki.models import UserGroupTable,GroupMaster
 
 
 
@@ -34,6 +36,13 @@ def login_view(request):
 
             if user:
                 login(request, user)
+                groups = (
+                            UserGroupTable.objects.filter(user__username=request.user.username)
+                        .select_related("group")
+                        .values_list('group__groupname', flat=True)
+                    )
+                if groups:
+                    request.session['group'] = groups
                 return redirect('enikki:timeline')
 
     else:

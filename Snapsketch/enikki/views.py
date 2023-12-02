@@ -102,15 +102,6 @@ def ajax_timeline(request):
                 .order_by("updated_at")
                 .distinct())
 
-            # 関連する投稿の内容を出力する例
-            # for post in posts:
-            #     print(f"Sketch Path: {post['sketch_path']}")
-            #     print(f"Diary: {post['diary']}")
-            #     print(f"Username: {post['user__username']}")
-            #     print(f"User Icon Path: {post['user__icon_path']}")
-            #     print(f"Like Count: {post['likeCount']}")
-            #     print(f"Comment Count: {post['commentCount']}")
-
             # GroupPostTable内のpage情報をpostsに追加
             for post, group_post in zip(posts, group_posts):
                 post['page'] = group_post.page
@@ -258,7 +249,6 @@ class CommentView(TemplateView):
 
 def ajax_group(request):
     if request.method == 'POST':
-        print(vars(request))
         user = request.user
         form = UpLoadProfileImgForm(request.POST, request.FILES)
         if form.is_valid():
@@ -308,10 +298,6 @@ def save_uploaded_file(file):
 class CanvasView(TemplateView):
     print(f'CanvasView')
     template_name = "canvas.html"
-    
-    @method_decorator(login_required)  # ここでログインが必要なことを示します
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         print("GET")
@@ -319,7 +305,6 @@ class CanvasView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         print("POST")
-        print(vars(request))
         
         self.template_name = "create.html"
 
@@ -359,10 +344,11 @@ class CanvasView(TemplateView):
                     post = PostMaster.objects.filter(user=user, created_at__year=date.year, created_at__month=date.month, created_at__day=date.day).first()
                     print(post)
                     if post:
+                        print(f'更新:{user}')
                         post.sketch_path = image_content  # 日記を更新する場合
                         post.save()  # 変更を保存
                     else:
-                        print('except:')
+                        print(f'作成:{user}')
                         post = PostMaster.objects.create(
                             sketch_path=image_content,
                             user=user
@@ -411,16 +397,11 @@ class CreateView(TemplateView):
             post = PostMaster.objects.filter(user=user, created_at__year=date.year, created_at__month=date.month, created_at__day=date.day).first()
             print(post)
             if post:
+                print(f'更新:{user}')
                 post.diary = diary  # 日記を更新する場合
                 post.save()  # 変更を保存
-
-                # セッションのリロード
-                session_key = request.session.session_key
-                session = Session.objects.get(pk=session_key)
-                request.session = session.get_decoded()
-                print('保存完了')
             else:
-                print('except:')
+                print(f'作成:{user}')
                 post = PostMaster.objects.create(
                     diary=post.diary,
                     user=user
@@ -463,7 +444,6 @@ class CalenderView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         print('POST')
-        print(vars(request))
 
         # POSTリクエスト(日付)取得
         date = request.POST['date']
