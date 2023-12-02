@@ -9,6 +9,7 @@ body{
 #draw_nav{
     float:left;
     width: 15%;
+    margin: 104px 0 120px 300px;
 }
 
 #color_nav{
@@ -19,15 +20,12 @@ body{
 #draw_nav ul li{
     list-style: none;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 main{
     float: right;
     margin:90px 140px;
-}
-
-body{
-    text-align: center;
 }
 
 .cbox{
@@ -91,4 +89,7 @@ body{
 #canvas{
     width: 800px;
     float:left;
+    position: absolute;
+    left: 50%;
+    margin: 120px 0 0 -300px;
 }

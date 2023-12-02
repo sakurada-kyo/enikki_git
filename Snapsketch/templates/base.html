@@ -3,39 +3,34 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>base</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="icon" href="data:,">
     {% block css %}{% endblock %}
-    <script src="https://kit.fontawesome.com/706c0011db.js" crossorigin="anonymous"></script>
+    
 </head>
 <body>
+
 <div class="wrapper">
     <header>
             <div id = "logo">Snap Sketch</div>
     </header>
     <main>
-        <div id = "foot">
-            <p>マイページ</p><br>
-            <p>カレンダー</p><br>
-            <p>ガチャ</p>
-        </div>
-        <!-- ここから中身作成 -->
+        <ul id="side">
+            {% block side %}
+            {% endblock %}
+        </ul>
         <div id = "box">
             {% block content %}
             {% endblock %}
         </div>
     </main>
     {% block footer %}
-    {% comment %} <footer>
-        <div id = "kotei">
-            <small>&copy;2023 SnapSketch</small>
-        </div>
-    </footer> {% endcomment %}
+    
     {% endblock %}
 </div>
 
-<script src="{%static 'js/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+<script src="https://kit.fontawesome.com/706c0011db.js" crossorigin="anonymous"></script>
 {% block js %}{% endblock %}
 </body>
 </html>
