@@ -4,7 +4,6 @@ import uuid
 
 userInstance = get_user_model()
 
-userInstance = settings.AUTH_USER_MODEL
 # アイコンパスを定義
 def directory_path(instance, filename):
     # User用
