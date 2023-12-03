@@ -3,8 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from .forms import SignupForm, LoginForm
 from django.contrib.auth import login,logout
 from django.views.decorators.csrf import ensure_csrf_cookie
-from enikki.models import UserGroupTable,GroupMaster
-
+from enikki.models import UserGroupTable
 
 
 #アカウント登録の関数
@@ -36,13 +35,24 @@ def login_view(request):
 
             if user:
                 login(request, user)
-                groups = (
-                            UserGroupTable.objects.filter(user__username=request.user.username)
+                try:
+                    # ユーザーの所属するグループ取得
+                    groups = list(
+                        UserGroupTable.objects.filter(user__username=request.user.username)
                         .select_related("group")
                         .values_list('group__groupname', flat=True)
+                        .order_by('-group__created_at')
                     )
-                if groups:
-                    request.session['group'] = groups
+                    
+                    if groups:
+                        # セッションに保存
+                        request.session['currentGroup'] = groups[0]
+                        request.session['groupList'] = groups
+                        print(f'currentGroup:{groups[0]},groupList:{groups}')
+                    else:
+                        raise Http404
+                except Http404:
+                    print('グループに所属していません')
                 return redirect('enikki:timeline')
 
     else:
