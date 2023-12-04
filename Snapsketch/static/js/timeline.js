@@ -330,20 +330,23 @@ function showPopup() {
       'contentType': false,
     })
       .done(function (response) {
-        console.log(response)
-        if(response){
+        console.log(response);
+        if(response.errors){
+          // エラーメッセージを取得して表示する例
+          const errorMessages = JSON.parse(response.errors);
+          for (const field in errorMessages) {
+            if (errorMessages.hasOwnProperty(field)) {
+              const errorMessage = errorMessages[field][0]; // 1つ目のエラーメッセージを取得
+              alert(`エラー: ${field} - ${errorMessage}`);
+            }
+          }
+        }else{
           const fragment = addGroup(response);
-          $('#group-nav .group-icon:last').after(fragment);
+          $('.fa-plus').before(fragment);
         }
       })
       // Ajax通信が失敗したら発動
       .fail((jqXHR, textStatus, errorThrown) => {
-        if (jqXHR.status === 400) {
-          // 400エラーの場合の処理
-          alert('400エラーが発生しました。');
-        }else{
-          alert('Ajax通信に失敗しました。');
-        }
         console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
         console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
         console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
@@ -356,10 +359,8 @@ function addGroup(data) {
   const groupNav = document.getElementById("group-nav");
   const groupIcon = document.createElement("img");
   const fragment = document.createDocumentFragment();
-  const groupIconPath = data.filePath;
+  const groupIconPath = data.imageFileName;
   const groupIndex = data.addGroupIndex;
-
-  console.log(groupIconPath);
 
   groupIcon.setAttribute("class", "group-icon");
   groupIcon.setAttribute("src", groupIconPath);

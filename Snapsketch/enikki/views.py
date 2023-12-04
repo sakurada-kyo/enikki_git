@@ -1,8 +1,7 @@
 from audioop import reverse
+from django.conf import settings
 from django.views.generic import TemplateView
-import json
-import base64
-import datetime
+import json,os,base64,tempfile,datetime
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import PostMaster
@@ -15,7 +14,7 @@ from django.core.paginator import Paginator
 from django.core import serializers
 from django.db.models import F, Max, Subquery, OuterRef
 from .forms import UpLoadProfileImgForm
-
+from django.db import transaction
 
 # # タイムライン画面表示
 class TimelineView(TemplateView):
@@ -249,27 +248,50 @@ class CommentView(TemplateView):
 
 def ajax_group(request):
     if request.method == 'POST':
+        print(vars(request))
         user = request.user
         form = UpLoadProfileImgForm(request.POST, request.FILES)
         if form.is_valid():
+            print('バリデーション成功')
             groupName = form.cleaned_data['groupname']
             imageFile = form.cleaned_data['avator']
-            imageFileName = f'/media/group/{groupName}{imageFile.name}'
+            imageFileName = f'/media/group/{groupName}/{imageFile.name}'
             
-            group = GroupMaster.objects.create(groupname=groupName, group_icon_path=imageFile)
-            UserGroupTable.objects.create(user=user, group=group)
+             # トランザクション内で処理を行う
+            with transaction.atomic():
+                group = GroupMaster.objects.create(groupname=groupName, group_icon_path=imageFile)
+                UserGroupTable.objects.create(user=user, group=group)
             
             context = {
                 'groupName': groupName,
                 'imageFileName': imageFileName,
                 'msg': 'グループ作成完了'
             }
-            
             return JsonResponse(context)
         else:
+            print('バリデーションエラー')
             # バリデーションエラーの場合、エラーメッセージをJSONとして返す
             errors = form.errors.as_json()
-            return JsonResponse({'errors': errors}, status=400)
+            return JsonResponse({'errors': errors})
+
+# 一時ファイル保存
+def save_uploaded_file(file):
+    try:
+        # 一時ディレクトリに一時ファイルを作成
+        temp_dir = tempfile.gettempdir()    
+        temp_file = tempfile.NamedTemporaryFile(delete=False, dir=temp_dir)
+
+        # 受け取ったファイルのデータを一時ファイルに書き込む
+        for chunk in file.chunks():
+            temp_file.write(chunk)
+
+        # ファイルを一時ファイルから指定したディレクトリに移動
+        destination = '/path/to/destination/directory/filename.jpg'  # 実際のパスに置き換えてください
+        os.rename(temp_file.name, destination)  # ファイルを移動
+
+        return destination  # ファイルの保存先パスを返す
+    finally:
+        temp_file.close()  # 一時ファイルをクローズする
 
 # キャンバス画面
 class CanvasView(TemplateView):
@@ -278,12 +300,12 @@ class CanvasView(TemplateView):
     def get(self, request, *args, **kwargs):
         print("GET")
         return render(request, self.template_name)
-
+   
     def post(self, request, *args, **kwargs):
         print("POST")
         print(vars(request))
 
-        template_name = "create.html"
+        self.template_name = "create.html"
         reqFile = request.FILES["img"]
         reqFileName = reqFile.name
         reqFileBinary = reqFile.read()
@@ -301,18 +323,18 @@ class CanvasView(TemplateView):
         # Djangoモデルに保存
         image_io = BytesIO()
         image.save(image_io, format="JPEG")  # JPEGとして保存
+        
         # Djangoモデルに保存
         imgFileName = f"u{rand}_{reqFileName}.jpg"
 
         user = request.user
-        # ユーザーがログインしているか確認
-        if user.is_authenticated:
-            # PostMasterモデルのインスタンスを作成し、ユーザーと画像パスを関連付ける
-            PostMaster.objects.create(
-                sketch_path=f"sketch/{imgFileName}",
-                user=user
-            )
-
+        
+        # PostMasterモデルのインスタンスを作成し、ユーザーと画像パスを関連付ける
+        PostMaster.objects.create(
+            sketch_path=,
+            user=user
+        )
+        
         # sketch/username/filename
         context = {"canvasFile": f"sketch/{imgFileName}"}
 
@@ -446,26 +468,28 @@ def view_accountView(request):
 
 #フォローリクエスト機能
 #ユーザー検索機能
-# class RequestView(TemplateView):
+class RequestView(TemplateView):
 
-#     template_name = 'request.html'
+    template_name = 'request.html'
     
-#     #検索されたuserIdを取得する
-#     frId = request.POST["frId"]
+    #検索されたuserIdを取得する
+    frId = request.POST["frId"]
 
-#     try:
-#         # 指定した日付とログインユーザーに基づいてレコードを抽出
-#         post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
-#         #データが存在するか調べる
-#         friend = user.objects.filter(user_id__exact=frId)
-#         #Requestmodelにデータを追加する
+    try:
+        # 指定した日付とログインユーザーに基づいてレコードを抽出
+        post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
+        #データが存在するか調べる
+        friend = user.objects.filter(user_id__exact=frId)
+        #Requestmodelにデータを追加する
         
-#         except Http404:
-#             PostMaster.objects.create(diary=diary,user=userId)
-#             return 
+        except Http404:
+            PostMaster.objects.create(diary=diary,user=userId)
+            return 
     
 #     user = get_user_model()
         #デフォルトのuserモデルを参照して情報を引っ張る
+
+
 # マイページ機能
 
 
