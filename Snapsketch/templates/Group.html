@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-  <link rel="stylesheet" href="{% static 'css\group.css' %}" />
+  {% comment %} <link rel="stylesheet" href="{% static 'css\group.css' %}" /> {% endcomment %}
 {% endblock %}
 {% block content %}
   <h2>グループ一覧</h2>
-  {% for group in groups %}
-    <div class="grp">
-      <img src="{% static '/media/group/{{ group.group_icon_path }}' %}" />
-      <p>{{ group.groupname }}</p>
-    </div>
-  {% endfor %}
   {% if error %}
     <p>{{ error }}</p>
+  {% else %}
+    {% for group in groups %}
+    <div class="grp">
+      <img src="/media/{{ group.group__group_icon_path }}" />
+      <p>{{ group.groupname }}</p>
+    </div>
+    {% endfor %}
   {% endif %}
 {% endblock %}
 {% block side %}
@@ -40,5 +41,5 @@
   </footer>
 {% endblock %}
 {% block js %}
-  <script src="{% static 'js/group.js' %}"></script>
+  {% comment %} <script src="{% static 'js/group.js' %}"></script> {% endcomment %}
 {% endblock %}
