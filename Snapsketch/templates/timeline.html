@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-        <div id="popup-wrapper">
+        {% if groupList %}<div id="popup-wrapper">{% else %}<div id="popup-wrapper" style="display: block;">{% endif %}
             <div id="popup-inside">
                 <div id="close">x</div>
                 <form method="post" id="group-form" action="{% url 'enikki:ajax_group' %}" enctype="multipart/form-data">
@@ -32,19 +32,21 @@
             </div>
         </div>
         <div id="group-nav">
-            {% if group %}
-            <img class="group-icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
+            {% if groupList %}
+            {% for group in groupList %}
+            <img class="group-icon" src="/media/{{ group.group_icon_path }}" alt="グループアイコン">
+            {% endfor %}
             {% endif %}
             <i class="fa-solid fa-plus"></i>
         </div>
         <div id="scroll">
             {% for post in posts %}
-                <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page }}">
+                <article class="content" data-group="" data-page="{{ post.page }}">
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
-                        <p class="user_name">{{ post.user_name }}</p>
+                        <p class="user_name">{{ post.user__username }}</p>
                         <div class="like">
-                            {% if is_user_liked %}
+                            {% if post.is_liked %}
                             <button type="button" class="ajax-like">
                             <!-- すでにいいねしている時はfasクラス -->
                             <i class="fas fa-heart text-danger"></i>

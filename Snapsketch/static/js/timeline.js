@@ -152,9 +152,9 @@ function ajax_open(lastElement) {
       console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
     });
 }
-//-----------------------ajax処理-----------------------
+//-----------------------タイムラインajax処理-----------------------
 
-//-----------------------templateタグ複製-----------------------
+//-----------------------投稿追加-----------------------
 function add_article(allPagesData) {
   var fragment = document.createDocumentFragment();
 
@@ -230,6 +230,7 @@ function add_article(allPagesData) {
   // 最後に追加！
   return fragment;
 }
+//------------------------投稿追加----------------------------
 
 //タグ生成
 function createAndAppendElement(tagName, className = '', textContent = '') {
@@ -343,6 +344,8 @@ function showPopup() {
         }else{
           const fragment = addGroup(response);
           $('.fa-plus').before(fragment);
+          popupWrapper.style.display = 'none';
+          focus()
         }
       })
       // Ajax通信が失敗したら発動
@@ -373,3 +376,14 @@ function addGroup(data) {
 //-----------------------グループ追加機能-----------------------
 //-----------------------グループ切り替え機能-----------------------
 //-----------------------グループ切り替え機能-----------------------
+
+//-----------------------フォーカス機能-----------------------
+function focus(){
+  $(function() {
+    // フォーカスされた要素に視覚的なフォーカスインジケーターを表示する
+    $(document).on("focusin", ".group-icon", function() {
+      $(this).addClass("focus-visible");
+    });
+});
+}
+//-----------------------フォーカス機能-----------------------
