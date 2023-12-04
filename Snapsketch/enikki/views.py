@@ -329,11 +329,11 @@ class CanvasView(TemplateView):
 
         user = request.user
         
-        # PostMasterモデルのインスタンスを作成し、ユーザーと画像パスを関連付ける
-        PostMaster.objects.create(
-            sketch_path=,
-            user=user
-        )
+        # # PostMasterモデルのインスタンスを作成し、ユーザーと画像パスを関連付ける
+        # PostMaster.objects.create(
+        #     sketch_path=,
+        #     user=user
+        # )
         
         # sketch/username/filename
         context = {"canvasFile": f"sketch/{imgFileName}"}
@@ -468,25 +468,25 @@ def view_accountView(request):
 
 #フォローリクエスト機能
 #ユーザー検索機能
-class RequestView(TemplateView):
+# class RequestView(TemplateView):
 
-    template_name = 'request.html'
+#     template_name = 'request.html'
     
-    #検索されたuserIdを取得する
-    frId = request.POST["frId"]
+#     #検索されたuserIdを取得する
+#     frId = request.POST["frId"]
 
-    try:
-        # 指定した日付とログインユーザーに基づいてレコードを抽出
-        post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
-        #データが存在するか調べる
-        friend = user.objects.filter(user_id__exact=frId)
-        #Requestmodelにデータを追加する
+#     try:
+#         # 指定した日付とログインユーザーに基づいてレコードを抽出
+#         post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
+#         #データが存在するか調べる
+#         friend = user.objects.filter(user_id__exact=frId)
+#         #Requestmodelにデータを追加する
         
-        except Http404:
-            PostMaster.objects.create(diary=diary,user=userId)
-            return 
+#         except Http404:
+#             PostMaster.objects.create(diary=diary,user=userId)
+#             return 
     
-#     user = get_user_model()
+# #     user = get_user_model()
         #デフォルトのuserモデルを参照して情報を引っ張る
 
 
