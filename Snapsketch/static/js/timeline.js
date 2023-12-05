@@ -130,15 +130,17 @@ function ajax_open(lastElement) {
     url: 'ajax_timeline/',
     type: 'POST',
     data: {
-      'group': $(lastElement).attr('data-group'),
-      'page': String($(lastElement).attr('data-page')),
+      // 'group': $(lastElement).attr('data-group'),
+      'page': $(lastElement).attr('data-page'),
     },
     dataType: 'json',
     headers: { 'X-CSRFToken': csrftoken }
   })
     .done(function (data) {
-      const allPagesData = data.all_pages_data;
-      if (allPagesData !== null) {
+      // const allPagesData = data.all_pages_data;
+      if ('error' in data) {
+        console.log(data.error);
+      }else{
         // データがnullでない場合の処理
         var fragment = add_article(allPagesData);
         $('#scroll').append(fragment);
