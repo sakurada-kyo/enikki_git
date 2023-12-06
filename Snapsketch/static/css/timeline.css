@@ -28,7 +28,7 @@ p{
     height: 100%;
     display: none;
   }
-  
+
   #popup-inside {
     text-align: center;
     height: 700px;
@@ -39,7 +39,7 @@ p{
     padding: 10px;
     position: relative;
   }
-    
+
   #close {
     position: absolute;
     top: 0;
@@ -48,7 +48,7 @@ p{
   }
 
 #group-nav{
-    /* width: 5%; */
+    width: 5%;
     float: left;
     margin-top:70px;
 }
@@ -150,7 +150,7 @@ button{
 }
 
 .diary{
-    background-color: red;
+    background-color: #e0e0e0;
     height: 200px;
     width: 100%;
 }

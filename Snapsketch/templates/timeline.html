@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-        <div id="popup-wrapper">
+        {% if groupList %}<div id="popup-wrapper">{% else %}<div id="popup-wrapper" style="display: block;">{% endif %}
             <div id="popup-inside">
                 <div id="close">x</div>
                 <form method="post" id="group-form" action="{% url 'enikki:ajax_group' %}" enctype="multipart/form-data">
@@ -16,11 +16,11 @@
                         <table>
                             <tr>
                                 <th>グループ名:</th>
-                                <td><input type="text" id="text" value=""></td>
+                                <td><input type="text" id="text" name="groupname" value=""></td>
                             </tr>
                             <tr>
                                 <th>アイコン:</th>
-                                <td><input type="file" name="imageFile"/></td>
+                                <td><input type="file" name="avator"/></td>
                             </tr>
                             <tr>
                                 <th>概要:</th>
@@ -32,19 +32,21 @@
             </div>
         </div>
         <div id="group-nav">
-            {% if group %}
-            <img class="group-icon" src="{% static 'images/test_icon.jpeg' %}" alt="グループアイコン">
+            {% if groupList %}
+            {% for group in groupList %}
+            <img class="group-icon" src="/media/{{ group.group_icon_path }}" alt="グループアイコン">
+            {% endfor %}
             {% endif %}
             <i class="fa-solid fa-plus"></i>
         </div>
         <div id="scroll">
             {% for post in posts %}
-                <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page }}">
+                <article class="content" data-group="" data-page="{{ post.page }}">
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
-                        <p class="user_name">{{ post.user_name }}</p>
+                        <p class="user_name">{{ post.user__username }}</p>
                         <div class="like">
-                            {% if is_user_liked %}
+                            {% if post.is_liked %}
                             <button type="button" class="ajax-like">
                             <!-- すでにいいねしている時はfasクラス -->
                             <i class="fas fa-heart text-danger"></i>
@@ -64,7 +66,7 @@
                         </div>
                     </div>
                     <section class="draw_diary">
-                        <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
+                        <img class="draw" src="/media/{{ post.sketch_path }}" alt="絵日記の絵">
                         <p class="diary">{{ post.diary }}</p>
                     </section>
                 </article>
@@ -73,11 +75,11 @@
 {% endblock %}
 
 {% block side %}
-<li><a href="{% url 'enikki:calendar' %}" class="side-list">マイページ</a></li>
+<li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
 <li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
-<li><a href="{% url 'enikki:calendar' %}" class="side-list">絵日記作成</a></li>
-<li><a href="{% url 'enikki:calendar' %}" class="side-list">フレンド一覧</a></li>
-<li><a href="{% url 'enikki:calendar' %}" class="side-list">グループ一覧</a></li>
+<li><a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a></li>
+<li><a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a></li>
+<li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
 {% endblock %}
 
 {% block js %}
