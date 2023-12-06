@@ -9,7 +9,7 @@
     <h1>新規登録</h1>
     <form action="/login_app/signup/" method="post">
       {% csrf_token %}
-    <input type="hidden" name="csrfmiddlewaretoken" value="lsw7bnir8xGFFK87fT4UW9SENHeB9K3iCjL2H2ZIk1Ly77LUi4X87tsRWWrbzi3S">
+      <input type="hidden" name="csrfmiddlewaretoken" value="lsw7bnir8xGFFK87fT4UW9SENHeB9K3iCjL2H2ZIk1Ly77LUi4X87tsRWWrbzi3S">
         <p>
     <label for="id_username">ユーザー名:</label>
     <input type="text" name="username" maxlength="150" autofocus required id="id_username">
@@ -35,6 +35,12 @@
     <input type="password" name="password2" autocomplete="new-password" required id="id_password2">
       <span class="helptext"></span>
   </p>
+
+  <p>
+    <label for="id_nickname">ニックネーム</label>
+    <input type="nickname" name="nickname" maxlength="100" id="id_nickname">
+  </p>
+
         <p><input type="submit" value="登録"></p>
     </form>
 </body>
