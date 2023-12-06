@@ -482,7 +482,7 @@ class MypageView(TemplateView):
                 context['error'] = 'ユーザーが見つかりません'
             return render(request,self.template_name,context)
         else:
-            redirect('login_app:login')
+            redirect('login')
             
 # コメントのAjax
 def comment_group(request):
@@ -505,3 +505,19 @@ class GroupView(TemplateView):
             context['error'] = 'グループに所属していません'
                 
         return render(request,self.template_name,context)
+    
+
+
+
+# def mypage_icon(request):
+#     user = request.user
+
+#     if request.method == 'POST':
+#         form = CustomUserForm(request.POST, request.FILES, instance=user)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('your_redirect_url')  # リダイレクト先を適切なURLに変更してください
+#     else:
+#         form = CustomUserForm(instance=user)
+
+#     return render(request, 'mypage.html', {'form': form})
