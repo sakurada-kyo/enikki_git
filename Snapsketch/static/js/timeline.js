@@ -61,7 +61,6 @@ function loadScroll() {
 
 //-----------------------intersection observer api-----------------------
 
-
 window.addEventListener('scroll', updates_sign());
 function updates_sign() {
   const parent = document.getElementById("scroll");
@@ -131,15 +130,17 @@ function ajax_open(lastElement) {
     url: 'ajax_timeline/',
     type: 'POST',
     data: {
-      'group': $(lastElement).attr('data-group'),
-      'page': String($(lastElement).attr('data-page')),
+      // 'group': $(lastElement).attr('data-group'),
+      'page': $(lastElement).attr('data-page'),
     },
     dataType: 'json',
     headers: { 'X-CSRFToken': csrftoken }
   })
     .done(function (data) {
-      const allPagesData = data.all_pages_data;
-      if (allPagesData !== null) {
+      // const allPagesData = data.all_pages_data;
+      if ('error' in data) {
+        console.log(data.error);
+      }else{
         // データがnullでない場合の処理
         var fragment = add_article(allPagesData);
         $('#scroll').append(fragment);
@@ -153,9 +154,9 @@ function ajax_open(lastElement) {
       console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
     });
 }
-//-----------------------ajax処理-----------------------
+//-----------------------タイムラインajax処理-----------------------
 
-//-----------------------templateタグ複製-----------------------
+//-----------------------投稿追加-----------------------
 function add_article(allPagesData) {
   var fragment = document.createDocumentFragment();
 
@@ -231,6 +232,7 @@ function add_article(allPagesData) {
   // 最後に追加！
   return fragment;
 }
+//------------------------投稿追加----------------------------
 
 //タグ生成
 function createAndAppendElement(tagName, className = '', textContent = '') {
@@ -331,19 +333,28 @@ function showPopup() {
       'contentType': false,
     })
       .done(function (response) {
-        console.log(response)
-        if(response){
+        console.log(response);
+        if(response.errors){
+          // エラーメッセージを取得して表示する例
+          const errorMessages = JSON.parse(response.errors);
+          for (const field in errorMessages) {
+            if (errorMessages.hasOwnProperty(field)) {
+              const errorMessage = errorMessages[field][0]; // 1つ目のエラーメッセージを取得
+              alert(`エラー: ${field} - ${errorMessage}`);
+            }
+          }
+        }else{
           const fragment = addGroup(response);
-          // $('#group-nav:nth-last-child(2)').append(fragment);
-          $('#group-nav .group-icon:last').after(fragment);
+          $('.fa-plus').before(fragment);
+          popupWrapper.style.display = 'none';
+          focus()
         }
       })
       // Ajax通信が失敗したら発動
       .fail((jqXHR, textStatus, errorThrown) => {
-        alert('Ajax通信に失敗しました。');
-        console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-        console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-        console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
+        console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
+        console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+        console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
       });
   });
 }
@@ -353,10 +364,8 @@ function addGroup(data) {
   const groupNav = document.getElementById("group-nav");
   const groupIcon = document.createElement("img");
   const fragment = document.createDocumentFragment();
-  const groupIconPath = data.filePath;
+  const groupIconPath = data.imageFileName;
   const groupIndex = data.addGroupIndex;
-
-  console.log(groupIconPath);
 
   groupIcon.setAttribute("class", "group-icon");
   groupIcon.setAttribute("src", groupIconPath);
@@ -369,3 +378,14 @@ function addGroup(data) {
 //-----------------------グループ追加機能-----------------------
 //-----------------------グループ切り替え機能-----------------------
 //-----------------------グループ切り替え機能-----------------------
+
+//-----------------------フォーカス機能-----------------------
+function focus(){
+  $(function() {
+    // フォーカスされた要素に視覚的なフォーカスインジケーターを表示する
+    $(document).on("focusin", ".group-icon", function() {
+      $(this).addClass("focus-visible");
+    });
+});
+}
+//-----------------------フォーカス機能-----------------------

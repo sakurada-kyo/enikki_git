@@ -5,13 +5,13 @@
 {% endblock  %}
 
 {% block content %}
-<form id="post-form" action="" method="post">
+<form id="post-form" action="{% url 'enikki:create' %}" method="post">
     {% csrf_token %}
     <div id = "flex">
         {% if not canvasFile %}
         <a id="sketch" href="{% url 'enikki:canvas' %}">絵日記を作成<br>＋</a>
         {% else %}
-        <img id="sketch" src="/media/{{ canvasFile }}" style="padding:0px;">
+        <img id="sketch" src="{{ canvasFile }}" style="padding:0px;">
         {% endif %}
         <textarea name = "sentence"></textarea>
     </div>
