@@ -477,15 +477,18 @@ class RequestView(TemplateView):
         #検索されたuserIdを取得する
         frId = request.POST["frId"]
 
-        #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
+        #検索機能：検索して表示して 申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
 
         try:
             # 指定した日付とログインユーザーに基づいてレコードを抽出
             post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
-            #データが存在するか調べる
+            #データが存在するか調べる(あったら変数に代入)
             friend = user.objects.filter(user_id__exact=frId)
-            #Requestmodelにデータを追加する
-            
+            #
+
+            #Requestmodelにデータを追加する(forms.pyに書くかも)
+            Requestmodel.objects.create()
+            sample = 
         except Http404:
                 PostMaster.objects.create(diary=diary,user=userId)
                 return 
