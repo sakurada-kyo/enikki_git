@@ -27,7 +27,6 @@ class GroupMaster(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True,null=True)
     
-     
 # # 投稿マスタ
 class PostMaster(models.Model):
     post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
