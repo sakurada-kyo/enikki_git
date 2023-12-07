@@ -563,7 +563,7 @@ def view_accountConfView(request):
 
 def view_accountView(request):
 
-    context = {a}
+    context = {}
 
     return render(request, 'account.html', context)
 
