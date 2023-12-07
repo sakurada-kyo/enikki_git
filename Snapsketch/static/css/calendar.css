@@ -91,10 +91,15 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 70%;
-    max-width: 500px;
+    max-width: 620px;
     padding: 10px 30px;
     background-color: #fff;
 }
+
+.draw_diary {
+
+    height: 550px;
+}   
 
 .close {
     position: absolute;
@@ -104,26 +109,32 @@
 }
 
 #scroll{
-    width: 80%;
+    /* width: 80%; */
     float: left;
     margin-top:10px;
     margin-bottom: 10px;
 }
 
 .content{
-    margin-top:10px;
+    overflow-y:scroll;
+    width: 605px;
+    height: 680px;
+    padding-left: 10px;
 }
 
 .user_icon{
     float:left;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
 }
 
 .user_name{
-    color:#ffffff;
     font-size:25px;
     padding-top:17px;
-    padding-left:5px;
+    padding-left:15px;
     float: left;
+    color: black;
 }
 
 .like{
@@ -136,16 +147,20 @@
     color:#e54747;
 }
 
+.fa-regular {
+    margin-top: 25px;
+}
+
 .far{
-    color:#ffffff;
+    margin-top: 25px;
 }
 
 .fa-heart{
     font-size: 35px;
+    color: black;
 }
 
 .like-count{
-    color:#ffffff;
     font-size: 30px;
 }
 
@@ -166,18 +181,16 @@
 
 .fa-comment{
     font-size: 35px;
-    color:#ffffff;
+    color:black;
     text-decoration: none;
 }
 
 .comment-count{
-    color: #ffffff;
     font-size: 30px;
 }
 
 .draw_diary{
-    clear: both;
-    
+    clear: both; 
     width: 100%;
 }
 

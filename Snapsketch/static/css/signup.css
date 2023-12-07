@@ -1,93 +1,29 @@
-body{
-    font-family: "Hiragino Sans";
-    text-align: center;
-    background-color: #B0E0E6;
+body {
+    background-color: #f8f9fa;
 }
-
-header{
-    margin-top: 170px;
-    color: #ffffff;
-    -webkit-text-stroke: 1px #000000;
-    font-size: 30px;
-}
-
-main{
-    font-size: 17px;
-    text-align: center;
-}
-
-main #mid{
-    padding: 40px;
-    margin: auto;
-    width: 30%;
-    background-color: #F0FFFF;
-}
-
-main #mid table tr{
-    margin-top: 20px;
-    color: #000000;
-}
-
-main #mid table tr th{
-    width: 200px;
-}
-
-main #mid table tr td{
-    width: 400px;
-    color: #000000;
-}
-
-.text{
-    height: 24px;
-    width: 60%;
-}
-
-.text2{
-    height: 24px;
-    width: 60%;
-}
-
-.button{
-    margin-right: 20px;
-}
-
-.button,.button2{
-    background-color: #165E83;
-    color: #fff;
+.container {
     margin-top: 50px;
-    font-size: 13px;
-    height: 29px;
-    width: 25%;
+}
+.form-signup {
+    max-width: 400px;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.form-signup h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.form-signup button[type="submit"] {
+    width: 100%;
 }
 
-.text2, .button, p{
-    margin-top: 20px;
-}
-
-main #mid p{
-    color: #000000;
-}
-
-#radio{
-    color: #000000;
-    padding: 0 2px;
-    margin-top: 20px;
-}
-
-#color{
-    color: #ffffff;
-}
-
-.form-select-wrap{
-    margin-top: 20px;
-    align-items: center;
-}
-
-.form-select-wrap > select{
-    padding: 8px 2px;
-    margin-left: 10px;
-    margin-right: 10px;
-    border: 1px solid gray;
-    border-radius: 4px;
-    font-size: 14px;
+.deco-file label{
+    display: inline-block;
+    border: 2px solid #1E88E5;
+    color: #1E88E5;
+    text-align: center;
+    padding: 20px 40px;
 }
