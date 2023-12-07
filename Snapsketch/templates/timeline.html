@@ -34,7 +34,7 @@
         <div id="group-nav">
             {% if groupList %}
             {% for group in groupList %}
-            <img class="group-icon" src="/media/{{ group.group_icon_path }}" alt="グループアイコン">
+            <img class="group-icon" src="/media/{{ group.group_icon_path }}" alt="グループアイコン" data-group="{{ group.groupname }}">
             {% endfor %}
             {% endif %}
             <i class="fa-solid fa-plus"></i>

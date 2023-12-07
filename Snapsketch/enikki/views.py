@@ -25,8 +25,6 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 # # タイムライン画面表示
-
-
 class TimelineView(TemplateView):
     template_name = "timeline.html"
     print(f'TimelineView')
@@ -99,7 +97,7 @@ class TimelineView(TemplateView):
                 print('グループ内で投稿がありません')
         return render(request, self.template_name, context)
 
-
+# ajaxタイムライン
 def ajax_timeline(request):
     if request.method == 'POST':
         try:
@@ -219,7 +217,92 @@ def ajax_like(request):
     return JsonResponse(data)
 
 # グループ切り替え処理
+def ajax_changeGroup(request):
+    if request.method == 'POST':
+        try:
+            group_name = request.POST.get('groupname','')  # グループ名
+            # page_number = int(request.POST.get('page', 1))  # 現在のページ番号
+            # print(f'page_number:{page_number},currentGroup:{group_name}')
+            # page_size = 10  # 1ページあたりの要素数
 
+            if group_name:
+                # グループ名を使って関連する投稿を取得
+                group_posts = (
+                    GroupPostTable.objects.filter(
+                    group__groupname=group_name)
+                    .select_related('post')
+                    .values(
+                        "post__sketch_path",
+                        "post__diary",
+                        "user__username",
+                        "like_count",
+                        "commentCount"
+                    )
+                )
+
+                if group_posts.exists():
+                    post_ids = group_posts.values_list('post__post_id', flat=True)
+                    
+                    posts = (PostMaster.objects.filter(post_id__in=post_ids)
+                        .values(
+                            "sketch_path",
+                            "diary",
+                            "user__username",
+                            "like_count",
+                            "commentCount",
+                        )
+                        .order_by("updated_at")
+                        .distinct())
+                else:
+                    raise Http404
+                
+                if posts:
+                    # ログイン中のユーザーが各投稿に対していいねしているかどうかを取得するサブクエリ
+                    liked_posts = LikeTable.objects.filter(
+                        user=request.user, post__in=posts).values_list('post', flat=True)
+
+                    # Paginatorを使用してページ分割
+                    paginator = Paginator(posts, page_size, orphans=1)
+
+                    all_pages_data = []
+                    for page_num in paginator.page_range:
+                        page_data = paginator.page(page_num)
+
+                        # 投稿データのシリアライズ
+                        serialized_data = serializers.serialize(
+                            'json', page_data, ensure_ascii=False)
+
+                        # ユーザーがいいねしているかどうかを投稿データに追加
+                        for entry in serialized_data:
+                            post_id = entry['pk']
+                            entry['fields']['is_liked'] = post_id in liked_posts
+
+                        all_pages_data.append({
+                            'data': serialized_data,
+                            'has_next': page_data.has_next(),
+                            'has_previous': page_data.has_previous(),
+                            'number': page_data.number,  # ページ番号
+                            'group': group_name
+                        })
+
+                    return JsonResponse({
+                        'all_pages_data': all_pages_data,
+                        'total_pages': paginator.num_pages,
+                    })
+                else:
+                    raise Http404
+            else:
+                return JsonResponse({'error': 'groupかpageがありません'})
+
+        except Http404:
+            print('読み込みデータがありません')
+            return JsonResponse({'error': '読み込みデータがありません'})
+    else:
+        return JsonResponse({'error': 'POSTメソッドを使用してください'})
+    data = {
+        
+    }
+    return JsonResponse(data)
 
 # # コメントページ表示
 class CommentView(TemplateView):
@@ -279,7 +362,7 @@ class CommentView(TemplateView):
 
         return render(request, "comment.html", context)
 
-
+# グループ追加
 def ajax_group(request):
     if request.method == 'POST':
         user = request.user

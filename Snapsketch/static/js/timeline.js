@@ -373,10 +373,50 @@ function addGroup(data) {
   fragment.appendChild(groupIcon);
 
   return fragment;
-
 }
 //-----------------------グループ追加機能-----------------------
 //-----------------------グループ切り替え機能-----------------------
+function changeGroup(){
+  // HTML要素を取得
+const groupIcons = document.querySelectorAll('.group-icon');
+
+// 各アイコンにクリックイベントを追加
+groupIcons.forEach(icon => {
+    icon.addEventListener('click', function(event) {
+        // クリックされた要素を取得
+        const clickedIcon = event.target;
+
+        // src属性から画像パスを取得
+        const groupname = clickedIcon.getAttribute('data-group');
+
+        $.ajax({
+          'url': '',
+          'type': 'POST',
+          'data': {
+            'groupname':groupname
+          },
+          'dataType': 'json',
+          'processData': false,
+          'contentType': false,
+        })
+          .done(function (response) {
+            if(response){
+              add_article(response);
+            }
+          })
+          // Ajax通信が失敗したら発動
+          .fail((jqXHR, textStatus, errorThrown) => {
+            console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
+            console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+            console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
+          });
+      });
+        // 取得した情報をコンソールに表示（デバッグ用）
+        console.log('クリックされた画像パス:', imagePath);
+
+        // ここで取得した情報を使って何か処理を行うことができます
+    });
+}
 //-----------------------グループ切り替え機能-----------------------
 
 //-----------------------フォーカス機能-----------------------
