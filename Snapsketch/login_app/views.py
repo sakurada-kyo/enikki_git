@@ -7,7 +7,7 @@ from .models import CustomUser
 from django.urls import reverse_lazy
 
 class CustomLoginView(LoginView):
-    template_name = 'login.html'  # ログインフォームが表示されるテンプレートの指定
+    template_name = 'login.htmlあ'  # ログインフォームが表示されるテンプレートの指定
     success_url = reverse_lazy('enikki:timeline')  # ログイン成功時のリダイレクト先
 
 class CustomUserCreateView(CreateView):
