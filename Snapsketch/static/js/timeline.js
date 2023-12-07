@@ -65,7 +65,7 @@ window.addEventListener('scroll', updates_sign());
 function updates_sign() {
   const parent = document.getElementById("scroll");
   var target = parent.lastElementChild;
-  if(!target) return;
+  if (!target) return;
   console.log("target:" + target);
   const options = {
     root: null,
@@ -140,7 +140,7 @@ function ajax_open(lastElement) {
       // const allPagesData = data.all_pages_data;
       if ('error' in data) {
         console.log(data.error);
-      }else{
+      } else {
         // データがnullでない場合の処理
         var fragment = add_article(allPagesData);
         $('#scroll').append(fragment);
@@ -157,7 +157,7 @@ function ajax_open(lastElement) {
 //-----------------------タイムラインajax処理-----------------------
 
 //-----------------------投稿追加-----------------------
-function add_article(allPagesData) {
+function add_article(allPagesData,multiple) {
   var fragment = document.createDocumentFragment();
 
   if (Array.isArray(allPagesData)) {
@@ -334,7 +334,7 @@ function showPopup() {
     })
       .done(function (response) {
         console.log(response);
-        if(response.errors){
+        if (response.errors) {
           // エラーメッセージを取得して表示する例
           const errorMessages = JSON.parse(response.errors);
           for (const field in errorMessages) {
@@ -343,7 +343,7 @@ function showPopup() {
               alert(`エラー: ${field} - ${errorMessage}`);
             }
           }
-        }else{
+        } else {
           const fragment = addGroup(response);
           $('.fa-plus').before(fragment);
           popupWrapper.style.display = 'none';
@@ -376,56 +376,56 @@ function addGroup(data) {
 }
 //-----------------------グループ追加機能-----------------------
 //-----------------------グループ切り替え機能-----------------------
-function changeGroup(){
+function changeGroup() {
   // HTML要素を取得
-const groupIcons = document.querySelectorAll('.group-icon');
+  const groupIcons = document.querySelectorAll('.group-icon');
 
-// 各アイコンにクリックイベントを追加
-groupIcons.forEach(icon => {
-    icon.addEventListener('click', function(event) {
-        // クリックされた要素を取得
-        const clickedIcon = event.target;
+  // 各アイコンにクリックイベントを追加
+  groupIcons.forEach(icon => {
+    icon.addEventListener('click', function (event) {
+      // クリックされた要素を取得
+      const clickedIcon = event.target;
 
-        // src属性から画像パスを取得
-        const groupname = clickedIcon.getAttribute('data-group');
+      // src属性から画像パスを取得
+      const groupname = clickedIcon.getAttribute('data-group');
 
-        $.ajax({
-          'url': '',
-          'type': 'POST',
-          'data': {
-            'groupname':groupname
-          },
-          'dataType': 'json',
-          'processData': false,
-          'contentType': false,
+      $.ajax({
+        'url': '',
+        'type': 'POST',
+        'data': {
+          'groupname': groupname
+        },
+        'dataType': 'json',
+        'processData': false,
+        'contentType': false,
+      })
+        .done(function (response) {
+          if (response) {
+            add_article(response);
+          }
         })
-          .done(function (response) {
-            if(response){
-              add_article(response);
-            }
-          })
-          // Ajax通信が失敗したら発動
-          .fail((jqXHR, textStatus, errorThrown) => {
-            console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
-            console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-            console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
-          });
-      });
-        // 取得した情報をコンソールに表示（デバッグ用）
-        console.log('クリックされた画像パス:', imagePath);
-
-        // ここで取得した情報を使って何か処理を行うことができます
+        // Ajax通信が失敗したら発動
+        .fail((jqXHR, textStatus, errorThrown) => {
+          console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
+          console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+          console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
+        });
     });
+    // 取得した情報をコンソールに表示（デバッグ用）
+    console.log('クリックされた画像パス:', imagePath);
+
+    // ここで取得した情報を使って何か処理を行うことができます
+  });
 }
 //-----------------------グループ切り替え機能-----------------------
 
 //-----------------------フォーカス機能-----------------------
-function focus(){
-  $(function() {
+function focus() {
+  $(function () {
     // フォーカスされた要素に視覚的なフォーカスインジケーターを表示する
-    $(document).on("focusin", ".group-icon", function() {
+    $(document).on("focusin", ".group-icon", function () {
       $(this).addClass("focus-visible");
     });
-});
+  });
 }
 //-----------------------フォーカス機能-----------------------

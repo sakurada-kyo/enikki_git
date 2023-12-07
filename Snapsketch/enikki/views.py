@@ -100,83 +100,86 @@ class TimelineView(TemplateView):
 # ajaxタイムライン
 def ajax_timeline(request):
     if request.method == 'POST':
-        try:
-            group_name = request.session.get('currentGroup')  # グループ名
-            page_number = int(request.POST.get('page', 1))  # 現在のページ番号
-            print(f'page_number:{page_number},currentGroup:{group_name}')
-            page_size = 10  # 1ページあたりの要素数
-
-            if group_name and page_number:
-                # グループ名を使って関連する投稿を取得
-                group_posts = GroupPostTable.objects.filter(
-                    group__groupname=group_name, page__gt=page_number)
-
-                if group_posts.exists():
-                    post_ids = group_posts.values_list('post__post_id', flat=True)
-                    
-                    posts = (PostMaster.objects.filter(post_id__in=post_ids)
-                        .values(
-                            "sketch_path",
-                            "diary",
-                            "user__username",
-                            # "user__group_icon_path",
-                            "like_count",
-                            "commentCount",
-                        )
-                        .order_by("updated_at")
-                        .distinct())
-
-                    # GroupPostTable内のpage情報をpostsに追加
-                    for post, group_post in zip(posts, group_posts):
-                        post['page'] = group_post.page
-                else:
-                    raise Http404
-                
-                if posts:
-                    # ログイン中のユーザーが各投稿に対していいねしているかどうかを取得するサブクエリ
-                    liked_posts = LikeTable.objects.filter(
-                        user=request.user, post__in=posts).values_list('post', flat=True)
-
-                    # Paginatorを使用してページ分割
-                    paginator = Paginator(posts, page_size, orphans=1)
-
-                    all_pages_data = []
-                    for page_num in paginator.page_range:
-                        page_data = paginator.page(page_num)
-
-                        # 投稿データのシリアライズ
-                        serialized_data = serializers.serialize(
-                            'json', page_data, ensure_ascii=False)
-
-                        # ユーザーがいいねしているかどうかを投稿データに追加
-                        for entry in serialized_data:
-                            post_id = entry['pk']
-                            entry['fields']['is_liked'] = post_id in liked_posts
-
-                        all_pages_data.append({
-                            'data': serialized_data,
-                            'has_next': page_data.has_next(),
-                            'has_previous': page_data.has_previous(),
-                            'number': page_data.number,  # ページ番号
-                            'group': group_name
-                        })
-
-                    return JsonResponse({
-                        'all_pages_data': all_pages_data,
-                        'total_pages': paginator.num_pages,
-                    })
-                else:
-                    raise Http404
-            else:
-                return JsonResponse({'error': 'groupかpageがありません'})
-
-        except Http404:
-            print('読み込みデータがありません')
-            return JsonResponse({'error': '読み込みデータがありません'})
+        getPost(request)
     else:
         return JsonResponse({'error': 'POSTメソッドを使用してください'})
 
 
+# 投稿取得関数
+def getPost(request):
+    try:
+        group_name = request.session.get('currentGroup')  # グループ名
+        page_number = int(request.POST.get('page', 1))  # 現在のページ番号
+        print(f'page_number:{page_number},currentGroup:{group_name}')
+        page_size = 10  # 1ページあたりの要素数
+
+        if group_name and page_number:
+            # グループ名を使って関連する投稿を取得
+            group_posts = GroupPostTable.objects.filter(
+                group__groupname=group_name, page__gt=page_number)
+
+            if group_posts.exists():
+                post_ids = group_posts.values_list('post__post_id', flat=True)
+                
+                posts = (PostMaster.objects.filter(post_id__in=post_ids)
+                    .values(
+                        "sketch_path",
+                        "diary",
+                        "user__username",
+                        "user__user_icon_path",
+                        "like_count",
+                        "commentCount",
+                    )
+                    .order_by("updated_at")
+                    .distinct())
+
+                # GroupPostTable内のpage情報をpostsに追加
+                for post, group_post in zip(posts, group_posts):
+                    post['page'] = group_post.page
+            else:
+                raise Http404
+            
+            if posts:
+                # ログイン中のユーザーが各投稿に対していいねしているかどうかを取得するサブクエリ
+                liked_posts = LikeTable.objects.filter(
+                    user=request.user, post__in=posts).values_list('post', flat=True)
+
+                # Paginatorを使用してページ分割
+                paginator = Paginator(posts, page_size, orphans=1)
+
+                all_pages_data = []
+                for page_num in paginator.page_range:
+                    page_data = paginator.page(page_num)
+
+                    # 投稿データのシリアライズ
+                    serialized_data = serializers.serialize(
+                        'json', page_data, ensure_ascii=False)
+
+                    # ユーザーがいいねしているかどうかを投稿データに追加
+                    for entry in serialized_data:
+                        post_id = entry['pk']
+                        entry['fields']['is_liked'] = post_id in liked_posts
+
+                    all_pages_data.append({
+                        'data': serialized_data,
+                        'has_next': page_data.has_next(),
+                        'has_previous': page_data.has_previous(),
+                        'number': page_data.number,  # ページ番号
+                        'group': group_name
+                    })
+
+                return JsonResponse({
+                    'all_pages_data': all_pages_data,
+                    'total_pages': paginator.num_pages,
+                })
+            else:
+                raise Http404
+        else:
+            return JsonResponse({'error': 'groupかpageがありません'})
+
+    except Http404:
+        print('読み込みデータがありません')
+        return JsonResponse({'error': '読み込みデータがありません'})
 # いいね機能
 def ajax_like(request):
     print("ajax_like")
@@ -220,89 +223,49 @@ def ajax_like(request):
 def ajax_changeGroup(request):
     if request.method == 'POST':
         try:
-            group_name = request.POST.get('groupname','')  # グループ名
-            # page_number = int(request.POST.get('page', 1))  # 現在のページ番号
-            # print(f'page_number:{page_number},currentGroup:{group_name}')
-            # page_size = 10  # 1ページあたりの要素数
-
-            if group_name:
-                # グループ名を使って関連する投稿を取得
+            groupname = request.POST.get('groupname', '')  # グループ名
+            
+            if groupname:
                 group_posts = (
-                    GroupPostTable.objects.filter(
-                    group__groupname=group_name)
-                    .select_related('post')
+                    GroupPostTable.objects
+                    .filter(group__groupname=groupname)
+                    .select_related('group', 'post')
                     .values(
-                        "post__sketch_path",
-                        "post__diary",
-                        "user__username",
-                        "like_count",
-                        "commentCount"
+                        'post__post_id',
+                        'post__user__username',
+                        'post__user__user_icon_path',
+                        'post__sketch_path',
+                        'post__diary',
+                        'post__like_count',
+                        'post__comment_count',
+                        'page'
                     )
                 )
 
                 if group_posts.exists():
-                    post_ids = group_posts.values_list('post__post_id', flat=True)
-                    
-                    posts = (PostMaster.objects.filter(post_id__in=post_ids)
-                        .values(
-                            "sketch_path",
-                            "diary",
-                            "user__username",
-                            "like_count",
-                            "commentCount",
-                        )
-                        .order_by("updated_at")
-                        .distinct())
-                else:
-                    raise Http404
-                
-                if posts:
-                    # ログイン中のユーザーが各投稿に対していいねしているかどうかを取得するサブクエリ
+                    # 投稿に対するいいねの情報を取得
                     liked_posts = LikeTable.objects.filter(
-                        user=request.user, post__in=posts).values_list('post', flat=True)
+                        user=request.user, post__in=group_posts.values_list('post__post_id', flat=True)
+                    ).values_list('post', flat=True)
 
-                    # Paginatorを使用してページ分割
-                    paginator = Paginator(posts, page_size, orphans=1)
+                    # ユーザーがいいねしているかどうかを投稿データに追加
+                    for entry in group_posts:
+                        post_id = entry['post__post_id']
+                        entry['is_liked'] = post_id in liked_posts
 
-                    all_pages_data = []
-                    for page_num in paginator.page_range:
-                        page_data = paginator.page(page_num)
-
-                        # 投稿データのシリアライズ
-                        serialized_data = serializers.serialize(
-                            'json', page_data, ensure_ascii=False)
-
-                        # ユーザーがいいねしているかどうかを投稿データに追加
-                        for entry in serialized_data:
-                            post_id = entry['pk']
-                            entry['fields']['is_liked'] = post_id in liked_posts
-
-                        all_pages_data.append({
-                            'data': serialized_data,
-                            'has_next': page_data.has_next(),
-                            'has_previous': page_data.has_previous(),
-                            'number': page_data.number,  # ページ番号
-                            'group': group_name
-                        })
-
-                    return JsonResponse({
-                        'all_pages_data': all_pages_data,
-                        'total_pages': paginator.num_pages,
-                    })
+                    return JsonResponse({'data': list(group_posts)})
                 else:
-                    raise Http404
+                    raise Http404('読み込みデータがありません')
             else:
-                return JsonResponse({'error': 'groupかpageがありません'})
+                return JsonResponse({'error': 'グループ名がありません'})
 
-        except Http404:
-            print('読み込みデータがありません')
+        except Http404 as e:
+            print(str(e))  # デバッグ用のエラーメッセージ
             return JsonResponse({'error': '読み込みデータがありません'})
+
     else:
         return JsonResponse({'error': 'POSTメソッドを使用してください'})
-    data = {
-        
-    }
-    return JsonResponse(data)
+
 
 # # コメントページ表示
 class CommentView(TemplateView):
