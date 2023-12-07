@@ -132,3 +132,6 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'login_app.CustomUser'
+
+# ログイン後のリダイレクト先を設定する場合
+LOGIN_REDIRECT_URL = 'enikki:timeline'
