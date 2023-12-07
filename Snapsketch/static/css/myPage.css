@@ -40,11 +40,11 @@ h1 {
 
 }
 
-.myPageRight {
+/* .myPageRight {
     width: 30%;
     height: 100%;
     float: left;
-}
+} */
 
 .introduction {
    /* width: 100%; */
@@ -136,11 +136,11 @@ textarea {
     display: table-cell;
     vertical-align: middle;
 }
-
+/* 
 .memo button {
     margin-left: 560px;
     margin-top:8px;
     height: 43px;
     width: 60px;
-}
+} */
 
