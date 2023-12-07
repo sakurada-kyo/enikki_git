@@ -38,7 +38,7 @@ $(function () {
             type: 'POST',
             data: {
                 'mypage': $('mypage').val(),
-                'mypage_icon': $('.user_icon').attr('src')
+                // 'mypage_icon': $('.user_icon').attr('src')
             },
             headers: { 'X-CSRFToken': csrftoken }
         })

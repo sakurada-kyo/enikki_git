@@ -572,29 +572,29 @@ def view_accountView(request):
 
 # フォローリクエスト機能
 # ユーザー検索機能
-class SearchView(TemplateView):
+# class SearchView(TemplateView):
 
 
-    template_name = 'search.html'
+#     template_name = 'search.html'
 
-    def post(self, request, *args, **kwargs):
-        #検索されたuserIdを取得する
-        frId = search.POST["frId"]
-         #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
-         try:
-            # 指定した日付とログインユーザーに基づいてレコードを抽出
-            post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
-            #データが存在するか調べる
-            friend = user.objects.filter(user_id__exact=frId)
-            #取得したデータを表示する
+#     def post(self, request, *args, **kwargs):
+#         #検索されたuserIdを取得する
+#         frId = search.POST["frId"]
+#          #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
+#         try:
+#             # 指定した日付とログインユーザーに基づいてレコードを抽出
+#             post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
+#             #データが存在するか調べる
+#             friend = user.objects.filter(user_id__exact=frId)
+#             #取得したデータを表示する
             
-            #Requestmodelにデータを追加する
+#             #Requestmodelにデータを追加する
 
-        except Http404:
-                PostMaster.objects.create(diary=diary,user=userId)
-                return
+#         except Http404:
+#                 PostMaster.objects.create(diary=diary,user=userId)
+#                 return
 
-    user = get_user_model()
+#     user = get_user_model()
         #デフォルトのuserモデルを参照して情報を引っ張る
 
 #リクエスト機能
@@ -619,6 +619,7 @@ class MypageView(TemplateView):
                     User, username=self.request.user.username)
                 context['username'] = user.username
                 context['email'] = user.email
+                context['password'] = user.password
                 # context['introduction'] = user.introduction
                 # context['icon_path'] = user.icon_path
             except Http404:
