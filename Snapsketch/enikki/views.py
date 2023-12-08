@@ -224,7 +224,7 @@ def ajax_changeGroup(request):
     if request.method == 'POST':
         try:
             groupname = request.POST.get('groupname', '')  # グループ名
-            
+
             if groupname:
                 group_posts = (
                     GroupPostTable.objects
@@ -612,7 +612,6 @@ def view_accountView(request):
 
     return render(request, 'account.html', context)
 
-# フォローリクエスト機能
 # ユーザー検索機能
 # class SearchView(TemplateView):
 
@@ -621,23 +620,20 @@ def view_accountView(request):
 
 #     def post(self, request, *args, **kwargs):
 #         #検索されたuserIdを取得する
-#         frId = search.POST["frId"]
+#         if request.method == 'POST':
+#         query = request.POST.get('placeholder', '')
 #          #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
 #         try:
 #             # 指定した日付とログインユーザーに基づいてレコードを抽出
 #             post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
 #             #データが存在するか調べる
-#             friend = user.objects.filter(user_id__exact=frId)
-#             #取得したデータを表示する
-            
-#             #Requestmodelにデータを追加する
+#             results = user.objects.filter(user_id__exact=query)
+#             return render(request, 'usersearch.html', {'query': query, 'results': results})
 
 #         except Http404:
 #                 PostMaster.objects.create(diary=diary,user=userId)
 #                 return
 
-#     user = get_user_model()
-        #デフォルトのuserモデルを参照して情報を引っ張る
 
 #リクエスト機能
 class RequestView(TemplateView):
@@ -696,15 +692,54 @@ class GroupView(TemplateView):
             context['error'] = 'グループに所属していません'
                 
         return render(request,self.template_name,context)
-    # def mypage_icon(request):
-#     user = request.user
 
-#     if request.method == 'POST':
-#         form = CustomUserForm(request.POST, request.FILES, instance=user)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('your_redirect_url')  # リダイレクト先を適切なURLに変更してください
-#     else:
-#         form = CustomUserForm(instance=user)
 
-#     return render(request, 'mypage.html', {'form': form})
+
+def mypage_icon(request):
+    print('icon')
+   # ユーザーアイコンの変更処理
+    if request.method == 'POST':
+        user = request.user
+
+        # ユーザーがアップロードしたファイルを取得
+        uploaded_file = request.FILES.get('user_icon')
+
+# ファイルが選択されているか確認
+    print(f'uploaded file{uploaded_file}')
+    if uploaded_file:
+        reqFileName = uploaded_file.name
+        reqFileBinary = uploaded_file.read()
+
+        try:
+            # バイナリデータをPIL Imageに変換する
+            image = Image.open(BytesIO(reqFileBinary))
+
+            # JPEG形式に変換（もしJPEGでない場合は変換が必要です）
+            if image.format != "JPEG":
+                image = image.convert("RGB")
+
+            # 保存する画像のファイル名
+            rand = get_random_string(3)
+            imgFileName = f"u{rand}_{reqFileName}.jpg"
+
+            # 画像を一時的にBytesIOに保存してから、ContentFileを使用してファイルフィールドに保存
+            image_io = BytesIO()
+            image.save(image_io, format="JPEG")
+            image_content = ContentFile(
+                image_io.getvalue(), name=imgFileName)
+
+            # ファイルをユーザーオブジェクトにセットして保存
+            user.icon = image_content
+            user.save()
+
+            # 成功時のレスポンスを返す
+            return JsonResponse({'success': True, 'icon_url': user.user_icon_path.url})
+        except IOError:
+            # 画像が正しく読み込めない場合のエラーハンドリング
+            print("IOエラーが発生しました。")
+
+    else:
+        return JsonResponse({'success': False, 'error_message': 'ファイルが選択されていません。'})
+    
+    
+

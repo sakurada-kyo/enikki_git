@@ -72,16 +72,50 @@ function add_mypage() {
     return fragment;
 }
 
+$(function () {
+    $('#iconInput').click(); // ファイル選択ダイアログを開く
+
+    // ファイルが選択された時の処理
+    $('#iconInput').on('change', function () {
+        var formData = new FormData();
+        formData.append('user_icon', this.files[0]);
+
+        // Ajaxリクエストを送信してファイルをアップロード
+        $.ajax({
+            url: '../ajax_myPage/', // 適切なURLに変更
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: { 'X-CSRFToken': csrftoken },
+            success: function (data) {
+                // アップロードが成功した場合の処理
+                if (data.success) {
+                    $('.user_icon').attr('src', data.icon_url);
+                    alert('アイコンが変更されました！');
+                } else {
+                    alert('アップロードに失敗しました。');
+                }
+            },
+            error: function () {
+                alert('通信エラーが発生しました。');
+            }
+        });
+    });
+
+
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     // ボタンのクリックイベントを設定
     var editButtons = document.querySelectorAll('.editButton');
     var editField = document.querySelector('.editField');
 
-    var editButtons1 = document.querySelectorAll('.editButton1');
-    var editField1 = document.querySelector('.editField1');
+    // var editButtons1 = document.querySelectorAll('.editButton1');
+    // var editField1 = document.querySelector('.editField1');
 
     console.log(editField);
-    console.log(editField1);
+    // console.log(editField1);
 
     editButtons.forEach(function (button) {
         button.addEventListener('click', function () {
@@ -110,24 +144,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
     // テキストエリア
-    editButtons1.forEach(function (button){
-        button.addEventListener('click',function(){
-            var buttonValue = button.value;
+    // editButtons1.forEach(function (button){
+    //     button.addEventListener('click',function(){
+    //         var buttonValue = button.value;
 
-            var editField1;
-            if (buttonValue === '4'){
-                editField1 = document.querySelector('.e4');
-            }
+    //         var editField1;
+    //         if (buttonValue === '4'){
+    //             editField1 = document.querySelector('.e4');
+    //         }
 
-            editField1.disabled = !editField1.disabled;
+    //         editField1.disabled = !editField1.disabled;
             
-            if (editField1.disabled) {
-                button.innerText = '編集';
-            } else {
-                button.innerText = '保存';
-            }
-        })
-    })
+    //         if (editField1.disabled) {
+    //             button.innerText = '編集';
+    //         } else {
+    //             button.innerText = '保存';
+    //         }
+    //     })
+    // })
 
 });
 function move() {

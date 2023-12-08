@@ -12,11 +12,12 @@
         </div>
 
         <div class="avatar">
-          <img class="user_icon" src="{{ mypage.user_icon.url }}" alt="アバター表示" wight="130" height="193" />
+          <img class="user_icon" src="{{ user_icon.url }}" alt="アバター表示" wight="130" height="193" />
         </div>
 
         <div class="avatarChange">
-          <button class="change" type="button">アイコン変更</button>
+          <input type="file" id="iconInput" name ="iconInput"style="display: none;" accept="image/*">
+          <label for="iconInput" class="change">アイコン変更</label>
         </div>
       </div>
 
@@ -62,7 +63,7 @@
     </div>
   </div>
 
-  <div class="myPageRight">
+  {% comment %} <div class="myPageRight">
     <div class="introduction">
       <h3>自己紹介</h3>
 
@@ -71,7 +72,7 @@
         <button class="detailChange1 editButton1" type="button" value="4">編集</button>
       </div>
     </div>
-  </div>
+  </div> {% endcomment %}
 {% endblock %}
 
 {% block side %}
