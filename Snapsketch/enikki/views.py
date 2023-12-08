@@ -630,16 +630,11 @@ def view_accountView(request):
 #             #データが存在するか調べる
 #             results = user.objects.filter(user_id__exact=query)
 #             return render(request, 'usersearch.html', {'query': query, 'results': results})
-#             #取得したデータを表示する
-            
-#             #Requestmodelにデータを追加する
 
 #         except Http404:
 #                 PostMaster.objects.create(diary=diary,user=userId)
 #                 return
 
-#     user = get_user_model()
-        #デフォルトのuserモデルを参照して情報を引っ張る
 
 #リクエスト機能
 class RequestView(TemplateView):
