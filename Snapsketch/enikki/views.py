@@ -540,7 +540,6 @@ class CreateView(TemplateView):
         
         return redirect('enikki:timeline')
 
-
 # カレンダー画面
 class CalenderView(TemplateView):
 

@@ -48,25 +48,27 @@ function generateCalendar(year, month) {
 }
 
 function showPreviousMonth() {
-    if (currentMonth === 0) {
-        currentYear--;
-        currentMonth = 11;
-    } else {
-        currentMonth--;
-    }
-    generateCalendar(currentYear, currentMonth);
+    updateCalendar();
 }
 
 
 function showNextMonth() {
-    if (currentMonth === 11) {
-        currentYear++;
-        currentMonth = 0;
-    } else {
-        currentMonth++;
-    }
-    generateCalendar(currentYear, currentMonth);
+    updateCalendar();
 }
+
+function updateCalendar() {
+    // AJAXリクエストを作成
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                // カレンダーの内容を更新
+                document.getElementById('calendar').innerHTML = xhr.responseText;
+            } else {
+                console.error('AJAX request failed');
+            }
+        }
+    };
 
 /* function showDialy() {
 
