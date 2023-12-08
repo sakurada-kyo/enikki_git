@@ -1,58 +1,22 @@
-body{
-    font-family: "Franklin Gothic";
-    text-align: center;
-    background-color: #B0E0E6;
+body {
+    background-color: #A5A0CF; /* 背景色 */
+    color:#000000;
 }
-
-header{
-    margin-top: 200px;
-    color: #ffffff;
-    -webkit-text-stroke: 0.1px #000000;
-    font-size: 30px;
+.container {
+    margin-top: 100px;
 }
-
-main{
-    font-size: 17px;
-    text-align: center;
-}
-
-main #mid{
-    padding: 40px;
+.form-login {
+    max-width: 400px;
     margin: auto;
-    width: 30%;
-    background-color: #F0FFFF;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
-.text{
-    height: 24px;
-    width: 60%;
+.form-login h2 {
+    margin-bottom: 20px;
+    text-align: center;
 }
-
-.text2{
-    height: 24px;
-    width: 60%;
-}
-
-.button{
-    background-color: #165E83;
-    color: #fff;
-    font-size: 13px;
-    height: 24px;
-    width: 25%;
-}
-
-.button2{
-    background-color: #165E83;
-    color: #fff;
-    font-size: 13px;
-    height: 24px;
-    width: 25%;
-}
-
-.text2, .button, p{
-    margin-top: 20px;
-}
-
-main #mid p{
-    color: #000000;
+.form-login button[type="submit"] {
+    width: 100%;
 }

@@ -1,5 +1,6 @@
 body {
-    background-color: #f8f9fa;
+    background-color: #A5A0CF; /* 背景色 */
+    color: #000000; /* テキストカラー */
 }
 .container {
     margin-top: 50px;
@@ -7,7 +8,7 @@ body {
 .form-signup {
     max-width: 400px;
     margin: auto;
-    background-color: #fff;
+    background-color: #ffffff; /* フォームの背景色 */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -18,12 +19,4 @@ body {
 }
 .form-signup button[type="submit"] {
     width: 100%;
-}
-
-.deco-file label{
-    display: inline-block;
-    border: 2px solid #1E88E5;
-    color: #1E88E5;
-    text-align: center;
-    padding: 20px 40px;
 }
