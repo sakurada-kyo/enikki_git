@@ -9,14 +9,14 @@
 	{% csrf_token %}
 	<dl class="search2">
 		<dt><input type="text" name="search" value="{{ query }}" placeholder="ユーザーIDを入力...." /></dt>
-		<dd><button type="submit">#ここにボタンの文字か画像入れる<span></span></button></dd>
+		<dd><button type="submit">検索<span></span></button></dd>
 	</dl>
 </form>
 
 {% if results %}
         <h2>Results for "{{ query }}"</h2>
         <ul>
-                <li>{{ user.user_icon_path }} - {{ user.username }}</li>
+                <li><img src={{user.user_icon_path}}>{{ user.username }}</li>
 				<dd><button type="submit">友達申請</button></dd>
         </ul>
     {% else %}
