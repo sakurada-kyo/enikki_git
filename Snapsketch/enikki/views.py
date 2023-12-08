@@ -224,7 +224,7 @@ def ajax_changeGroup(request):
     if request.method == 'POST':
         try:
             groupname = request.POST.get('groupname', '')  # グループ名
-            
+
             if groupname:
                 group_posts = (
                     GroupPostTable.objects

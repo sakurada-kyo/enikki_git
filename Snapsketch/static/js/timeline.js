@@ -172,7 +172,7 @@ function add_article(allPagesData,multiple) {
         const postUserName = post.fields.user.username; // ユーザー名情報を取得
         const postLikeCount = post.fields.likeCount; // いいね数情報を取得
         const postCommentCount = post.fields.commentCount; // コメント数情報を取得
-        const page = post.fields.page
+        const page = post.fields.page;
         const isLiked = post.fields.is_liked; // いいね情報を取得
 
         var content = createAndAppendElement('article', 'content', '');
