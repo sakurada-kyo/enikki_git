@@ -142,7 +142,7 @@ function ajax_open(lastElement) {
         console.log(data.error);
       } else {
         // データがnullでない場合の処理
-        var fragment = add_article(allPagesData);
+        var fragment = add_article(data,true);
         $('#scroll').append(fragment);
         updates_sign();
       }
@@ -157,12 +157,12 @@ function ajax_open(lastElement) {
 //-----------------------タイムラインajax処理-----------------------
 
 //-----------------------投稿追加-----------------------
-function add_article(allPagesData,multiple) {
+function add_article(allPagesData) {
   var fragment = document.createDocumentFragment();
 
   if (Array.isArray(allPagesData)) {
     for (const pageData of allPagesData) {
-      const posts = JSON.parse(pageData.data);// 'data' をJavaScriptオブジェクトに変換
+      const posts = JSON.parse(pageData.data); // 'data' をJavaScriptオブジェクトに変換
       const group = pageData.group;
 
       // このページの投稿データを処理
@@ -233,6 +233,38 @@ function add_article(allPagesData,multiple) {
   return fragment;
 }
 //------------------------投稿追加----------------------------
+
+//------------------------投稿更新----------------------------
+function update_article(data){
+  var fragment = document.createDocumentFragment();
+
+
+  if (Array.isArray(data)) {
+    maxObj = data.length;
+    const parent = document.getElementById("scroll");
+    var lastElement = parent.lastElementChild;
+    const lastPage = lastElement.getAttribute("data-page");
+    if(maxObj >= lastPage){
+       //更新
+        for(let i = 1; i < lastPage; i++){
+          var selector = '[data-page="' + i + '"]';
+          var foundElement = parent.find(selector)
+          foundElement.find('user_icon').attr('src', data[i].post__user__user_icon_path);
+          foundElement.find('user_name').innerHTML = data[i].post__user__username;
+          foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+          foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+          foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+          
+        }
+    }else{
+
+    }
+  };
+
+  // 最後に追加！
+  return fragment;
+}
+//------------------------投稿更新----------------------------
 
 //タグ生成
 function createAndAppendElement(tagName, className = '', textContent = '') {
@@ -375,6 +407,7 @@ function addGroup(data) {
   return fragment;
 }
 //-----------------------グループ追加機能-----------------------
+
 //-----------------------グループ切り替え機能-----------------------
 function changeGroup() {
   // HTML要素を取得
@@ -400,8 +433,10 @@ function changeGroup() {
         'contentType': false,
       })
         .done(function (response) {
-          if (response) {
-            add_article(response);
+          if (response.errors) {
+            console.log('エラー')
+          }else{
+            update_article(response);
           }
         })
         // Ajax通信が失敗したら発動

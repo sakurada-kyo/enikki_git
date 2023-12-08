@@ -120,7 +120,7 @@ def getPost(request):
 
             if group_posts.exists():
                 post_ids = group_posts.values_list('post__post_id', flat=True)
-                
+
                 posts = (PostMaster.objects.filter(post_id__in=post_ids)
                     .values(
                         "sketch_path",
