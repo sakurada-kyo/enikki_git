@@ -12,11 +12,12 @@
         </div>
 
         <div class="avatar">
-          <img class="user_icon" src="{{ mypage.user_icon.url }}" alt="アバター表示" wight="130" height="193" />
+          <img class="user_icon" src="{{ user_icon.url }}" alt="アバター表示" wight="130" height="193" />
         </div>
 
         <div class="avatarChange">
-          <button class="change" type="button">アイコン変更</button>
+          <input type="file" id="iconInput" name ="iconInput"style="display: none;" accept="image/*">
+          <label for="iconInput" class="change">アイコン変更</label>
         </div>
       </div>
 

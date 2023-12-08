@@ -73,10 +73,7 @@ function add_mypage() {
 }
 
 $(function () {
-    // アイコン変更ボタンがクリックされた時の処理
-    $('.avatarChange .change').on('click', function () {
-        $('#iconInput').click(); // ファイル選択ダイアログを開く
-    });
+    $('#iconInput').click(); // ファイル選択ダイアログを開く
 
     // ファイルが選択された時の処理
     $('#iconInput').on('change', function () {
@@ -85,7 +82,7 @@ $(function () {
 
         // Ajaxリクエストを送信してファイルをアップロード
         $.ajax({
-            url: '/upload_icon/', // 適切なURLに変更
+            url: '../ajax_myPage/', // 適切なURLに変更
             type: 'POST',
             data: formData,
             processData: false,
@@ -106,7 +103,7 @@ $(function () {
         });
     });
 
-    
+
 });
 
 document.addEventListener('DOMContentLoaded', function () {
