@@ -224,7 +224,7 @@ def ajax_changeGroup(request):
     if request.method == 'POST':
         try:
             groupname = request.POST.get('groupname', '')  # グループ名
-            
+
             if groupname:
                 group_posts = (
                     GroupPostTable.objects
@@ -698,15 +698,54 @@ class GroupView(TemplateView):
             context['error'] = 'グループに所属していません'
                 
         return render(request,self.template_name,context)
-    # def mypage_icon(request):
-#     user = request.user
 
-#     if request.method == 'POST':
-#         form = CustomUserForm(request.POST, request.FILES, instance=user)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('your_redirect_url')  # リダイレクト先を適切なURLに変更してください
-#     else:
-#         form = CustomUserForm(instance=user)
 
-#     return render(request, 'mypage.html', {'form': form})
+
+def mypage_icon(request):
+    print('icon')
+   # ユーザーアイコンの変更処理
+    if request.method == 'POST':
+        user = request.user
+
+        # ユーザーがアップロードしたファイルを取得
+        uploaded_file = request.FILES.get('user_icon')
+
+# ファイルが選択されているか確認
+    print(f'uploaded file{uploaded_file}')
+    if uploaded_file:
+        reqFileName = uploaded_file.name
+        reqFileBinary = uploaded_file.read()
+
+        try:
+            # バイナリデータをPIL Imageに変換する
+            image = Image.open(BytesIO(reqFileBinary))
+
+            # JPEG形式に変換（もしJPEGでない場合は変換が必要です）
+            if image.format != "JPEG":
+                image = image.convert("RGB")
+
+            # 保存する画像のファイル名
+            rand = get_random_string(3)
+            imgFileName = f"u{rand}_{reqFileName}.jpg"
+
+            # 画像を一時的にBytesIOに保存してから、ContentFileを使用してファイルフィールドに保存
+            image_io = BytesIO()
+            image.save(image_io, format="JPEG")
+            image_content = ContentFile(
+                image_io.getvalue(), name=imgFileName)
+
+            # ファイルをユーザーオブジェクトにセットして保存
+            user.icon = image_content
+            user.save()
+
+            # 成功時のレスポンスを返す
+            return JsonResponse({'success': True, 'icon_url': user.user_icon_path.url})
+        except IOError:
+            # 画像が正しく読み込めない場合のエラーハンドリング
+            print("IOエラーが発生しました。")
+
+    else:
+        return JsonResponse({'success': False, 'error_message': 'ファイルが選択されていません。'})
+    
+    
+
