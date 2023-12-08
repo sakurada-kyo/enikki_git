@@ -612,27 +612,27 @@ def view_accountView(request):
 
     return render(request, 'account.html', context)
 
-# ユーザー検索機能
-# class SearchView(TemplateView):
+#ユーザー検索機能
+class SearchView(TemplateView):
 
 
-#     template_name = 'search.html'
+    template_name = 'search.html'
 
-#     def post(self, request, *args, **kwargs):
-#         #検索されたuserIdを取得する
-#         if request.method == 'POST':
-#         query = request.POST.get('placeholder', '')
-#          #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
-#         try:
-#             # 指定した日付とログインユーザーに基づいてレコードを抽出
-#             post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
-#             #データが存在するか調べる
-#             results = user.objects.filter(user_id__exact=query)
-#             return render(request, 'usersearch.html', {'query': query, 'results': results})
+    def post(self, request, *args, **kwargs):
+        #検索されたuserIdを取得する
+        if request.method == 'POST':
+        query = request.POST.get('placeholder', '')
+         #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
+        try:
+            # 指定した日付とログインユーザーに基づいてレコードを抽出
+            post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
+            #データが存在するか調べる
+            results = user.objects.filter(user_id__exact=query)
+            return render(request, 'usersearch.html', {'query': query, 'results': results})
 
-#         except Http404:
-#                 PostMaster.objects.create(diary=diary,user=userId)
-#                 return
+        except Http404:
+                PostMaster.objects.create(diary=diary,user=userId)
+                return
 
 
 #リクエスト機能
@@ -640,6 +640,16 @@ class RequestView(TemplateView):
 
     template_name = 'request.html'
 
+    def friend_request(request):
+        if request.method =='POST':
+            form = FrequestTable(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('success page') #👈保存成功時に遷移するページのURLに変更
+        else:
+            form = FrequestTable()
+
+        return render(request,'usersearch.html',{'form':form})
 
 
 # マイページ機能
