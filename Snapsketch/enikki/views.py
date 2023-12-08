@@ -613,7 +613,6 @@ def view_accountView(request):
 
     return render(request, 'account.html', context)
 
-# フォローリクエスト機能
 # ユーザー検索機能
 # class SearchView(TemplateView):
 
@@ -622,13 +621,15 @@ def view_accountView(request):
 
 #     def post(self, request, *args, **kwargs):
 #         #検索されたuserIdを取得する
-#         frId = search.POST["frId"]
+#         if request.method == 'POST':
+#         query = request.POST.get('placeholder', '')
 #          #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
 #         try:
 #             # 指定した日付とログインユーザーに基づいてレコードを抽出
 #             post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
 #             #データが存在するか調べる
-#             friend = user.objects.filter(user_id__exact=frId)
+#             results = user.objects.filter(user_id__exact=query)
+#             return render(request, 'usersearch.html', {'query': query, 'results': results})
 #             #取得したデータを表示する
             
 #             #Requestmodelにデータを追加する
