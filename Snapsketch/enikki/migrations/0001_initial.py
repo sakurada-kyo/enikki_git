@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 39fc44f557dae6883c8080a6c78e9a999f09c082
 from django.db import migrations, models
 import django.db.models.deletion
 import enikki.models
