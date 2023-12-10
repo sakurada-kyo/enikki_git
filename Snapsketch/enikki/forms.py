@@ -22,7 +22,7 @@ class UpLoadProfileImgForm(forms.Form):
         print('clean_groupname:成功')
         return groupname
     
-class RequestForm(forms.ModelForm):
-    class Meta:
-        model = 
-        fields = ['name','email','message']
+# class RequestForm(forms.ModelForm):
+#     class Meta:
+#         model = 
+#         fields = ['name','email','message']

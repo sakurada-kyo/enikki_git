@@ -454,6 +454,73 @@ function changeGroup() {
 }
 //-----------------------グループ切り替え機能-----------------------
 
+//------------------------投稿更新----------------------------
+function update_article(data){
+  var fragment = document.createDocumentFragment();
+
+  if (Array.isArray(data)) {
+    maxObj = data.length;
+    const parent = document.getElementById("scroll");
+    var lastElement = parent.lastElementChild;
+    const lastPage = lastElement.getAttribute("data-page");
+    if(maxObj >= lastPage){
+       //更新
+        for(let i = data[0].page; i <= lastPage; i++){
+          console.log("更新");
+          // var selector = '[data-page="' + data[i].page + '"]';
+          // var foundElement = parent.find(selector)
+          // foundElement.find('user_icon').attr('src', data[i].post__user__user_icon_path);
+          // foundElement.find('user_name').innerHTML = data[i].post__user__username;
+          // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+          // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+          // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+          
+        }
+      //追加
+      for(let i = lastPage + 1; i <= maxObj; i++){
+        console.log("追加");
+        // var selector = '[data-page="' + data[i].page + '"]';
+        // var foundElement = parent.find(selector)
+        // foundElement.find('user_icon').attr('src', data[i].post__user__user_icon_path);
+        // foundElement.find('user_name').innerHTML = data[i].post__user__username;
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        
+      }
+    }else{
+      //更新
+      for(let i = data[0].page; i <= maxObj; i++){
+        console.log("更新");
+        // var selector = '[data-page="' + data[i].page + '"]';
+        // var foundElement = parent.find(selector)
+        // foundElement.find('user_icon').attr('src', data[i].post__user__user_icon_path);
+        // foundElement.find('user_name').innerHTML = data[i].post__user__username;
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        
+      }
+      //削除
+      for(let i = maxObj + 1; i <= lastPage; i++){
+        console.log("削除");
+        // var selector = '[data-page="' + data[i].page + '"]';
+        // var foundElement = parent.find(selector)
+        // foundElement.find('user_icon').attr('src', data[i].post__user__user_icon_path);
+        // foundElement.find('user_name').innerHTML = data[i].post__user__username;
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        
+      }
+    }
+  };
+
+  // 最後に追加！
+  // return fragment;
+}
+//------------------------投稿更新----------------------------
+
 //-----------------------フォーカス機能-----------------------
 function focus() {
   $(function () {
