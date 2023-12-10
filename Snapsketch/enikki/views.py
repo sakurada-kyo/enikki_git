@@ -95,12 +95,14 @@ class TimelineView(TemplateView):
                     raise Http404
             except Http404:
                 print('グループ内で投稿がありません')
+        else:
+            print('currentGroupがない')
         return render(request, self.template_name, context)
 
 # ajaxタイムライン
 def ajax_timeline(request):
     if request.method == 'POST':
-        getPost(request)
+        return getPost(request)
     else:
         return JsonResponse({'error': 'POSTメソッドを使用してください'})
 
@@ -109,7 +111,7 @@ def ajax_timeline(request):
 def getPost(request):
     try:
         group_name = request.session.get('currentGroup')  # グループ名
-        page_number = int(request.get('page', 1))  # 現在のページ番号
+        page_number = int(request.POST.get('page', 1))  # 現在のページ番号
         print(f'page_number:{page_number},currentGroup:{group_name}')
         page_size = 10  # 1ページあたりの要素数
 
@@ -180,6 +182,7 @@ def getPost(request):
     except Http404:
         print('読み込みデータがありません')
         return JsonResponse({'error': '読み込みデータがありません'})
+    
 # いいね機能
 def ajax_like(request):
     print("ajax_like")
@@ -221,10 +224,10 @@ def ajax_like(request):
 
 # グループ切り替え処理
 def ajax_changeGroup(request):
+    print('ajax_changeGroup')
     if request.method == 'POST':
         try:
             groupname = request.POST.get('groupname', '')  # グループ名
-
             if groupname:
                 group_posts = (
                     GroupPostTable.objects
