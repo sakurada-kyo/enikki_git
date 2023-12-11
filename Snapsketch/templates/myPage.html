@@ -1,80 +1,81 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/myPage.css' %}" />
+  <!-- Bootstrapのスタイルを追加 -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 {% endblock %}
+
 {% block content %}
-  <div class="myPageLeft">
-    <div class="profile">
-      <div class="profilePhoto">
-        <div class="photo">
-          <h3>プロフィール</h3>
+  <div class="container-fluid my-3">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <h5 class="card-title">プロフィール</h5>
+            <div class="profilePhoto">
+              <div class="photo">
+                <h3>プロフィール</h3>
+              </div>
+              <div class="avatar">
+                <img class="user_icon img-fluid rounded-circle" src="{{ mypage.user_icon.url }}" alt="アバター表示">
+              </div>
+              <div class="avatarChange mt-2">
+                <button class="btn btn-primary" type="button">アイコン変更</button>
+              </div>
+            </div>
+            <div class="friend mt-3">
+              <button class="btn btn-secondary" type="button">友達一覧</button>
+            </div>
+          </div>
         </div>
-
-        <div class="avatar">
-          <img class="user_icon" src="{{ mypage.user_icon.url }}" alt="アバター表示" wight="130" height="193" />
-        </div>
-
-        <div class="avatarChange">
-          <button class="change" type="button">アイコン変更</button>
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">詳細情報</h5>
+            <table class="table table-striped">
+              <tr>
+                <th>ユーザ名：</th>
+                <td>
+                  <p>{{ mypage.user_name }}</p>
+                </td>
+                <td>
+                  <button class="btn btn-link detailChange1" type="button" value="1">編集</button>
+                </td>
+              </tr>
+              <tr>
+                <th>メールアドレス：</th>
+                <td>
+                  <p>{{ mypage.address }}</p>
+                </td>
+                <td>
+                  <button class="btn btn-link detailChange1" type="button" value="2">編集</button>
+                </td>
+              </tr>
+              <tr>
+                <th>パスワード：</th>
+                <td>
+                  <p>・・・・・・・・</p>
+                </td>
+                <td>
+                  <button class="btn btn-link detailChange1" type="button" value="3">編集</button>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
 
-      <div class="friend">
-        <button class="friendButton" type="button">友達一覧</button>
-      </div>
-    </div>
-
-    <div class="address">
-      <div class="detail">
-        <table>
-          <tr>
-            <th>ユーザ名：</th>
-            <td>
-              <p>{{ mypage.user_name }}</p>
-            </td>
-            <td>
-              <button class="detailChange1" type="button" value="1">編集</button>
-            </td>
-          </tr>
-          <tr>
-            <th>メールアドレス：</th>
-            <td>
-              <p>{{ mypage.address }}</p>
-            </td>
-            <td>
-              <button class="detailChange1" type="button" value="2">編集</button>
-            </td>
-          </tr>
-          <tr>
-            <th>パスワード：</th>
-            <td>
-              <p>・・・・・・・・</p>
-            </td>
-            <td>
-              <button class="detailChange1" type="button" value="3">編集</button>
-            </td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- <button onclick="location.href='user.html'">編集</button> -->
-    </div>
-  </div>
-
-  <div class="myPageRight">
-    <div class="introduction">
-      <h3>自己紹介</h3>
-
-      <div class="memo">
-        <textarea name="comment" cols="40" rows="8">{{ mypage.profile }}</textarea>
-        <button class="memoReserve" type="button" value="4">保存</button>
+      <div class="col-md-8">
+        <!-- 自己紹介の部分を削除 -->
       </div>
     </div>
   </div>
 {% endblock %}
 
 {% block side %}
+  <!-- サイドバーの内容をそのまま残す -->
   <li>
     <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
   </li>
@@ -93,9 +94,20 @@
 {% endblock %}
 
 {% block footer %}
+  <!-- フッターの内容をそのまま残す -->
   <footer>
     <div id="kotei">
       <small>&copy;2023 SnapSketch</small>
     </div>
   </footer>
+{% endblock %}
+
+{% block js %}
+  <!-- BootstrapのJavaScriptライブラリを読み込む -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-GLhlTQ8iKSeLeM1e7BX5wnRTiB9YYuaSUqDlTinxvpFAflCOdL/1aSm2fFWPN4Q" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 {% endblock %}

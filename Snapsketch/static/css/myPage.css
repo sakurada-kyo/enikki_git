@@ -144,3 +144,15 @@ textarea {
     width: 60px;
 }
 
+.detail {
+    margin-top: 30px;
+    margin-left: auto; /* 自動的に右に寄るように */
+    margin-right: 40px; /* 右側の余白 */
+}
+
+/* もしくは */
+
+.detail {
+    margin-top: 30px;
+    margin-left: 60px; /* 左側の余白を増やす */
+}

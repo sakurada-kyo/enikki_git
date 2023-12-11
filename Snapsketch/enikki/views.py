@@ -581,7 +581,7 @@ class SearchView(TemplateView):
         #検索されたuserIdを取得する
         frId = search.POST["frId"]
          #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
-         try:
+        try:
             # 指定した日付とログインユーザーに基づいてレコードを抽出
             post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
             #データが存在するか調べる
