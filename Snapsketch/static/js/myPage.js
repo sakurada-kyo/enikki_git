@@ -138,30 +138,61 @@ document.addEventListener('DOMContentLoaded', function () {
             // ボタンのテキストを変更
             if (editField.disabled) {
                 button.innerText = '編集';
+                $$(function () {
+                    $('.editButton').on('click', function () {
+                        var button = $(this);
+                        var editField = button.closest('tr').find('.editField');
+                
+                        if (editField.prop('disabled')) {
+                            // 編集モードに切り替える
+                            button.text('保存');
+                            editField.prop('disabled', false);
+                        } else {
+                            console.log("保存")
+                            var newUsername = button.closest('tr').find('.e1').val();
+                            var newEmail = button.closest('tr').find('.e2').val();
+                
+                            $.ajax({
+                                url: '../ajax_myPageup/',  // 適切なURLに変更
+                                type: 'POST',
+                                data: {
+                                    'new_username': newUsername,
+                                    'new_email': newEmail
+                                },
+                                headers: { 'X-CSRFToken': csrftoken },
+                                success: function (data) {
+                                    if (data.success) {
+                                        alert('ユーザ名とメールアドレスが更新されました！');
+                
+                                        // 対応するtd要素を更新
+                                        var usernameTd = button.closest('tr').find('.e1');
+                                        var emailTd = button.closest('tr').find('.e2');
+                
+                                        usernameTd.val(newUsername);
+                                        emailTd.val(newEmail);
+                
+                                        button.text('編集');
+                                        editField.prop('disabled', true);
+                                    } else {
+                                        alert('更新に失敗しました。');
+                                    }
+                                },
+                                error: function () {
+                                    alert('通信エラーが発生しました。');
+                                }
+                            });
+                        }
+                    });
+                });
+                
+
+
             } else {
                 button.innerText = '保存';
+                
             }
         });
     });
-    // テキストエリア
-    // editButtons1.forEach(function (button){
-    //     button.addEventListener('click',function(){
-    //         var buttonValue = button.value;
-
-    //         var editField1;
-    //         if (buttonValue === '4'){
-    //             editField1 = document.querySelector('.e4');
-    //         }
-
-    //         editField1.disabled = !editField1.disabled;
-            
-    //         if (editField1.disabled) {
-    //             button.innerText = '編集';
-    //         } else {
-    //             button.innerText = '保存';
-    //         }
-    //     })
-    // })
 
 });
 function move() {

@@ -663,6 +663,7 @@ class MypageView(TemplateView):
                 context['username'] = user.username
                 context['email'] = user.email
                 context['password'] = user.password
+                context['user_icon'] = user.user_icon_path.url
                 # context['introduction'] = user.introduction
                 # context['icon_path'] = user.icon_path
             except Http404:
@@ -734,9 +735,9 @@ def mypage_icon(request):
                 image_io.getvalue(), name=imgFileName)
 
             # ファイルをユーザーオブジェクトにセットして保存
-            user.icon = image_content
+            user.user_icon_path = image_content
             user.save()
-
+            print(f'user.user_icon_path.url{user.user_icon_path.url}')
             # 成功時のレスポンスを返す
             return JsonResponse({'success': True, 'icon_url': user.user_icon_path.url})
         except IOError:
@@ -746,5 +747,44 @@ def mypage_icon(request):
     else:
         return JsonResponse({'success': False, 'error_message': 'ファイルが選択されていません。'})
     
+def update_user_details(request):
+        print(f'user_update;')
+        if request.method == 'POST':
+            user = request.user
+
+        # 新しいユーザ名とメールアドレスを取得
+            new_username = request.POST.get('new_username')
+            new_email = request.POST.get('new_email')
+            print(f'new_user;{new_username}')
+        # データベースを更新
+            user.username = new_username
+            user.email = new_email
+            user.save()
+
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'error_message': '認証エラー'})
+    
+def update_user_de7tails(request):
+        print(f'user_update;')
+        if request.method == 'POST':
+            user = request.user
+
+        # 新しいユーザ名とメールアドレスを取得
+            new_username = request.POST.get('new_username')
+            new_email = request.POST.get('new_email')
+            print(f'new_user;{new_username}')
+        # データベースを更新
+            user.username = new_username
+            user.email = new_email
+            user.save()
+
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'error_message': '認証エラー'})
+    
+    
+
+
     
 

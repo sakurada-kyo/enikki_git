@@ -12,7 +12,7 @@
         </div>
 
         <div class="avatar">
-          <img class="user_icon" src="{{ user_icon.url }}" alt="アバター表示" wight="130" height="193" />
+          <img class="user_icon" src="{{ user_icon }}" alt="アバター表示" wight="130" height="193" />
         </div>
 
         <div class="avatarChange">
@@ -53,9 +53,9 @@
               <td>
                 <input type="password" class="editField e3" value="{{ password}}" disabled>
               </td>
-              <td>
+              {% comment %} <td>
                 <button class="detailChange1 editButton" type="button" value="3">編集</button>
-              </td>
+              </td> {% endcomment %}
             </tr>
           </table>
         </div>
