@@ -130,7 +130,6 @@ function ajax_open(lastElement) {
     url: 'ajax_timeline/',
     type: 'POST',
     data: {
-      // 'group': $(lastElement).attr('data-group'),
       'page': $(lastElement).attr('data-page'),
     },
     dataType: 'json',
@@ -142,7 +141,7 @@ function ajax_open(lastElement) {
         console.log(data.error);
       } else {
         // データがnullでない場合の処理
-        var fragment = add_article(allPagesData);
+        var fragment = add_article(data, true);
         $('#scroll').append(fragment);
         updates_sign();
       }
@@ -157,12 +156,12 @@ function ajax_open(lastElement) {
 //-----------------------タイムラインajax処理-----------------------
 
 //-----------------------投稿追加-----------------------
-function add_article(allPagesData,multiple) {
+function add_article(allPagesData) {
   var fragment = document.createDocumentFragment();
 
   if (Array.isArray(allPagesData)) {
     for (const pageData of allPagesData) {
-      const posts = JSON.parse(pageData.data);// 'data' をJavaScriptオブジェクトに変換
+      const posts = JSON.parse(pageData.data); // 'data' をJavaScriptオブジェクトに変換
       const group = pageData.group;
 
       // このページの投稿データを処理
@@ -172,7 +171,7 @@ function add_article(allPagesData,multiple) {
         const postUserName = post.fields.user.username; // ユーザー名情報を取得
         const postLikeCount = post.fields.likeCount; // いいね数情報を取得
         const postCommentCount = post.fields.commentCount; // コメント数情報を取得
-        const page = post.fields.page
+        const page = post.fields.page;
         const isLiked = post.fields.is_liked; // いいね情報を取得
 
         var content = createAndAppendElement('article', 'content', '');
@@ -233,6 +232,8 @@ function add_article(allPagesData,multiple) {
   return fragment;
 }
 //------------------------投稿追加----------------------------
+
+
 
 //タグ生成
 function createAndAppendElement(tagName, className = '', textContent = '') {
@@ -325,12 +326,12 @@ function showPopup() {
     }
 
     $.ajax({
-      'url': $(this).prop('action'),
-      'type': $(this).prop('method'),
-      'data': formData,
-      'dataType': 'json',
-      'processData': false,
-      'contentType': false,
+      url: $(this).prop('action'),
+      type: $(this).prop('method'),
+      data: formData,
+      dataType: 'json',
+      processData: false,
+      contentType: false,
     })
       .done(function (response) {
         console.log(response);
@@ -366,58 +367,111 @@ function addGroup(data) {
   const fragment = document.createDocumentFragment();
   const groupIconPath = data.imageFileName;
   const groupIndex = data.addGroupIndex;
+  const groupName = data.groupName;
 
   groupIcon.setAttribute("class", "group-icon");
   groupIcon.setAttribute("src", groupIconPath);
+  groupIcon.setAttribute("data-group", groupName);
 
   fragment.appendChild(groupIcon);
 
   return fragment;
 }
 //-----------------------グループ追加機能-----------------------
+
 //-----------------------グループ切り替え機能-----------------------
-function changeGroup() {
-  // HTML要素を取得
-  const groupIcons = document.querySelectorAll('.group-icon');
 
-  // 各アイコンにクリックイベントを追加
-  groupIcons.forEach(icon => {
-    icon.addEventListener('click', function (event) {
-      // クリックされた要素を取得
-      const clickedIcon = event.target;
+// HTML要素を取得
+var groupIcons = document.querySelectorAll('.group-icon');
 
-      // src属性から画像パスを取得
-      const groupname = clickedIcon.getAttribute('data-group');
+// 各アイコンにクリックイベントを追加
+groupIcons.forEach(icon => {
+  icon.addEventListener('click', function (event) {
+    // クリックされた要素を取得
+    const clickedIcon = event.target;
+    console.log(`clickedIcon:${clickedIcon}`);
+    //グループ名取得
+    const groupname = clickedIcon.getAttribute('data-group');
+    console.log(`groupname:${groupname}`);
 
-      $.ajax({
-        'url': '',
-        'type': 'POST',
-        'data': {
-          'groupname': groupname
-        },
-        'dataType': 'json',
-        'processData': false,
-        'contentType': false,
+
+    $.ajax({
+      url: '/enikki/ajax_changeGroup/',
+      type: 'POST',
+      data: {
+        'groupname': groupname
+      },
+      dataType: 'json',
+      headers: { 'X-CSRFToken': csrftoken }
+    })
+      .done(function (response) {
+        if (response.error) {
+          var error = response.error;
+          console.log(error);
+        } else {
+          update_article(response);
+        }
       })
-        .done(function (response) {
-          if (response) {
-            add_article(response);
-          }
-        })
-        // Ajax通信が失敗したら発動
-        .fail((jqXHR, textStatus, errorThrown) => {
-          console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
-          console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-          console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
-        });
-    });
-    // 取得した情報をコンソールに表示（デバッグ用）
-    console.log('クリックされた画像パス:', imagePath);
-
-    // ここで取得した情報を使って何か処理を行うことができます
+      // Ajax通信が失敗したら発動
+      .fail((jqXHR, textStatus, errorThrown) => {
+        console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
+        console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+        console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
+      });
+    // 追加するコード
+    console.log(JSON.stringify({ 'groupname': groupname }));
   });
+  // 取得した情報をコンソールに表示（デバッグ用）
+  // console.log('クリックされた画像パス:', imagePath);
+
+  // ここで取得した情報を使って何か処理を行うことができます
+});
+
+//------------------------投稿更新----------------------------
+function update_article(data) {
+  // var fragment = document.createDocumentFragment();
+
+  if (Array.isArray(data)) {
+    maxObj = data.length;
+    const parent = document.getElementById("scroll");
+    const lastElement = parent.lastElementChild;
+    const lastPage = lastElement.getAttribute("data-page");
+    if (maxObj >= lastPage) {
+      //更新
+      for (let i = 1; i <= lastPage; i++) {
+        console.log("更新");
+        // var selector = '[data-page="' + i + '"]';
+        // var foundElement = parent.find(selector)
+        // foundElement.find('user_icon').attr('src', data[i].post__user__user_icon_path);
+        // foundElement.find('user_name').innerHTML = data[i].post__user__username;
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+        // foundElement.find('user_icon').setAttribute('src',data[i].post__user__user_icon_path);
+      }
+
+      //追加
+      for (let i = lastPage + 1; i <= maxObj; i++) {
+        console.log("追加");
+      }
+    } else {
+      //更新
+      for (let i = 1; i <= maxObj; i++) {
+        console.log("更新");
+      }
+
+      //削除
+      for (let i = maxObj; i <= lastPage; i++) {
+        console.log("削除");
+      }
+    }
+  };
+
+  // 最後に追加！
+  // return fragment;
 }
+//------------------------投稿更新----------------------------
 //-----------------------グループ切り替え機能-----------------------
+
 
 //-----------------------フォーカス機能-----------------------
 function focus() {

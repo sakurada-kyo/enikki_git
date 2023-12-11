@@ -5,15 +5,26 @@
 {% endblock %}
 {% block content %}
 
-<form action="#" name="search2" method="post">
+<form action="{% url 'パスの名前' %}" name="search2" method="post">
 	{% csrf_token %}
 	<dl class="search2">
-		<dt><input type="text" name="search" value="" placeholder="アカウント名を入力...." /></dt>
-		<dd><button><span></span></button></dd>
+		<dt><input type="text" name="search" value="{{ query }}" placeholder="ユーザーIDを入力...." /></dt>
+		<dd><button type="submit">検索<span></span></button></dd>
 	</dl>
 </form>
 
+{% if results %}
+        <h2>Results for "{{ query }}"</h2>
+        <ul>
+                <li><img src={{user.user_icon_path}}>{{ user.username }}</li>
+				<dd><button type="submit">友達申請</button></dd>
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+
 {% endblock %}
+
 {% block footer %}
 <footer>
     <div id = "kotei">

@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/myPage.css' %}" />
+  <!-- Bootstrapのスタイルを追加 -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 {% endblock %}
+
 {% block content %}
   <div class="myPageLeft">
     <div class="profile">
@@ -76,6 +81,7 @@
 {% endblock %}
 
 {% block side %}
+  <!-- サイドバーの内容をそのまま残す -->
   <li>
     <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
   </li>
@@ -94,6 +100,7 @@
 {% endblock %}
 
 {% block footer %}
+  <!-- フッターの内容をそのまま残す -->
   <footer>
     <div id="kotei">
       <small>&copy;2023 SnapSketch</small>

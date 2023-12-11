@@ -12,7 +12,7 @@
         <div class="form-signup">
             <h2>新規登録</h2>
             <!-- サインアップフォーム -->
-            <form method="post" enctype="multipart/form-data" >
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="mb-3">
                     {{ form.username.label_tag }}

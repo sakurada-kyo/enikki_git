@@ -40,7 +40,6 @@
             <i class="fa-solid fa-plus"></i>
         </div>
         <div id="scroll">
-            
             {% if posts %}
                 {% for post in posts %}
                     <article class="content" data-group="" data-page="{{ post.page }}">
@@ -86,6 +85,11 @@
 {% endblock %}
 
 {% block js %}
+    <footer>
+        <div id="kotei">
+        <small>&copy;2023 SnapSketch</small>
+        </div>
+    </footer>
         <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
         {% comment %} <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script> {% endcomment %}
         <script src="{% static 'js\timeline.js' %}"></script>

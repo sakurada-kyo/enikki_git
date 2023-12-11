@@ -95,12 +95,14 @@ class TimelineView(TemplateView):
                     raise Http404
             except Http404:
                 print('グループ内で投稿がありません')
+        else:
+            print('currentGroupがない')
         return render(request, self.template_name, context)
 
 # ajaxタイムライン
 def ajax_timeline(request):
     if request.method == 'POST':
-        getPost(request)
+        return getPost(request)
     else:
         return JsonResponse({'error': 'POSTメソッドを使用してください'})
 
@@ -120,7 +122,7 @@ def getPost(request):
 
             if group_posts.exists():
                 post_ids = group_posts.values_list('post__post_id', flat=True)
-                
+
                 posts = (PostMaster.objects.filter(post_id__in=post_ids)
                     .values(
                         "sketch_path",
@@ -180,6 +182,7 @@ def getPost(request):
     except Http404:
         print('読み込みデータがありません')
         return JsonResponse({'error': '読み込みデータがありません'})
+    
 # いいね機能
 def ajax_like(request):
     print("ajax_like")
@@ -221,10 +224,10 @@ def ajax_like(request):
 
 # グループ切り替え処理
 def ajax_changeGroup(request):
+    print('ajax_changeGroup')
     if request.method == 'POST':
         try:
             groupname = request.POST.get('groupname', '')  # グループ名
-            
             if groupname:
                 group_posts = (
                     GroupPostTable.objects
@@ -381,10 +384,7 @@ def save_uploaded_file(file):
         temp_file.close()  # 一時ファイルをクローズする
 
 # キャンバス画面
-
-
 class CanvasView(TemplateView):
-    print(f'CanvasView')
     template_name = "canvas.html"
 
     def get(self, request, *args, **kwargs):
@@ -457,10 +457,7 @@ class CanvasView(TemplateView):
         print("画像ファイルがありません。")
 
 # 絵日記作成画面
-
-
 class CreateView(TemplateView):
-    print(f'CreateView')
     template_name = 'create.html'
 
     @method_decorator(login_required)  # ここでログインが必要なことを示します
@@ -540,7 +537,6 @@ class CreateView(TemplateView):
         
         return redirect('enikki:timeline')
 
-
 # カレンダー画面
 class CalenderView(TemplateView):
 
@@ -613,38 +609,44 @@ def view_accountView(request):
 
     return render(request, 'account.html', context)
 
-# フォローリクエスト機能
-# ユーザー検索機能
+#ユーザー検索機能
 # class SearchView(TemplateView):
 
 
 #     template_name = 'search.html'
 
-#     def post(self, request, *args, **kwargs):
-#         #検索されたuserIdを取得する
-#         frId = search.POST["frId"]
-#          #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
-#         try:
-#             # 指定した日付とログインユーザーに基づいてレコードを抽出
-#             post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
-#             #データが存在するか調べる
-#             friend = user.objects.filter(user_id__exact=frId)
-#             #取得したデータを表示する
-            
-#             #Requestmodelにデータを追加する
+    # def post(self, request, *args, **kwargs):
+    #     #検索されたuserIdを取得する
+    #     if request.method == 'POST':
+    #         query = request.POST.get('placeholder', '')
+    #         #検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
+    #         try:
+    #             # 指定した日付とログインユーザーに基づいてレコードを抽出
+    #             post = get_object_or_404(PostMaster, user_id=userId, created_at=date)
+    #             #データが存在するか調べる
+    #             results = user.objects.filter(user_id__exact=query)
+    #             return render(request, 'usersearch.html', {'query': query, 'results': results})
 
-#         except Http404:
-#                 PostMaster.objects.create(diary=diary,user=userId)
-#                 return
+    #         except Http404:
+    #                 PostMaster.objects.create(diary=diary,user=userId)
+    #                 return
 
-#     user = get_user_model()
-        #デフォルトのuserモデルを参照して情報を引っ張る
 
 #リクエスト機能
-class RequestView(TemplateView):
+# class RequestView(TemplateView):
 
-    template_name = 'request.html'
+#     template_name = 'request.html'
 
+#     def friend_request(request):
+#         if request.method =='POST':
+#             form = FrequestTable(request.POST)
+#             if form.is_valid():
+#                 form.save()
+#                 return redirect('success page') #👈保存成功時に遷移するページのURLに変更
+#         else:
+#             form = FrequestTable()
+
+#         return render(request,'usersearch.html',{'form':form})
 
 
 # マイページ機能
@@ -672,35 +674,6 @@ class MypageView(TemplateView):
         else:
             redirect('login_app:login')
             
-# コメントのAjax
-
-
-def comment_group(request):
-    print("ajax_comment")
-    comment = request.POST.get('comment')
-    data = {
-
-    }
-    return JsonResponse(data)
-
-
-class GroupView(TemplateView):
-    template_name = 'group.html'
-
-    def get(self, request, *args, **kwargs):
-        print('GET')
-        context = {}
-        try:
-            groups = UserGroupTable.objects.filter(user__username=self.request.user.username).values('group__groupname', 'group__group_icon_path')
-            context['groups'] = groups
-            print(f'groups:{groups}')
-        except Http404:
-            context['error'] = 'グループに所属していません'
-                
-        return render(request,self.template_name,context)
-
-
-
 def mypage_icon(request):
     print('icon')
    # ユーザーアイコンの変更処理
