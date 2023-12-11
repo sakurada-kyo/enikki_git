@@ -27,7 +27,9 @@ class GroupMaster(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True,null=True)
     
-     
+    def __str__(self):
+        return self.groupname
+    
 # # 投稿マスタ
 class PostMaster(models.Model):
     post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -80,7 +82,9 @@ class GroupPostTable(models.Model):
            models.UniqueConstraint(fields=['group_id', 'post_id'], name='unique_GroupPost')
         ]
 
-# # #友達申請テーブル
-# class RequestTable(models.Model):
-#     request_user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='request_user_id')
-#     user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='user_id')
+########################################エラー###########################################
+#友達申請テーブル
+class FrequestTable(models.Model):
+    request_user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='request_user')
+    user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='user')
+########################################エラー###########################################

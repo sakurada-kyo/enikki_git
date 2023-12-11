@@ -21,3 +21,8 @@ class UpLoadProfileImgForm(forms.Form):
             raise forms.ValidationError('グループ名が空白です。')
         print('clean_groupname:成功')
         return groupname
+    
+# class RequestForm(forms.ModelForm):
+#     class Meta:
+#         model = 
+#         fields = ['name','email','message']
