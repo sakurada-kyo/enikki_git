@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'enikki.apps.EnikkiConfig',
     'login_app.apps.LoginAppConfig',
-    'import_export',
 ]
 
 MIDDLEWARE = [
