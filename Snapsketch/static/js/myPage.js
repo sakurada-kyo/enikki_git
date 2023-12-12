@@ -1,3 +1,4 @@
+$(function () {
 // CSRFトークン
 function getCookie(name) {
     var cookieValue = null;
@@ -64,9 +65,9 @@ $(function () {
 });
 
 //メールアドレス、名前編集のajax
-function mypage_nameEmail_ajax(data,flg,button){
+function mypage_detail_ajax(data,flg,button){
     $.ajax({
-        url: '/enikki/ajax_myPage_NameEmail/', // 適切なURLに変更
+        url: '/enikki/ajax_mypage_detail/', // 適切なURLに変更
         type: 'POST',
         data:{
             'data':data,
@@ -78,9 +79,9 @@ function mypage_nameEmail_ajax(data,flg,button){
                 var error = data.error
                 console.log(`${error}`);
             } else {
+                var msg = data.msg;
                 if(flg){
                     // ユーザー名更新
-                    console.log('ユーザー名が更新されました');
                     var usernameField = button.closest('tr').find('.e1');
                     usernameField.val(newUsername);
                     usernameField.prop('disabled', true);
@@ -92,6 +93,8 @@ function mypage_nameEmail_ajax(data,flg,button){
 
                 button.text('編集');
                 editField.prop('disabled', true);
+
+                alert(`${msg}`);
             }
         },
         error: function () {
@@ -114,46 +117,31 @@ editButtons.forEach(function(button){
             editField = document.querySelector('.e2');
         } else if (buttonValue === '3') {
             editField = document.querySelector('.e3');
-        } 
-        
-        // テキストボックス編集可能
+        }
+
         editField.disabled = !editField.disabled;
+        if(editField.disabled){
+            button.innerHTML = '保存';
+        }else{
+            console.log("保存");
+            var flg;
+            var data;
 
-        // ボタンのテキストを変更
-        if (editField.disabled) {
-            button.innerText = '編集';
-            $(function () {
-                $('.editButton').on('click', function () {
-                    var button = $(this);
-                    var editField = button.closest('tr').find('.editField');
-            
-                    if (editField.prop('disabled')) {
-                        // 編集モードに切り替える
-                        button.text('保存');
-                        editField.prop('disabled', false);
-                    } else {
-                        // 保存クリック時
-                        console.log("保存");
-                        var flg;
-                        var data;
+            if (editField.hasClass('e1')) {
+                // ユーザー名
+                console.log('e1クラスを持っています');
+                data = button.closest('tr').find('.e1').val();
+                flg = true;
+            } else {
+                // メールアドレス
+                console.log('e1クラスを持っていません');
+                data = button.closest('tr').find('.e2').val();
+                flg = false;
+            }
 
-                        if (closestRow.find('.e1').length > 0) {
-                            // ユーザー名
-                            console.log('e1クラスを持っています');
-                            data = button.closest('tr').find('.e1').val();
-                            flg = true;
-                        } else {
-                            // メールアドレス
-                            console.log('e1クラスを持っていません');
-                            data = button.closest('tr').find('.e2').val();
-                            flg = false;
-                        }
-                        
-                        mypage_nameEmail_ajax(data,flg,button);
+            mypage_detail_ajax(data,flg,button);
 
-                    }
-                });
-            });
+            button.innerHTML = '編集';
         }
     });
 });
@@ -161,3 +149,4 @@ editButtons.forEach(function(button){
 function move() {
     location.href = '/enikki/friend/';
 }
+});
