@@ -71,7 +71,7 @@ class TimelineView(TemplateView):
                         "sketch_path",
                         "diary",
                         "user__username",
-                        # "user__icon_path",
+                        "user__user_icon_path",
                         "like_count",
                         "comment_count",
                     ).order_by("updated_at")
@@ -182,7 +182,7 @@ def getPost(request):
     except Http404:
         print('読み込みデータがありません')
         return JsonResponse({'error': '読み込みデータがありません'})
-    
+
 # いいね機能
 def ajax_like(request):
     print("ajax_like")
@@ -587,11 +587,17 @@ def ajax_calendar(request):
                 return
 
 
-def view_friendView(request):
+class FriendView(TemplateView):
+    template_name = 'friend.html'
 
-    context = {}
+    def get(self, request, *args, **kwargs):
+        print('GET')
 
-    return render(request, 'friend.html', context)
+        user = self.request.user
+
+        friends = get_object_or_404(Follower,follower=user,followee=user)
+
+        return render(request, self.template_name)
 
 
 def view_accountConfView(request):
@@ -601,13 +607,6 @@ def view_accountConfView(request):
     context = {}
 
     return render(request, 'accountConf.html', context)
-
-
-def view_accountView(request):
-
-    context = {}
-
-    return render(request, 'account.html', context)
 
 #ユーザー検索機能
 # class SearchView(TemplateView):
@@ -744,9 +743,4 @@ class GroupView(TemplateView):
                 
         return render(request,self.template_name,context)
 
-
-
-
-    
-    
 
