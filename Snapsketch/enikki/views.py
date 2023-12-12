@@ -71,7 +71,7 @@ class TimelineView(TemplateView):
                         "sketch_path",
                         "diary",
                         "user__username",
-                        # "user__icon_path",
+                        "user__user_icon_path",
                         "like_count",
                         "comment_count",
                     ).order_by("updated_at")
@@ -182,7 +182,7 @@ def getPost(request):
     except Http404:
         print('読み込みデータがありません')
         return JsonResponse({'error': '読み込みデータがありません'})
-    
+
 # いいね機能
 def ajax_like(request):
     print("ajax_like")
@@ -587,11 +587,16 @@ def ajax_calendar(request):
                 return
 
 
-def view_friendView(request):
+class FriendView(TemplateView):
+    template_name = 'friend.html'
 
-    context = {}
+    def get(self, request, *args, **kwargs):
+        print('GET')
+        user = self.request.user
 
-    return render(request, 'friend.html', context)
+        friends = get_object_or_404(Follower,follower=user,followee=user)
+        
+        return render(request, self.template_name)
 
 
 def view_accountConfView(request):
@@ -601,13 +606,6 @@ def view_accountConfView(request):
     context = {}
 
     return render(request, 'accountConf.html', context)
-
-
-def view_accountView(request):
-
-    context = {}
-
-    return render(request, 'account.html', context)
 
 #ユーザー検索機能
 # class SearchView(TemplateView):
@@ -683,62 +681,79 @@ def mypage_icon(request):
         # ユーザーがアップロードしたファイルを取得
         uploaded_file = request.FILES.get('user_icon')
 
-# ファイルが選択されているか確認
-    print(f'uploaded file{uploaded_file}')
-    if uploaded_file:
-        reqFileName = uploaded_file.name
-        reqFileBinary = uploaded_file.read()
+        # ファイルが選択されているか確認
+        print(f'uploaded file{uploaded_file}')
+        if uploaded_file:
+            reqFileName = uploaded_file.name
+            reqFileBinary = uploaded_file.read()
 
-        try:
-            # バイナリデータをPIL Imageに変換する
-            image = Image.open(BytesIO(reqFileBinary))
+            try:
+                # バイナリデータをPIL Imageに変換する
+                image = Image.open(BytesIO(reqFileBinary))
 
-            # JPEG形式に変換（もしJPEGでない場合は変換が必要です）
-            if image.format != "JPEG":
-                image = image.convert("RGB")
+                # JPEG形式に変換（もしJPEGでない場合は変換が必要です）
+                if image.format != "JPEG":
+                    image = image.convert("RGB")
 
-            # 保存する画像のファイル名
-            rand = get_random_string(3)
-            imgFileName = f"u{rand}_{reqFileName}.jpg"
+                # 保存する画像のファイル名
+                rand = get_random_string(3)
+                imgFileName = f"u{rand}_{reqFileName}.jpg"
 
-            # 画像を一時的にBytesIOに保存してから、ContentFileを使用してファイルフィールドに保存
-            image_io = BytesIO()
-            image.save(image_io, format="JPEG")
-            image_content = ContentFile(
-                image_io.getvalue(), name=imgFileName)
+                # 画像を一時的にBytesIOに保存してから、ContentFileを使用してファイルフィールドに保存
+                image_io = BytesIO()
+                image.save(image_io, format="JPEG")
+                image_content = ContentFile(
+                    image_io.getvalue(), name=imgFileName)
 
-            # ファイルをユーザーオブジェクトにセットして保存
-            user.user_icon_path = image_content
-            user.save()
-            print(f'user.user_icon_path.url{user.user_icon_path.url}')
-            # 成功時のレスポンスを返す
-            return JsonResponse({'success': True, 'icon_url': user.user_icon_path.url})
-        except IOError:
-            # 画像が正しく読み込めない場合のエラーハンドリング
-            print("IOエラーが発生しました。")
+                # ファイルをユーザーオブジェクトにセットして保存
+                user.user_icon_path = image_content
+                user.save()
+                print(f'user.user_icon_path.url{user.user_icon_path.url}')
+                # 成功時のレスポンスを返す
+                return JsonResponse({'success': True, 'icon_url': user.user_icon_path.url})
+            except IOError:
+                # 画像が正しく読み込めない場合のエラーハンドリング
+                print("IOエラーが発生しました。")
 
-    else:
-        return JsonResponse({'success': False, 'error_message': 'ファイルが選択されていません。'})
+        else:
+            return JsonResponse({'success': False, 'error_message': 'ファイルが選択されていません。'})
     
-def update_user_details(request):
-        print(f'user_update;')
+def ajax_mypage_detail(request):
+        print(f'ajax_mypage_detail')
         if request.method == 'POST':
             user = request.user
 
-        # 新しいユーザ名とメールアドレスを取得
-            new_username = request.POST.get('new_username')
-            new_email = request.POST.get('new_email')
-            print(f'new_user;{new_username}')
-        # データベースを更新
-            user.username = new_username
-            user.email = new_email
+            # 新しいユーザ名とメールアドレスを取得
+            data = request.POST.get('data')
+            flg = request.POST.get('flg')
+            
+            # ユーザー名とメールアドレス更新
+            if flg:
+                user.username = data
+                msg = 'ユーザー名が変更されました'
+            else:
+                user.email = data
+                msg = 'メールアドレスが変更されました'
+            
+            # データベースを更新
             user.save()
 
-            return JsonResponse({'success': True})
+            return JsonResponse({'success': True,'msg':msg})
         else:
-            return JsonResponse({'success': False, 'error_message': '認証エラー'})
-      
+            return JsonResponse({'error': 'エラーが発生しました'})
     
+class GroupView(TemplateView):
+    template_name = 'group.html'
+    def get(self, request, *args, **kwargs):
+        print('GET')
+        context = {}
+        try:
+            groups = UserGroupTable.objects.filter(user__username=self.request.user.username).values('group__groupname', 'group__group_icon_path')
+            context['groups'] = groups
+            print(f'groups:{groups}')
+        except Http404:
+            context['error'] = 'グループに所属していません'
+                
+        return render(request,self.template_name,context)
 
-    
 
