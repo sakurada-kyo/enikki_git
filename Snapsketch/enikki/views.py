@@ -272,19 +272,23 @@ def ajax_changeGroup(request):
 
 # # コメントページ表示
 class CommentView(TemplateView):
-    def post(self, request, *args, **kwargs):
-        groupName = request.session['group']
-        page = request.POST["page"]
+    def get(self, request, *args, **kwargs):
+        groupName = request.session['currentGroup']
+        page = request.POST.get("page")
+        
         if page.isdigit():
             page = int(page)
         else:
-            print("likeCount"+page)
+            print('pageが数字ではありません')
 
         context = {}
 
         # グループ名を使って関連する投稿を取得
-        group_post = GroupPostTable.objects.filter(
-            group__groupname=groupName, page__gt=page)
+        group_post = (
+            GroupPostTable.objects.filter(
+            group__groupname=groupName, page=page)
+            )
+            # .select_related()
 
         if group_post:
             # グループ名を使って関連する投稿を取得
@@ -327,6 +331,13 @@ class CommentView(TemplateView):
                     context['comments'] = comments
 
         return render(request, "comment.html", context)
+    
+def ajax_comment(request):
+    if request.method == 'POST':
+        comment = request.POST.get("comment")
+        if comment:
+            
+        return
 
 # グループ追加
 def ajax_group(request):
@@ -755,5 +766,4 @@ class GroupView(TemplateView):
             context['error'] = 'グループに所属していません'
                 
         return render(request,self.template_name,context)
-
 
