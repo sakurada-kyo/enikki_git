@@ -337,7 +337,7 @@ def ajax_comment(request):
         comment = request.POST.get("comment")
         if comment:
             
-        return
+            return
 
 # グループ追加
 def ajax_group(request):
