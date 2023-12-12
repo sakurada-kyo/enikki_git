@@ -30,48 +30,7 @@ $.ajaxSetup({
     }
 });
 
-//マイページajax処理
-$(function () {
-    $('.detaiChange1').on('click', function () {
-        $.ajax({
-            url: 'ajax_myPage/',
-            type: 'POST',
-            data: {
-                'mypage': $('mypage').val(),
-                // 'mypage_icon': $('.user_icon').attr('src')
-            },
-            headers: { 'X-CSRFToken': csrftoken }
-        })
-            .done((data) => {
-                add_comment(data);
-            })
-            // Ajax通信が失敗したら発動
-            .fail((jqXHR, textStatus, errorThrown) => {
-                alert('Ajax通信に失敗しました。');
-                console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-                console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-                console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
-            });
-    })
-});
-
-
-function add_mypage() {
-    var fragment = document.createDocumentFragment();
-
-    for (var cnt = 0; cnt < 2; cnt++) {
-        var mypageContent = document.createElement('td');
-        var mypageP = document.createElment('p');
-        var mypageBtn = document.createElement('button');
-
-        mypageContent.setAttribute("td", "td");
-        mypageContent.appendChild(mypageP);
-        mypageContent.appendChild(mypageBtn);
-
-    }
-    return fragment;
-}
-
+//アイコン編集
 $(function () {
     $('#iconInput').click(); // ファイル選択ダイアログを開く
 
@@ -82,7 +41,7 @@ $(function () {
 
         // Ajaxリクエストを送信してファイルをアップロード
         $.ajax({
-            url: '../ajax_myPage/', // 適切なURLに変更
+            url: '/enikki/ajax_mypage_icon/', // 適切なURLに変更
             type: 'POST',
             data: formData,
             processData: false,
@@ -102,99 +61,103 @@ $(function () {
             }
         });
     });
-
-
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    // ボタンのクリックイベントを設定
-    var editButtons = document.querySelectorAll('.editButton');
-    var editField = document.querySelector('.editField');
-
-    // var editButtons1 = document.querySelectorAll('.editButton1');
-    // var editField1 = document.querySelector('.editField1');
-
-    console.log(editField);
-    // console.log(editField1);
-
-    editButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            // ボタンがクリックされたときの処理
-            var buttonValue = button.value; // ボタンのvalue属性を取得
-
-            // 対応する入力フィールドを取得
-            var editField;
-            if (buttonValue === '1') {
-                editField = document.querySelector('.e1');
-            } else if (buttonValue === '2') {
-                editField = document.querySelector('.e2');
-            } else if (buttonValue === '3') {
-                editField = document.querySelector('.e3');
-            } 
-
-            // 入力フィールドのdisabled属性をトル
-            editField.disabled = !editField.disabled;
-
-            // ボタンのテキストを変更
-            if (editField.disabled) {
-                button.innerText = '編集';
-                $$(function () {
-                    $('.editButton').on('click', function () {
-                        var button = $(this);
-                        var editField = button.closest('tr').find('.editField');
-                
-                        if (editField.prop('disabled')) {
-                            // 編集モードに切り替える
-                            button.text('保存');
-                            editField.prop('disabled', false);
-                        } else {
-                            console.log("保存")
-                            var newUsername = button.closest('tr').find('.e1').val();
-                            var newEmail = button.closest('tr').find('.e2').val();
-                
-                            $.ajax({
-                                url: '../ajax_myPageup/',  // 適切なURLに変更
-                                type: 'POST',
-                                data: {
-                                    'new_username': newUsername,
-                                    'new_email': newEmail
-                                },
-                                headers: { 'X-CSRFToken': csrftoken },
-                                success: function (data) {
-                                    if (data.success) {
-                                        alert('ユーザ名とメールアドレスが更新されました！');
-                
-                                        // 対応するtd要素を更新
-                                        var usernameTd = button.closest('tr').find('.e1');
-                                        var emailTd = button.closest('tr').find('.e2');
-                
-                                        usernameTd.val(newUsername);
-                                        emailTd.val(newEmail);
-                
-                                        button.text('編集');
-                                        editField.prop('disabled', true);
-                                    } else {
-                                        alert('更新に失敗しました。');
-                                    }
-                                },
-                                error: function () {
-                                    alert('通信エラーが発生しました。');
-                                }
-                            });
-                        }
-                    });
-                });
-                
-
-
+//メールアドレス、名前編集のajax
+function mypage_nameEmail_ajax(data,flg,button){
+    $.ajax({
+        url: '/enikki/ajax_myPage_NameEmail/', // 適切なURLに変更
+        type: 'POST',
+        data:{
+            'data':data,
+            'flg':flg
+        },
+        headers: { 'X-CSRFToken': csrftoken },
+        success: function (data) {
+            if (data.error) {
+                var error = data.error
+                console.log(`${error}`);
             } else {
-                button.innerText = '保存';
-                
-            }
-        });
-    });
+                if(flg){
+                    // ユーザー名更新
+                    console.log('ユーザー名が更新されました');
+                    var usernameField = button.closest('tr').find('.e1');
+                    usernameField.val(newUsername);
+                    usernameField.prop('disabled', true);
+                }else{
+                    var emailField = button.closest('tr').find('.e2');
+                    emailField.val(newEmail);
+                    emailField.prop('disabled', true);
+                }
 
+                button.text('編集');
+                editField.prop('disabled', true);
+            }
+        },
+        error: function () {
+            alert('通信エラーが発生しました。');
+        }
+    });
+}
+
+var editButtons = document.querySelectorAll('.editButton');
+editButtons.forEach(function(button){
+    button.addEventListener('click',function(){
+
+        var buttonValue = button.value; // ボタンのvalue属性を取得
+
+        // 対応する入力フィールドを取得
+        var editField;
+        if (buttonValue === '1') {
+            editField = document.querySelector('.e1');
+        } else if (buttonValue === '2') {
+            editField = document.querySelector('.e2');
+        } else if (buttonValue === '3') {
+            editField = document.querySelector('.e3');
+        } 
+        
+        // テキストボックス編集可能
+        editField.disabled = !editField.disabled;
+
+        // ボタンのテキストを変更
+        if (editField.disabled) {
+            button.innerText = '編集';
+            $(function () {
+                $('.editButton').on('click', function () {
+                    var button = $(this);
+                    var editField = button.closest('tr').find('.editField');
+            
+                    if (editField.prop('disabled')) {
+                        // 編集モードに切り替える
+                        button.text('保存');
+                        editField.prop('disabled', false);
+                    } else {
+                        // 保存クリック時
+                        console.log("保存");
+                        var flg;
+                        var data;
+
+                        if (closestRow.find('.e1').length > 0) {
+                            // ユーザー名
+                            console.log('e1クラスを持っています');
+                            data = button.closest('tr').find('.e1').val();
+                            flg = true;
+                        } else {
+                            // メールアドレス
+                            console.log('e1クラスを持っていません');
+                            data = button.closest('tr').find('.e2').val();
+                            flg = false;
+                        }
+                        
+                        mypage_nameEmail_ajax(data,flg,button);
+
+                    }
+                });
+            });
+        }
+    });
 });
+
 function move() {
     location.href = '/enikki/friend/';
 }
