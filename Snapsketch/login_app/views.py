@@ -2,10 +2,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView
 from django.views.generic.edit import CreateView
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserCreationForm
 from .models import CustomUser
 from enikki.models import *
 from django.urls import reverse_lazy
+from django.views import View
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'  # ログインフォームが表示されるテンプレートの指定
@@ -36,4 +37,18 @@ class CustomUserCreateView(CreateView):
     model = CustomUser
     form_class = CustomUserCreationForm
     template_name = 'signup.html'  # ユーザー作成フォームが表示されるテンプレートの指定
-    success_url = reverse_lazy('login')  # 登録後にログインページにリダイレクト
+    success_url = reverse_lazy('accountConf')  # 登録後にログインページにリダイレクト
+
+
+class SignUpConfirmationView(View):
+    template_name = 'accountConf.html'
+
+    def post(self, request, *args, **kwargs):
+        form = CustomUserCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            # フォームがバリデーションを通過した場合、確認画面にデータを渡して表示
+            return redirect('enikki:timeline')
+        else:
+            # フォームが無効な場合、新規登録画面に戻る
+            return render(request, self.template_name, {'form': form})
