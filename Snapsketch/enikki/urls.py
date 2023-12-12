@@ -16,8 +16,8 @@ urlpatterns = [
     path('ajax_mypage_icon/', views.mypage_icon, name='mypage_icon'),
     # path('account/', views.view_accountView, name='account'),
     path("calendar/", views.CalenderView.as_view(), name="calendar"),
-    path('comment/ajax_comment/',views.comment_group, name='ajax_comment'),
-    path('friend/', views.view_friendView, name='friend'),
+    # path('comment/ajax_comment/',views.comment_group, name='ajax_comment'),
+    path('friend/', views.FriendView.as_view(), name='friend'),
     path('group/',views.GroupView.as_view(), name='group'),
     path('ajax_changeGroup/',views.ajax_changeGroup, name='changeGroup'),
 

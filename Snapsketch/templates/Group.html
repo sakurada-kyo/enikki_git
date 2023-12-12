@@ -10,8 +10,8 @@
   {% else %}
     {% for group in groups %}
     <div class="grp">
-      <img src="/media/{{ group.group__group_icon_path }}" />
-      <p>{{ group.groupname }}</p>
+      <img src="/media/{{ group.group.group_icon_path }}" />
+      <p>{{ group.group.groupname }}</p>
     </div>
     {% endfor %}
   {% endif %}

@@ -15,7 +15,7 @@
   <main>
       <div class ="wrapper">
           <div id = "mid">
-            <form method="post" enctype="multipart/form-data">
+            <form method="get" action="/enikki/timeline/" enctype="multipart/form-data">
               {% csrf_token %}
               {{ form.username.label_tag }}
               {{ form.username.value }}

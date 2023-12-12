@@ -23,6 +23,7 @@ from django.utils import timezone
 from django.contrib.sessions.models import Session
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views import View
 
 # # タイムライン画面表示
 class TimelineView(TemplateView):
@@ -587,16 +588,23 @@ def ajax_calendar(request):
                 return
 
 
-class FriendView(TemplateView):
+class FriendView(View):
     template_name = 'friend.html'
 
     def get(self, request, *args, **kwargs):
-        print('GET')
-        user = self.request.user
+        user = request.user
+        friends = self.get_mutual_friends(user)
 
-        friends = get_object_or_404(Follower,follower=user,followee=user)
-        
-        return render(request, self.template_name)
+        context = {'friends': friends}
+        return render(request, self.template_name, context)
+
+    def get_mutual_friends(self, user):
+        try:
+            follower_ids = Follower.objects.filter(followee=user).values_list('follower', flat=True)
+            friends = Follower.objects.filter(follower=user, followee__in=follower_ids)
+            return friends
+        except Follower.DoesNotExist:
+            raise Http404("You have no friends.")
 
 
 def view_accountConfView(request):
@@ -745,15 +753,12 @@ def ajax_mypage_detail(request):
 class GroupView(TemplateView):
     template_name = 'group.html'
     def get(self, request, *args, **kwargs):
-        print('GET')
-        context = {}
+        user = request.user
         try:
-            groups = UserGroupTable.objects.filter(user__username=self.request.user.username).values('group__groupname', 'group__group_icon_path')
-            context['groups'] = groups
-            print(f'groups:{groups}')
-        except Http404:
-            context['error'] = 'グループに所属していません'
-                
-        return render(request,self.template_name,context)
-
+            # 現在のユーザーが所属しているグループの一覧を取得
+            groups = UserGroupTable.objects.filter(user=user).select_related('group')
+            context = {'groups': groups}
+        except UserGroupTable.DoesNotExist:
+            context = {'error': '所属しているグループはありません'}
+        return render(request, self.template_name, context)
 

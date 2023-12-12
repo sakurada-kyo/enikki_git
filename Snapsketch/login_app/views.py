@@ -7,6 +7,7 @@ from .models import CustomUser
 from enikki.models import *
 from django.urls import reverse_lazy
 from django.views import View
+from django.contrib.auth import login
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'  # ログインフォームが表示されるテンプレートの指定
@@ -46,9 +47,11 @@ class SignUpConfirmationView(View):
     def post(self, request, *args, **kwargs):
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            login(request, user)
             # フォームがバリデーションを通過した場合、確認画面にデータを渡して表示
-            return redirect('enikki:timeline')
-        else:
-            # フォームが無効な場合、新規登録画面に戻る
             return render(request, self.template_name, {'form': form})
+        else:
+            print(form.errors)
+            # フォームが無効な場合、新規登録画面に戻る
+            return redirect('signup')
