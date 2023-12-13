@@ -18,8 +18,8 @@ $(function () {
                 console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
                 console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
             });
-    })
-})
+    });
+});
 
 // CSRFトークン
 function getCookie(name) {
