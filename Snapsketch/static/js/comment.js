@@ -53,7 +53,7 @@ $.ajaxSetup({
     }
 });
 
-function add_comment() {
+function add_comment(data) {
     var fragment = document.createDocumentFragment();
 
     for (var cnt = 0; cnt < 2; cnt++) {
@@ -86,7 +86,7 @@ function add_comment() {
 }
 
 $(function () {
-    $('.toukou').click(function () {
+    $('.reply').click(function () {
         // $('textarea').clone().insertBefore('span');
         var fragment = add_comment();
         $('.comment_area').append(fragment);
@@ -97,4 +97,3 @@ $(function () {
 function closePopup() {
     document.getElementById('open').checked = false;
 }
-
