@@ -6,7 +6,7 @@ import os
 import base64
 import tempfile
 import datetime
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, HttpResponseServerError, JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from .models import PostMaster
 from django.utils.crypto import get_random_string
@@ -57,6 +57,8 @@ class TimelineView(TemplateView):
             currentGroup = request.session['currentGroup']
             print(f'currentGroupTimelineView:{currentGroup}')
             try:
+                
+                user = request.user
                 # グループ内の投稿記事持ってくる
                 if currentGroup:
 
@@ -65,7 +67,6 @@ class TimelineView(TemplateView):
                         group__groupname=currentGroup)
                     post_ids = group_posts.values_list(
                         'post__post_id', flat=True)
-                    print(f'post_ids:{post_ids}')
 
                     posts = PostMaster.objects.filter(post_id__in=post_ids).values(
                         "post_id",
@@ -76,10 +77,10 @@ class TimelineView(TemplateView):
                         "like_count",
                         "comment_count",
                     ).order_by("updated_at")
-                    print(f'posts:{posts}')
+                    
                     # いいね情報を取得
                     likes = LikeTable.objects.filter(
-                        user=request.user, post_id__in=post_ids).values_list('post_id', flat=True)
+                        user=user, post__in=post_ids).values_list('post_id', flat=True)
 
                     # ポストにいいね情報を追加
                     for post in posts:
@@ -274,71 +275,100 @@ def ajax_changeGroup(request):
 # # コメントページ表示
 class CommentView(TemplateView):
     def get(self, request, *args, **kwargs):
-        groupName = request.session['currentGroup']
-        page = request.POST.get("page")
-        
-        if page.isdigit():
-            page = int(page)
-        else:
-            print('pageが数字ではありません')
-
         context = {}
-
+        
+        user = request.user
+        
+        # セッションからグループ名取得
+        groupName = request.session['currentGroup']
+        if not groupName:
+            print('グループに所属していません')
+            redirect('timeline')
+        
+        # ページ番号取得
+        page = int(request.GET.get("page"))
+        
         # グループ名を使って関連する投稿を取得
         group_post = (
             GroupPostTable.objects.filter(
             group__groupname=groupName, page=page)
-            )
-            # .select_related()
-
-        if group_post:
-            # グループ名を使って関連する投稿を取得
-            post = (
-                PostMaster.objects.filter(
-                    group_post__group__groupname=groupName,
-                    group_post__page=page,
+            .select_related('post')
+            .values(
+                'post__post_id',
+                'post__sketch_path',
+                'post__diary',
+                'post__like_count',
+                'post__comment_count',
+                'post__user__username',
+                'post__user__user_icon_path'
+                'page'
                 )
-                .select_related("user")
-                .values(
-                    "post_id",
-                    "sketch_path",
-                    "diary",
-                    "user__username",
-                    "user__icon_path",
-                    "like_count",
-                    "commentCount",
-                )
-                .first()
             )
 
-            if post:
-                # 投稿IDを取得
-                post_id = post.post_id
+        # いいね情報を取得
+        likes = (
+            LikeTable.objects.filter(
+                user=user, post=group_post).values_list('post_id', flat=True)
+        )
 
-                # 投稿に紐づくコメントを取得
-                comments = (
-                    CommentMaster.objects.filter(post_id=post_id)
-                    .select_related('user')
-                    .values(
-                        "user__username",
-                        "user__icon_path",
-                        "comment",
-                    )
-                )
+        # いいねされているかどうか
+        if likes:
+            group_post['is_liked'] = True
+        else:
+            group_post['is_liked'] = False
 
-                context['post'] = post
+        # post_idセッションの有無
+        if 'post_id' in request.session:
+            del request.session['post_id']
 
-                if comments:
-                    context['comments'] = comments
+        post_id = group_post['post__post_id']
+
+        # post_idセッション設定
+        request.session['post_id'] = group_post['post__post_id']
+
+        # 投稿に紐づくコメントを取得
+        comments = (
+            CommentMaster.objects.filter(post=post_id)
+            .select_related('user')
+            .values(
+                "user__username",
+                "user__icon_path",
+                "comment",
+            )
+        )
+        
+        if not comments:
+            context['error'] = 'コメントがありません'
+            
+        context['comments'] = comments
+        context['post'] = group_post
 
         return render(request, "comment.html", context)
+        
     
 def ajax_comment(request):
     if request.method == 'POST':
+        user = request.user
         comment = request.POST.get("comment")
         if comment:
+            if 'post_id' in request.session:
+                post_id = request.session['post_id']
+                post = PostMaster.objects.get(pk=post_id)
+                # 新しいコメントを作成する例
+                new_comment = CommentMaster(
+                    user=user,  # ユーザーは適切な方法で取得する必要があります
+                    post=post,  # セッションから取得したpost_idに紐づくPostMasterインスタンスを指定
+                    comment=comment  # コメントの内容を適切なものに置き換える
+                    # 他のフィールドも適宜設定する
+                )
+                new_comment.save()  # 新しいコメントを保存する
+                
+                return JsonResponse({'new_comment':new_comment})
+            else:
+                return JsonResponse({'error':'post_idがありません'})
             
-            return
+        else:
+            return JsonResponse({'error':'コメントがありません'})
 
 # グループ追加
 def ajax_group(request):
@@ -539,14 +569,14 @@ class CreateView(TemplateView):
                             group=group, post=post, page=page_value))
                         print(f'GroupPostTable:group:{group},post:{post},page:{page_value}')
                         print(f'new_group_posts:{new_group_posts}')
-                
+
 
                 GroupPostTable.objects.bulk_create(new_group_posts)
 
         except Exception as e:
             print(str(e))  # エラーを表示するなど適切な処理を行う
 
-        
+
         return redirect('enikki:timeline')
 
 # カレンダー画面
@@ -615,7 +645,7 @@ def ajax_calendar(request):
     # リクエストが POST でない場合のデフォルトのレスポンス
     return HttpResponse(status=405)
 
-class FriendView(View):
+class FriendView(TemplateView):
     template_name = 'friend.html'
 
     def get(self, request, *args, **kwargs):
@@ -800,13 +830,17 @@ def ajax_mypage_detail(request):
             data = request.POST.get('data')
             flg = request.POST.get('flg')
             
+            print(f'data:{data},flg:{flg}')
+            
             # ユーザー名とメールアドレス更新
-            if flg:
+            if flg ==  'true':
                 user.username = data
                 msg = 'ユーザー名が変更されました'
+                print('username変更')
             else:
                 user.email = data
                 msg = 'メールアドレスが変更されました'
+                print('email変更')
             
             # データベースを更新
             user.save()
@@ -837,12 +871,8 @@ class GroupView(TemplateView):
         except UserGroupTable.DoesNotExist:
             context = {'error': '所属しているグループはありません'}
         return render(request, self.template_name, context)
-    
-    
 
-    
-
-    
-
-
-
+def ajax_inviteGroup(request):
+    print(f'ajax_inviteGroup')
+    if request.method == 'POST':
+        return

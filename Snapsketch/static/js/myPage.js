@@ -66,6 +66,7 @@ $(function () {
 
 //メールアドレス、名前編集のajax
 function mypage_detail_ajax(data,flg,button,editField){
+    console.log(`data:${data},flg:${flg},button:${button},editField:${editField}`);
     $.ajax({
         url: '/enikki/ajax_mypage_detail/', // 適切なURLに変更
         type: 'POST',
@@ -74,12 +75,12 @@ function mypage_detail_ajax(data,flg,button,editField){
             'flg':flg
         },
         headers: { 'X-CSRFToken': csrftoken },
-        success: function (data) {
-            if (data.error) {
-                var error = data.error
+        success: function (response) {
+            if (response.error) {
+                var error = response.error
                 console.log(`${error}`);
             } else {
-                var msg = data.msg;
+                var msg = response.msg;
                 if(flg){
                     // ユーザー名更新
                     var usernameField = $(button).closest('tr').find('.e1');
@@ -116,11 +117,11 @@ $(function () {
         }
 
         // 編集モードと保存モードを切り替える
-        if (editField.prop('disabled')) {
-            editField.prop('disabled', false);
+        if ($(editField).prop('disabled')) {
+            $(editField).prop('disabled', false);
             button.text('保存');
         } else {
-            editField.prop('disabled', true);
+            $(editField).prop('disabled', true);
             button.text('編集');
 
             var flg;
