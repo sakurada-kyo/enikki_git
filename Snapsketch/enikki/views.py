@@ -593,14 +593,27 @@ def ajax_calendar(request):
         print(f'date{date}')
         if date:
             try:
-                post = get_object_or_404(
-                    PostMaster, user_id=userId, created_at=date)
-            except Http404:
-                # 投稿がなかった時の処理
-                return JsonResponse({'error':'投稿がありませんでした'})
-        else:
-            return JsonResponse({'error':'error'})
-
+                # すべてのグループメンバーによって選択された日付の投稿を取得
+                posts = PostMaster.objects.filter(created_at=date, group__members=request.user)
+                
+                # シリアライズされた投稿データを格納するリストを作成
+                serialized_posts = []
+                
+                for post in posts:
+                    # PostMasterモデルに対するシリアライザがあると仮定
+                    serialized_post = {
+                        'user_name': post.user_name,
+                        'like_count': post.like_count,
+                        'comment_count': post.comment_count,
+                        # ポップアップで表示したい他のフィールドを追加
+                    }
+                    serialized_posts.append(serialized_post)
+                
+                return JsonResponse({'posts': serialized_posts})
+            except PostMaster.DoesNotExist:
+                return JsonResponse({'error': '該当する投稿がありません'})
+    # リクエストが POST でない場合のデフォルトのレスポンス
+    return HttpResponse(status=405)
 
 class FriendView(View):
     template_name = 'friend.html'

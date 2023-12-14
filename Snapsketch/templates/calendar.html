@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
 {% endblock %}
 {% block content %}
-  <form id="form" action="../calendar/" method="post">
+  <form id="form" action="/enikki/calendar/ajax_calendar/" method="post">
     {% csrf_token %}
     <div class="btn">
     <div class="buttonId" id="buttonId">
@@ -21,13 +21,13 @@
     
 
     <!-- ポップアップ表示 --> 
-    <section id="popup" class="popup">
+    {% comment %} <section id="popup" class="popup">
       <div id="popBg" class="popBg"></div>
       <div class="popWrapper">
         <div class="popContents">
-          <div id="scroll">
+          <div id="scroll"> {% endcomment %}
             {% comment %} {% for post in posts %} {% endcomment %}
-                <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page }}">
+                {% comment %} <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page }}">
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
                         <p class="user_name">{{ post.user_name }}yamada taro </p>
@@ -55,15 +55,25 @@
                         <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
                         <p class="diary">aaaaaa</p>
                     </section>
-                </article>
+                </article> {% endcomment %}
             {% comment %} {% endfor %} {% endcomment %}
-        </div>
+        {% comment %} </div>
         </div>
         <div id="close" class="close">
           ×
         </div>
       </div>
-    </section>
+    </section> {% endcomment %}
+
+    <section id="popup" class="popup">
+      <div id="popBg" class="popBg"></div>
+      <div class="popWrapper">
+          <div class="popContents">
+              <!-- 投稿データはJavaScriptで動的に追加される -->
+          </div>
+          <div id="close" class="close">×</div>
+      </div>
+  </section>
 
   </form>
 {% endblock %}
