@@ -69,7 +69,27 @@ function updateCalendar() {
             }
         }
     };
+        // URLをajax_calendarエンドポイントに変更
+        xhr.open('POST', '/calendar/ajax_calendar/', true);
 
+        // FormDataを作成し、必要なデータを追加
+        const fd = new FormData();
+        fd.append('date', formatDate(currentDate)); // formatDate関数は適切に定義されていると仮定しています
+    
+        // AJAXリクエストを送信
+        xhr.send(fd);
+}
+
+var dayTags = document.querySelectorAll(".day");
+console.log(dayTags);
+dayTags.forEach(element => {
+    element.addEventListener("click", () => {
+        date = element.getAttribute("data-date");
+
+        // updateCalendar関数を使用してAJAXリクエストを送信
+        updateCalendar();
+    });
+});
 /* function showDialy() {
 
    } */
@@ -84,17 +104,17 @@ var form = document.getElementById("form");
 
 var dayTags = document.querySelectorAll(".day");
 console.log(dayTags);
-// dayTags.forEach(element => {
-//     element.addEventListener("click", () => {
-//         date = element.getAttribute("data-date");
-//         const fd = new FormData(form);
-//         fd.append('date', date);
-//         for (let d of fd) {
-//             console.log(`${d[0]}: ${d[1]}`);
-//         }
-//         form.submit()
-//     });
-// });
+dayTags.forEach(element => {
+    element.addEventListener("click", () => {
+        date = element.getAttribute("data-date");
+        const fd = new FormData(form);
+        fd.append('date', date);
+        for (let d of fd) {
+            console.log(`${d[0]}: ${d[1]}`);
+        }
+        form.submit()
+    });
+});
 
 $(function () {
     $('.day').click(function(){
