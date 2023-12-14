@@ -18,16 +18,14 @@
     </div>
     </div>
 
-    
-
-    <!-- ポップアップ表示 --> 
+    <!-- ポップアップ表示 -->
     {% comment %} <section id="popup" class="popup">
       <div id="popBg" class="popBg"></div>
       <div class="popWrapper">
         <div class="popContents">
-          <div id="scroll"> {% endcomment %}
-            {% comment %} {% for post in posts %} {% endcomment %}
-                {% comment %} <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page }}">
+          <div id="scroll">
+             {% for post in posts %}
+                 <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page }}">
                     <div class="content_header">
                         <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
                         <p class="user_name">{{ post.user_name }}yamada taro </p>
@@ -55,9 +53,9 @@
                         <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
                         <p class="diary">aaaaaa</p>
                     </section>
-                </article> {% endcomment %}
-            {% comment %} {% endfor %} {% endcomment %}
-        {% comment %} </div>
+                </article>
+             {% endfor %}
+         </div>
         </div>
         <div id="close" class="close">
           ×
@@ -69,7 +67,7 @@
       <div id="popBg" class="popBg"></div>
       <div class="popWrapper">
           <div class="popContents">
-              <!-- 投稿データはJavaScriptで動的に追加される -->
+          <!-- 投稿データはJavaScriptで動的に追加される -->
           </div>
           <div id="close" class="close">×</div>
       </div>

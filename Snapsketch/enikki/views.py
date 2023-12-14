@@ -50,18 +50,17 @@ class TimelineView(TemplateView):
                 print('グループを取得できませんでした')
         else:
             print('groupListがない')
-        
-                
+
         if 'currentGroup' in request.session:
             # セッションからグループ名取得
             currentGroup = request.session['currentGroup']
             print(f'currentGroupTimelineView:{currentGroup}')
             try:
-                
                 user = request.user
+                
                 # グループ内の投稿記事持ってくる
                 if currentGroup:
-
+                    
                     # グループ名を使って関連する投稿を取得
                     group_posts = GroupPostTable.objects.filter(
                         group__groupname=currentGroup)
@@ -618,32 +617,36 @@ class CalenderView(TemplateView):
 
 def ajax_calendar(request):
     if request.method == 'POST':
-        userId = request.user.user_id
+        user = request.user
+        currentGroup = request.session['currentGroup']
         date = request.POST.get('date')
-        print(f'date{date}')
-        if date:
-            try:
-                # すべてのグループメンバーによって選択された日付の投稿を取得
-                posts = PostMaster.objects.filter(created_at=date, group__members=request.user)
-                
-                # シリアライズされた投稿データを格納するリストを作成
-                serialized_posts = []
-                
-                for post in posts:
-                    # PostMasterモデルに対するシリアライザがあると仮定
-                    serialized_post = {
-                        'user_name': post.user_name,
-                        'like_count': post.like_count,
-                        'comment_count': post.comment_count,
-                        # ポップアップで表示したい他のフィールドを追加
-                    }
-                    serialized_posts.append(serialized_post)
-                
-                return JsonResponse({'posts': serialized_posts})
-            except PostMaster.DoesNotExist:
-                return JsonResponse({'error': '該当する投稿がありません'})
+
+        groupposts = (
+            GroupPostTable.objects.filter(group=currentGroup,post__created_at=date)
+            .select_related('post')
+            .values(
+                    'post_id',
+                    'sketch_path',
+                    'diary',
+                    'user__username',
+                    'user__user_icon_path',
+                    'like_count',
+                    'comment_count'
+            )
+        )
+        
+        # いいね情報を取得
+        likes = LikeTable.objects.filter(
+            user=user, post__in=groupposts).values_list('post_id', flat=True)
+        
+        # ポストにいいね情報を追加
+        for post in groupposts:
+            post_id = post['post_id']
+            # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
+            post['is_liked'] = post_id in likes
+
     # リクエストが POST でない場合のデフォルトのレスポンス
-    return HttpResponse(status=405)
+    return JsonResponse({'posts':groupposts,'currentGroup':currentGroup})
 
 class FriendView(TemplateView):
     template_name = 'friend.html'
