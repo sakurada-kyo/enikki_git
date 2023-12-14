@@ -858,12 +858,8 @@ class GroupView(TemplateView):
         except UserGroupTable.DoesNotExist:
             context = {'error': '所属しているグループはありません'}
         return render(request, self.template_name, context)
-    
-    
 
-    
-
-    
-
-
-
+def ajax_inviteGroup(request):
+    print(f'ajax_inviteGroup')
+    if request.method == 'POST':
+        return

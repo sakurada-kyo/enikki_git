@@ -17,18 +17,20 @@
     {% endfor %}
   {% endif %}
 
-  <!-- ポップアップ表示 --> 
-<form id="members-popup" style="display: none;" action="/enikki/group/members/list/">
+  <!-- ポップアップ表示 -->
+<div id="members-popup" style="display: none;">
   <div id="popup-inside">
-    <h2>グループメンバー一覧</h2>
-    <!-- メンバー一覧を表示するロジックを追加 -->
-    {% for friend in friends %}
-      <p>{{ friend.followee.username }}</p>
-    {% endfor %}
-    <input type="submit" value="招待">
-    <button id="close-button">閉じる</button>
+    <form action="" method="post">
+      {% csrf_token %}
+      <h2>グループメンバー一覧</h2>
+      <!-- メンバー一覧を表示するロジックを追加 -->
+      {% for friend in friends %}
+        <p>{{ friend.followee.username }}</p>
+      {% endfor %}
+      <input id="invite" type="submit" value="招待">
+    </form>
   </div>
-</form>
+</div>
 {% endblock %}
 {% block side %}
   <li>

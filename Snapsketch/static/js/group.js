@@ -1,22 +1,20 @@
 
-    var add = document.getElementById('add');
-    var popupWrapper = document.getElementById('members-popup');
-    
-    console.log("add" + add);
-    // ボタンをクリックしたときにポップアップを表示させる
-    add.addEventListener('click', () => {
-      popupWrapper.style.display = "block";      
-      console.log("add:" + add);
-      var closeBtn = document.getElementById('close-button');
-      
-    });
+var add = document.getElementById('add');
+var invite = document.getElementById('invite');
 
-    closeBtn.addEventListener('click',fadeout());
+add.addEventListener('click',() => {
+  var popUp = document.getElementById('members-popup');
+  popUp.style.display = 'block';
+});
 
-    function fadeout(){
-      var popupWrapper = document.getElementById('members-popup');
-      popupWrapper.style.display = "none";
-    }
+invite.addEventListener('click',() => {
+  //ポップアップ閉じる処理
+  close();
+});
+
+function close(){
+  popUp.style.display = 'none';
+}
     // ポップアップの外側又は「x」のマークをクリックしたときポップアップを閉じる
     // popupWrapper.addEventListener('click', e => {
     //   if (e.target.id === popupWrapper.id || e.target.id === close.id) {
@@ -67,4 +65,3 @@
     //       console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
     //     });
 //     });
-
