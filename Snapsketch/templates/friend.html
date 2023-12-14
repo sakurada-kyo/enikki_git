@@ -5,11 +5,11 @@
                                                         {% endblock %}
                                                         {% block content %}
                                                           <div id="register">
-                                                            <h3>フレンド一覧</h3><br />
+                                                            <h3>フレンド一覧</h3><br/>
 
                                                             {% for friend in friends %}
                                                               <div class="account-form">
-                                                                <div class="circle">{{ friend.followee.user_icon_path.url }}</div>
+                                                                <div class="circle"><img src= "{{ friend.followee.user_icon_path.url }}"></div>
                                                                 <h4>{{ friend.followee.username }}</h4>
                                                               </div>
                                                             {% endfor %}

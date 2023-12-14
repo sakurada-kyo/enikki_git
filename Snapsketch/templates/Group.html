@@ -12,7 +12,7 @@
     <div class="grp">
       <img src="/media/{{ group.group.group_icon_path }}" />
       <p>{{ group.group.groupname }}</p>
-      <input type="button" id="add" value="メンバーを追加する">
+      <input type="button" class="add" value="メンバーを追加する">
     </div>
     {% endfor %}
   {% endif %}
@@ -20,11 +20,13 @@
   <!-- ポップアップ表示 -->
 <div id="members-popup" style="display: none;">
   <div id="popup-inside">
+    <div id="close">x</div>
     <form action="" method="post">
       {% csrf_token %}
       <h2>グループメンバー一覧</h2>
       <!-- メンバー一覧を表示するロジックを追加 -->
       {% for friend in friends %}
+        <input type="checkbox" id="scales" name="scales">
         <p>{{ friend.followee.username }}</p>
       {% endfor %}
       <input id="invite" type="submit" value="招待">
