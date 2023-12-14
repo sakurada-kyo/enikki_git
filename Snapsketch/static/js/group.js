@@ -1,67 +1,17 @@
 
-var add = document.getElementById('add');
+var adds = document.querySelectorAll('.add');
 var invite = document.getElementById('invite');
+var close = document.getElementById('close');
 
-add.addEventListener('click',() => {
-  var popUp = document.getElementById('members-popup');
-  popUp.style.display = 'block';
+// 登録している友達を表示
+adds.forEach(add => {
+  add.addEventListener('click',() => {
+    var popUp = document.getElementById('members-popup');
+    popUp.style.display = 'block';
+  });
+  
+})
+// ポップアップを閉じる
+document.getElementById('close').addEventListener('click', function() {
+  document.getElementById('members-popup').style.display = 'none';
 });
-
-invite.addEventListener('click',() => {
-  //ポップアップ閉じる処理
-  close();
-});
-
-function close(){
-  popUp.style.display = 'none';
-}
-    // ポップアップの外側又は「x」のマークをクリックしたときポップアップを閉じる
-    // popupWrapper.addEventListener('click', e => {
-    //   if (e.target.id === popupWrapper.id || e.target.id === close.id) {
-    //     popupWrapper.style.display = 'none';
-    //   }
-    // });
-
-    // $('#group-form').on('submit', function (e) {
-    //   e.preventDefault();
-    //   console.log('送信');
-
-    //   var formData = new FormData($('#group-form').get(0));
-
-    //   if (formData != null) {
-    //     console.log("form-data");
-    //   }
-
-    //   $.ajax({
-    //     url: $(this).prop('action'),
-    //     type: $(this).prop('method'),
-    //     data: formData,
-    //     dataType: 'json',
-    //     processData: false,
-    //     contentType: false,
-    //   })
-    //     .done(function (response) {
-    //       console.log(response);
-    //       if (response.errors) {
-    //         // エラーメッセージを取得して表示する例
-    //         const errorMessages = JSON.parse(response.errors);
-    //         for (const field in errorMessages) {
-    //           if (errorMessages.hasOwnProperty(field)) {
-    //             const errorMessage = errorMessages[field][0]; // 1つ目のエラーメッセージを取得
-    //             alert(`エラー: ${field} - ${errorMessage}`);
-    //           }
-    //         }
-    //       } else {
-    //         const fragment = addGroup(response);
-    //         $('.fa-plus').before(fragment);
-    //         popupWrapper.style.display = 'none';
-    //         focus();
-    //       }
-    //     })
-    //     // Ajax通信が失敗したら発動
-    //     .fail((jqXHR, textStatus, errorThrown) => {
-    //       console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
-    //       console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-    //       console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
-    //     });
-//     });
