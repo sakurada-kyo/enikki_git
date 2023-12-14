@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-  {% comment %} <link rel="stylesheet" href="{% static 'css\group.css' %}" /> {% endcomment %}
+  <link rel="stylesheet" href="{% static 'css\group.css' %}" />
 {% endblock %}
 {% block content %}
   <h2>グループ一覧</h2>
@@ -12,9 +12,23 @@
     <div class="grp">
       <img src="/media/{{ group.group.group_icon_path }}" />
       <p>{{ group.group.groupname }}</p>
+      <input type="button" id="add" value="メンバーを追加する">
     </div>
     {% endfor %}
   {% endif %}
+
+  <!-- ポップアップ表示 --> 
+<form id="members-popup" style="display: none;" action="/enikki/group/members/list/">
+  <div id="popup-inside">
+    <h2>グループメンバー一覧</h2>
+    <!-- メンバー一覧を表示するロジックを追加 -->
+    {% for friend in friends %}
+      <p>{{ friend.followee.username }}</p>
+    {% endfor %}
+    <input type="submit" value="招待">
+    <button id="close-button">閉じる</button>
+  </div>
+</form>
 {% endblock %}
 {% block side %}
   <li>
@@ -41,5 +55,6 @@
   </footer>
 {% endblock %}
 {% block js %}
+<script src="{% static 'js/group.js' %}"></script>
   {% comment %} <script src="{% static 'js/group.js' %}"></script> {% endcomment %}
 {% endblock %}

@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
 {% endblock %}
 {% block content %}
-  <form id="form" action="" method="post">
+  <form id="form" action="../calendar/" method="post">
     {% csrf_token %}
     <div class="btn">
     <div class="buttonId" id="buttonId">

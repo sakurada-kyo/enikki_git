@@ -589,14 +589,17 @@ class CalenderView(TemplateView):
 def ajax_calendar(request):
     if request.method == 'POST':
         userId = request.user.user_id
-        date = request.POST['date']
+        date = request.POST.get('date')
+        print(f'date{date}')
         if date:
             try:
                 post = get_object_or_404(
                     PostMaster, user_id=userId, created_at=date)
             except Http404:
                 # 投稿がなかった時の処理
-                return
+                return JsonResponse({'error':'投稿がありませんでした'})
+        else:
+            return JsonResponse({'error':'error'})
 
 
 class FriendView(View):
@@ -626,6 +629,44 @@ def view_accountConfView(request):
 
     return render(request, 'accountConf.html', context)
 
+
+class GroupMembersListView(View):
+    print('GroupMembersList')
+    # def get(self, request, *args, **kwargs):
+    #     group_name = request.GET.get('group')
+    #     members = self.get_group_members(group_name)
+
+    #     # メンバー一覧をJSON形式でレスポンス
+    #     members_data = [{'username': member.followee.username} for member in members]
+    #     return JsonResponse(members_data, safe=False)
+
+    # def get_group_members(self, group_name):
+    #     try:
+    #         # グループごとのメンバー一覧を取得するロジック
+    #         # 例: members = Follower.objects.filter(group=group_name)
+    #         # モデルとフィールド名は実際のデータモデルに合わせて変更してください
+    #         return JsonResponse({'error':'error'})
+    #     except Follower.DoesNotExist:
+    #         raise Http404("Group members not found.")
+
+# class group_members_list(View):
+    template_name = 'Group.html'
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        friends = self.get_mutual_members(user)
+        print(f'friend{friends}')
+
+        context = {'friends': friends}
+        return render(request, self.template_name, context)
+
+    def get_mutual_members(self, user):
+        try:
+            follower_ids = Follower.objects.filter(followee=user).values_list('follower', flat=True)
+            friends = Follower.objects.filter(follower=user, followee__in=follower_ids)
+            return friends
+        except Follower.DoesNotExist:
+            raise Http404("You have no friends.")
 #ユーザー検索機能
 # class SearchView(TemplateView):
 
@@ -762,16 +803,33 @@ def ajax_mypage_detail(request):
             return JsonResponse({'error': 'エラーが発生しました'})
     
 class GroupView(TemplateView):
-    template_name = 'group.html'
+    template_name = 'Group.html'
+    def get_mutual_members(self, user):
+        try:
+            follower_ids = Follower.objects.filter(followee=user).values_list('follower', flat=True)
+            friends = Follower.objects.filter(follower=user, followee__in=follower_ids)
+            return friends
+        except Follower.DoesNotExist:
+            raise Http404("You have no friends.")
+
     def get(self, request, *args, **kwargs):
         user = request.user
         try:
+            friends = self.get_mutual_members(user)
+            print(f'friend{friends}')
             # 現在のユーザーが所属しているグループの一覧を取得
             groups = UserGroupTable.objects.filter(user=user).select_related('group')
-            context = {'groups': groups}
+            context = {'groups': groups,
+                       'friends': friends}
         except UserGroupTable.DoesNotExist:
             context = {'error': '所属しているグループはありません'}
         return render(request, self.template_name, context)
+    
+    
+
+    
+
+    
 
 
 
