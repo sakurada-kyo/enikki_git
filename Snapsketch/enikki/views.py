@@ -586,7 +586,6 @@ class CalendarView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         print('GET:CalendarView')
-        
         context = {}
         # セッションから現在のグループ取得
         currentGroup = request.session['currentGroup']
@@ -617,7 +616,7 @@ def ajax_calendar(request):
         user = request.user # ログインユーザー
         currentGroup = request.session['currentGroup'] # 現在グループ取得
         dateStr = request.POST.get('date') # 日付取得
-        print(f'dateStr:{dateStr}')
+        
         # 日付文字列を適切な型に変換（例：YYYY-MM-DDの文字列をdatetimeオブジェクトに変換）
         date = datetime.strptime(dateStr, '%Y-%m-%d').date()
 
@@ -628,7 +627,7 @@ def ajax_calendar(request):
             .filter(post__created_at = date)
             .select_related('post','group')
             .values(
-                    'post_id',
+                    'post__post_id',
                     'post__sketch_path',
                     'post__diary',
                     'post__user__username',
@@ -639,23 +638,22 @@ def ajax_calendar(request):
             .distinct()
         )
         print(f'groupposts:{groupposts}')
-        
+
         # いいね情報を取得
-        likes = (
-            LikeTable.objects
-            .filter(user=user, post__in=groupposts)
-            .select_related('post')
-            .values_list('post__post_id', flat=True)
-            )
-        
+        post_ids = [post['post__post_id'] for post in groupposts]
+        likes = LikeTable.objects.filter(user=user, post__post_id__in=post_ids).values_list('post__post_id', flat=True)
+
         # ポストにいいね情報を追加
         for post in groupposts:
-            post_id = post['post_id']
+            post_id = post['post__post_id']
             # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
             post['is_liked'] = post_id in likes
+            del post['post__post_id']
 
-    # リクエストが POST でない場合のデフォルトのレスポンス
-    return JsonResponse({'posts':groupposts,'currentGroup':currentGroup})
+        groupposts_list = list(groupposts)
+
+        # リクエストが POST でない場合のデフォルトのレスポンス
+        return JsonResponse({'posts':json.dumps(groupposts_list),'currentGroup':currentGroup})
 
 class FriendView(TemplateView):
     template_name = 'friend.html'

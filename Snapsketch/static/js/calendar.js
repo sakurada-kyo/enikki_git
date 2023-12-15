@@ -187,7 +187,7 @@ function ajax_open(element) {
 //-----------------------ポップアップ投稿表示-----------------------
 function showPosts(posts){
     var fragment = document.createDocumentFragment();
-    posts.forEach(post => {
+    posts.forEach(function(post){
         const postSketchPath = post.sketch_path; // 絵パス情報を取得
         const postDiary = post.diary; // 日記情報を取得
         const postUserName = post.user__username; // ユーザー名情報を取得
