@@ -4,80 +4,55 @@
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
 {% endblock %}
 {% block content %}
-  <form id="form" action="" method="post">
+  <form id="calendar-form">
     {% csrf_token %}
     <div class="btn">
     <div class="buttonId" id="buttonId">
-      <button class="button1" onclick="showPreviousMonth()">◀</button>
+      <input type="button" class="button1" onclick="showPreviousMonth()" value="◀">
     </div>
 
     <div class="calendar" id="calendar"></div>
 
     <div class="buttonId" id="buttonId">
-      <button class="button2" onclick="showNextMonth()">▶</button>
+      <input type="button" class="button2" onclick="showNextMonth()" value="▶">
     </div>
     </div>
-
-    
-
-    <!-- ポップアップ表示 --> 
     <section id="popup" class="popup">
       <div id="popBg" class="popBg"></div>
       <div class="popWrapper">
-        <div class="popContents">
-          <div id="scroll">
-            {% comment %} {% for post in posts %} {% endcomment %}
-                <article class="content" data-group="{{ post.group_name }}" data-page="{{ post.page }}">
-                    <div class="content_header">
-                        <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
-                        <p class="user_name">{{ post.user_name }}yamada taro </p>
-                        <div class="like">
-                            {% if is_user_liked %}
-                            <button type="button" class="ajax-like">
-                            <!-- すでにいいねしている時はfasクラス -->
-                            <i class="fas fa-heart text-danger"></i>
-                            </button>
-                            {% else %}
-                            <button type="button" class="ajax-like">
-                            <!-- いいねしていないときはfarクラス -->
-                            <i class="far fa-heart text-danger"></i>
-                            </button>
-                            {% endif %}
-                            <!-- いいねの数 -->
-                            <span class="like-count">{{ post.like_count }}0</span>
-                        </div>
-                        <div class="comment"><!--グループ名とページ番号送信-->
-                            <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?page={{ post.page }}"></a>
-                            <span class="comment-count">{{ post.comment_count }}0</span>
-                        </div>
-                    </div>
-                    <section class="draw_diary">
-                        <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵">
-                        <p class="diary">aaaaaa</p>
-                    </section>
-                </article>
-            {% comment %} {% endfor %} {% endcomment %}
-        </div>
-        </div>
-        <div id="close" class="close">
-          ×
-        </div>
+          <div class="popContents">
+          <!-- 投稿データはJavaScriptで動的に追加される -->
+          </div>
+          <div id="close" class="close">×</div>
       </div>
     </section>
-
   </form>
 {% endblock %}
 
 {% block js %}
+  <script>
+    var datesFromDjango = JSON.parse('{{ dates|escapejs }}');
+  </script>
   <script src="{% static 'js/calendar.js' %}"></script>
 {% endblock %}
 
 {% block side %}
-<li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
-<li><a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a></li>
-<li><a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a></li>
-<li><a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a></li>
-<li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
+  <!-- サイドバーの内容をそのまま残す -->
+  <li>
+    <a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a>
+  </li>
+  <li>
+    <a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a>
+  </li>
 {% endblock %}
 
 {% block footer %}

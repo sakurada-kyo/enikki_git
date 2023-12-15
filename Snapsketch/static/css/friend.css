@@ -1,4 +1,4 @@
-h4 {
+h3 {
     font-size: 22px;
     margin: 0;
     margin-top: 10px;
@@ -30,12 +30,12 @@ h4 {
     padding-left: 25px;
 }
 
-#button {
+/* #button {
     display: inline-flex;
     flex-direction: column;
     padding-top: 50px;
     padding-left: 160px;
-}
+} */
 
 .edit {
     display: block;
