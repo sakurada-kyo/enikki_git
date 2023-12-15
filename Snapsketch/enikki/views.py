@@ -1,11 +1,12 @@
 from audioop import reverse
+import calendar
 from django.conf import settings
 from django.views.generic import TemplateView
 import json
 import os
-import base64
+from django.db.models import Q
 import tempfile
-import datetime
+from datetime import datetime
 from django.http import Http404, HttpResponse, HttpResponseServerError, JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from .models import PostMaster
@@ -271,7 +272,7 @@ def ajax_changeGroup(request):
         return JsonResponse({'error': 'POSTメソッドを使用してください'})
 
 
-# # コメントページ表示
+# コメントページ表示
 class CommentView(TemplateView):
     def get(self, request, *args, **kwargs):
         context = {}
@@ -579,65 +580,73 @@ class CreateView(TemplateView):
         return redirect('enikki:timeline')
 
 # カレンダー画面
-class CalenderView(TemplateView):
+class CalendarView(TemplateView):
 
     template_name = 'calendar.html'
 
     def get(self, request, *args, **kwargs):
-        print('GET')
-        return render(request, self.template_name)
-
-    def post(self, request, *args, **kwargs):
-        print('POST')
-
-        # POSTリクエスト(日付)取得
-        date = request.POST['date']
-
-        # ユーザー取得
+        print('GET:CalendarView')
+        
+        context = {}
+        # セッションから現在のグループ取得
+        currentGroup = request.session['currentGroup']
+        # ログインユーザー取得
         user = self.request.user
+        # DBから投稿した日付を取得
+        dates = (
+            GroupPostTable.objects.filter(
+                post__user = user,
+                group__groupname=currentGroup
+            )
+        .select_related('post','group')
+        .values_list('post__created_at',flat=True)
+        .distinct()
+        )
 
-        # グループ取得
-        groupName = request.session['group']
+        # 日付を文字列に変換
+        formatted_dates = [date.strftime('%Y-%m-%d') for date in dates]
 
-        if groupName:
-            # ユーザーと日付で該当する投稿の post_id を取得
-            page = GroupPostTable.objects.filter(
-                post__user=user,
-                post__created_at__date=date,
-                group__groupname=groupName,
-            ).values_list('page', flat=True).first()
+        context['dates'] = json.dumps(formatted_dates)
 
-            # 最初に該当する投稿の page を取得する
-            if page is not None:
-                url = reverse('timeline') + f'?page={page}'
-                return redirect(url)
-            else:
-                return None  # 該当する投稿が見つからなかった場合の処理
+        return render(request, self.template_name,context)
 
 
 def ajax_calendar(request):
     if request.method == 'POST':
-        user = request.user
-        currentGroup = request.session['currentGroup']
-        date = request.POST.get('date')
+        print('ajax_calendar')
+        user = request.user # ログインユーザー
+        currentGroup = request.session['currentGroup'] # 現在グループ取得
+        dateStr = request.POST.get('date') # 日付取得
+        print(f'dateStr:{dateStr}')
+        # 日付文字列を適切な型に変換（例：YYYY-MM-DDの文字列をdatetimeオブジェクトに変換）
+        date = datetime.strptime(dateStr, '%Y-%m-%d').date()
 
+        # 日付からグループ内の投稿取得
         groupposts = (
-            GroupPostTable.objects.filter(group=currentGroup,post__created_at=date)
-            .select_related('post')
+            GroupPostTable.objects
+            .filter(group__groupname=currentGroup)
+            .filter(post__created_at = date)
+            .select_related('post','group')
             .values(
                     'post_id',
-                    'sketch_path',
-                    'diary',
-                    'user__username',
-                    'user__user_icon_path',
-                    'like_count',
-                    'comment_count'
+                    'post__sketch_path',
+                    'post__diary',
+                    'post__user__username',
+                    'post__user__user_icon_path',
+                    'post__like_count',
+                    'post__comment_count'
             )
+            .distinct()
         )
+        print(f'groupposts:{groupposts}')
         
         # いいね情報を取得
-        likes = LikeTable.objects.filter(
-            user=user, post__in=groupposts).values_list('post_id', flat=True)
+        likes = (
+            LikeTable.objects
+            .filter(user=user, post__in=groupposts)
+            .select_related('post')
+            .values_list('post__post_id', flat=True)
+            )
         
         # ポストにいいね情報を追加
         for post in groupposts:
@@ -678,24 +687,7 @@ def view_accountConfView(request):
 
 class GroupMembersListView(View):
     print('GroupMembersList')
-    # def get(self, request, *args, **kwargs):
-    #     group_name = request.GET.get('group')
-    #     members = self.get_group_members(group_name)
-
-    #     # メンバー一覧をJSON形式でレスポンス
-    #     members_data = [{'username': member.followee.username} for member in members]
-    #     return JsonResponse(members_data, safe=False)
-
-    # def get_group_members(self, group_name):
-    #     try:
-    #         # グループごとのメンバー一覧を取得するロジック
-    #         # 例: members = Follower.objects.filter(group=group_name)
-    #         # モデルとフィールド名は実際のデータモデルに合わせて変更してください
-    #         return JsonResponse({'error':'error'})
-    #     except Follower.DoesNotExist:
-    #         raise Http404("Group members not found.")
-
-# class group_members_list(View):
+    
     template_name = 'Group.html'
 
     def get(self, request, *args, **kwargs):
@@ -713,6 +705,7 @@ class GroupMembersListView(View):
             return friends
         except Follower.DoesNotExist:
             raise Http404("You have no friends.")
+        
 #ユーザー検索機能
 # class SearchView(TemplateView):
 
