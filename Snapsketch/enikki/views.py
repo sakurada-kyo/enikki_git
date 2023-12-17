@@ -300,31 +300,27 @@ class CommentView(TemplateView):
                 'post__like_count',
                 'post__comment_count',
                 'post__user__username',
-                'post__user__user_icon_path'
+                'post__user__user_icon_path',
                 'page'
                 )
             )
-
-        # いいね情報を取得
-        likes = (
-            LikeTable.objects.filter(
-                user=user, post=group_post).values_list('post_id', flat=True)
-        )
-
-        # いいねされているかどうか
-        if likes:
-            group_post['is_liked'] = True
-        else:
-            group_post['is_liked'] = False
+        
+        group_post_list = list(group_post)  # QuerySet をリストに変換
+        
+        # 投稿 ID を取得
+        post_id =   str(group_post_list[0]['post__post_id'])
+        
+        for post in group_post_list:
+            post_likes = LikeTable.objects.filter(user=user, post__post_id=post_id).exists()
+            post['is_liked'] = post_likes
+            post.pop('post__post_id', None)  # 'post__post_id' を削除
 
         # post_idセッションの有無
         if 'post_id' in request.session:
             del request.session['post_id']
 
-        post_id = group_post['post__post_id']
-
         # post_idセッション設定
-        request.session['post_id'] = group_post['post__post_id']
+        request.session['post_id'] = post_id
 
         # 投稿に紐づくコメントを取得
         comments = (
@@ -332,7 +328,7 @@ class CommentView(TemplateView):
             .select_related('user')
             .values(
                 "user__username",
-                "user__icon_path",
+                "user__user_icon_path",
                 "comment",
             )
         )
@@ -341,7 +337,7 @@ class CommentView(TemplateView):
             context['error'] = 'コメントがありません'
             
         context['comments'] = comments
-        context['post'] = group_post
+        context['post'] = group_post_list[0]
 
         return render(request, "comment.html", context)
         
@@ -633,11 +629,12 @@ def ajax_calendar(request):
                     'post__user__username',
                     'post__user__user_icon_path',
                     'post__like_count',
-                    'post__comment_count'
+                    'post__comment_count',
+                    'page'
             )
             .distinct()
         )
-        print(f'groupposts:{groupposts}')
+        
 
         # いいね情報を取得
         post_ids = [post['post__post_id'] for post in groupposts]
@@ -650,6 +647,8 @@ def ajax_calendar(request):
             post['is_liked'] = post_id in likes
             del post['post__post_id']
 
+        print(f'groupposts:{groupposts}')
+        
         groupposts_list = list(groupposts)
 
         # リクエストが POST でない場合のデフォルトのレスポンス

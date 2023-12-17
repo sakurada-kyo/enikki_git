@@ -48,6 +48,7 @@ function generateCalendar(year, month) {
         // datesに含まれているか確認
         if (datesFromDjango.includes(date)) {
           dayElement.style.backgroundColor = 'red';
+          dayElement.setAttribute("data-post","true");
         }
         dayElement.setAttribute("data-date", date);
         daysContainer.appendChild(dayElement);
@@ -76,7 +77,7 @@ function showNextMonth() {
   generateCalendar(currentYear, currentMonth);
 }
 
-var dayTags = document.querySelectorAll(".day");
+var dayTags = document.querySelectorAll("[data-post]");
 dayTags.forEach(element => {
     element.addEventListener("click", () => {
         ajax_open(element);
@@ -94,7 +95,6 @@ var dayTags = document.querySelectorAll(".day");
 console.log(`dayTags:${dayTags}`);
 dayTags.forEach(element => {
     element.addEventListener("click", () => {
-      console.log(`element:${element}:${element.innerHTML}`);
       ajax_open(element);
     });
 });
@@ -110,10 +110,10 @@ function padZero(num) {
 //----------------------ポップアップ表示フェード----------------------
 $(function () {
     $('.day').click(function(){
-        $('#popup').fadeIn();
+        $('#popup-wrapper').fadeIn();
     });
-    $('#close , #popBg').click(function(){
-      $('#popup').fadeOut();
+    $('#close , #popup-wrapper').click(function(){
+      $('#popup-wrapper').fadeOut();
     });
 });
 //----------------------ポップアップ表示フェード----------------------
@@ -151,7 +151,7 @@ $(function () {
   });
 //-----------------------CSRFトークン-----------------------
 
-//-----------------------タイムラインajax処理-----------------------
+//-----------------------ajax処理-----------------------
 function ajax_open(element) {
   date = $(element).attr('data-date');
   console.log(`date:${date}`);
@@ -168,10 +168,12 @@ function ajax_open(element) {
       headers: { 'X-CSRFToken': csrftoken }
   })
       .done(function (data) {
+        
       if ('error' in data) {
           console.log(data.error);
       } else {
-          var fragment = showPosts(data);
+          var postsArray = JSON.parse(data.posts);//JSONText→JSONObject
+          var fragment = showPosts(postsArray);
           $('.popContents').append(fragment);
       }
       })
@@ -182,20 +184,21 @@ function ajax_open(element) {
       console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
       });
 }
-//-----------------------タイムラインajax処理-----------------------
+//-----------------------ajax処理-----------------------
 
 //-----------------------ポップアップ投稿表示-----------------------
 function showPosts(posts){
     var fragment = document.createDocumentFragment();
     posts.forEach(function(post){
-        const postSketchPath = post.sketch_path; // 絵パス情報を取得
-        const postDiary = post.diary; // 日記情報を取得
-        const postUserName = post.user__username; // ユーザー名情報を取得
-        const postLikeCount = post.likeCount; // いいね数情報を取得
-        const postCommentCount = post.commentCount; // コメント数情報を取得
+      console.log(post.post__user__user_icon_path);
+        const postSketchPath = `/media/${post.post__sketch_path}`; // 絵パス情報を取得
+        const postDiary = post.post__diary; // 日記情報を取得
+        const postUserName = post.post__user__username; // ユーザー名情報を取得
+        const postLikeCount = post.post__like_count; // いいね数情報を取得
+        const postCommentCount = post.post__comment_count; // コメント数情報を取得
         const postPage = post.page; //ページ番号取得
         const isLiked = post.is_liked; // いいね情報を取得
-        const postUserIcon = post.user__user_icon_path; // ユーザーアイコン
+        const postUserIcon = `/media/${post.post__user__user_icon_path}`; // ユーザーアイコン
 
 
         var content = createAndAppendElement('article', 'content', '');

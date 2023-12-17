@@ -1,7 +1,7 @@
 $(function () {
     $('.toukou').on('click', function () {
         $.ajax({
-            url: 'ajax_comment/',
+            url: '/enikki/comment/ajax_comment/',
             type: 'POST',
             data: {
                 'comment': $('comment').val()

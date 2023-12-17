@@ -6,13 +6,13 @@
 {% endblock %}
 
 {% block content %}
-  <div id="scroll">
+  <div id="post-comment-wrap">
     <article class="content" data-page="{{ post.page }}">
       <div class="content_header">
-        <img class="user_icon" src="/media/{{ post.user_icon_path }}" alt="ユーザーアイコン" />
-        <p class="user_name">{{ post.user__username }}</p>
+        <img class="user_icon" src="/media/{{ post.post__user__user_icon_path }}" alt="ユーザーアイコン" />
+        <p class="user_name">{{ post.post__user__username }}</p>
         <div class="like">
-          {% if is_user_liked %}
+          {% if post.is_liked %}
           <button type="button" class="ajax-like">
           <!-- すでにいいねしている時はfasクラス -->
           <i class="fas fa-heart text-danger"></i>
@@ -24,18 +24,19 @@
           </button>
           {% endif %}
           <!-- いいねの数 -->
-          <span class="like-count">{{ post.like_count }}</span>
+          <span class="like-count">{{ post.post__like_count }}</span>
         </div>
         <div class="comment">
           <!-- グループ名とページ番号送信 -->
-          <a class="fa-regular fa-comment" href="{% url 'post:comment' %}?group=&page="></a>
-          <span class="comment-count">0</span>
+          <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?page={{ post.page }}"></a>
+          <span class="comment-count">{{ post.post__comment_count }}</span>
         </div>
       </div>
       <section class="draw_diary">
-        <img class="draw" src="{% static 'images/test_icon.jpeg' %}" alt="絵日記の絵" />
-        <p class="diary">{{ post.diary }}</p>
+        <img class="draw" src="/media/{{ post.post__sketch_path }}" alt="絵日記の絵" />
+        <p class="diary">{{ post.post__diary }}</p>
       </section>
+    </article>
       <!-- ここからコメント追加ポップ -->
       <div class="popup_area">
         <div class="popup-wrapper">
@@ -53,16 +54,31 @@
         </div>
       </div>
       <!-- ここからコメント返信画面 -->
-      <div class="comment_area">
-        <div class="comment_content">
-          <img class="comment_icon" src="{% static 'images/test_icon.jpeg' %}" alt="コメント" />
-          <span class="comment_name">名前</span><br/>
-          <span class="comment_sentence">ここにコメントが表示されます</span>
+      <div class="comment-area">
+        {% if error %}
+        <p id="error">{{ error }}</p>
+        {% endif %}
+        {% for comment in comments %}
+        <div class="comment-content">
+          <img class="user-icon" src="/media/{{ comment.user__user_icon_path }}" alt="コメント" />
+          <span class="comment-name">{{ comment.user__username }}</span><br/>
+          <span class="comment-sentence">{{ comment.comment }}</span>
         </div>
+        {% endfor %}
       </div>
-    </article>
+    
   </div>
 {% endblock %}
+
+{% block side %}
+<li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
+<li><a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
+<li><a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a></li>
+<li><a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a></li>
+<li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
+{% endblock  %}
+
 {% block js %}
   <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
   <script src="{% static 'js\comment.js' %}"></script>
