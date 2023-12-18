@@ -16,6 +16,10 @@ document.getElementById('close').addEventListener('click', function() {
   document.getElementById('members-popup').style.display = 'none';
 });
 
+document.getElementById('invite').addEventListener('click', function(){
+  document.getElmentById('members-popup').style.display = 'none';
+})
+
 //-----------------------ajax処理-----------------------
   function ajax_open(lastElement) {
     console.log("page:" + $(lastElement).attr('data-page'));
@@ -47,3 +51,39 @@ document.getElementById('close').addEventListener('click', function() {
       });
   }
   //-----------------------ajax処理-----------------------
+
+
+
+  // ユーザを招待する
+invite.addEventListener('click', function() {
+  var checkboxes = document.querySelectorAll('input[name="scales"]:checked');
+  var selectedUsers = [];
+  
+  checkboxes.forEach(checkbox => {
+    selectedUsers.push(checkbox.nextElementSibling.textContent);
+  });
+  
+  // Ajaxリクエストを送信
+  $.ajax({
+    url: '/enikki/group/ajax_groupmembers_list/', 
+    type: 'POST',
+    data: {
+      'selected_users': selectedUsers,
+    },
+    // processData: false,
+    // contentType: false,
+    dataType: 'json',
+    headers: { 'X-CSRFToken': csrftoken }
+  })
+    .done(function(data) {
+      // 成功時の処理
+      console.log('招待が成功しました。');
+      // 追加の処理を追加する場合はここに追加
+    })
+    .fail((jqXHR, textStatus, errorThrown) => {
+      alert('Ajax通信に失敗しました。');
+      console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+      console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+      console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
+    });
+});

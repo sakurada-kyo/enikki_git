@@ -708,9 +708,7 @@ class GroupMembersListView(View):
         except Follower.DoesNotExist:
             raise Http404("You have no friends.")
         
-def ajax_groupmembers_list(request):
-    
-    return
+
 #ユーザー検索機能
 # class SearchView(TemplateView):
 
@@ -877,3 +875,21 @@ def ajax_inviteGroup(request):
     print(f'ajax_inviteGroup')
     if request.method == 'POST':
         return
+    
+def ajax_groupmembers_list(request):
+    if request.method == 'POST':
+        selected_users = request.POST.getlist('selected_users[]')  # AJAXリクエストから選択されたユーザーを取得
+
+        # 選択されたユーザーをデータベースに登録する処理を実装
+        for username in selected_users:
+            # ユーザーモデルに適した処理に変更
+            user = UserGroupTable.objects.get(username=username)
+            # 登録のための処理を追加
+
+            # 成功を示すJSONレスポンスを返す
+            response_data = {'success': True}
+            return JsonResponse(response_data)
+
+        # AJAX以外のリクエストには対応しない
+        response_data = {'error': 'Invalid Request'}
+        return JsonResponse(response_data, status=400)    

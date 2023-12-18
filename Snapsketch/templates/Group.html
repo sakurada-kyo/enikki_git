@@ -21,7 +21,7 @@
 <div id="members-popup" style="display: none;">
   <div id="popup-inside">
     <div id="close">x</div>
-    <form action="" method="post">
+    {% comment %} <form action="" method="post"> {% endcomment %}
       {% csrf_token %}
       <h2>グループメンバー一覧</h2>
       <!-- メンバー一覧を表示するロジックを追加 -->
@@ -30,7 +30,7 @@
         <p>{{ friend.followee.username }}</p>
       {% endfor %}
       <input id="invite" type="submit" value="招待">
-    </form>
+    {% comment %} </form> {% endcomment %}
   </div>
 </div>
 {% endblock %}
