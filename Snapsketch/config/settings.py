@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'enikki.apps.EnikkiConfig',
     'login_app.apps.LoginAppConfig',
-    # 'bootstrap4',
+  
 ]
 
 MIDDLEWARE = [
@@ -53,6 +53,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
+
+AUTH_USER_MODEL = 'login_app.CustomUser'
 
 TEMPLATES = [
     {
@@ -128,3 +130,8 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'login_app.CustomUser'
+
+# ログイン後のリダイレクト先を設定する場合
+LOGIN_REDIRECT_URL = 'enikki:timeline'

@@ -20,45 +20,45 @@
         </div>
       </div>
 
+      
       <div class="friend">
-        <button class="friendButton" type="button">友達一覧</button>
+        <button class="friendButton" type="button" onclick="move()">友達一覧</button>
       </div>
     </div>
 
-    <div class="address">
-      <div class="detail">
-        <table>
-          <tr>
-            <th>ユーザ名：</th>
-            <td>
-              <p>{{ mypage.user_name }}</p>
-            </td>
-            <td>
-              <button class="detailChange1" type="button" value="1">編集</button>
-            </td>
-          </tr>
-          <tr>
-            <th>メールアドレス：</th>
-            <td>
-              <p>{{ mypage.address }}</p>
-            </td>
-            <td>
-              <button class="detailChange1" type="button" value="2">編集</button>
-            </td>
-          </tr>
-          <tr>
-            <th>パスワード：</th>
-            <td>
-              <p>・・・・・・・・</p>
-            </td>
-            <td>
-              <button class="detailChange1" type="button" value="3">編集</button>
-            </td>
-          </tr>
-        </table>
+      <div class="address">
+        <div class="detail">
+          <table>
+            <tr>
+              <th>ユーザ名：</th>
+              <td>
+                <input type="text" class="editField e1" value="{{ username }}" disabled>
+              </td>
+              <td>
+                <button class="detailChange1 editButton" type="button" value="1">編集</button>
+              </td>
+            </tr>
+            <tr>
+              <th>メールアドレス：</th>
+              <td>
+                <input type="text" id="text" class="editField e2" value="{{ email }}" disabled style="background-color: transparent">
+              </td>
+              <td>
+                <button class="detailChange1 editButton" type="button" value="2">編集</button>
+              </td>
+            </tr>
+            <tr>
+              <th>パスワード：</th>
+              <td>
+                <input type="password" class="editField e3" value="{{ password}}" disabled>
+              </td>
+              <td>
+                <button class="detailChange1 editButton" type="button" value="3">編集</button>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
-
-      <!-- <button onclick="location.href='user.html'">編集</button> -->
     </div>
   </div>
 
@@ -67,8 +67,8 @@
       <h3>自己紹介</h3>
 
       <div class="memo">
-        <textarea name="comment" cols="40" rows="8">{{ mypage.profile }}</textarea>
-        <button class="memoReserve" type="button" value="4">保存</button>
+        <textarea class="editField1 e4" name="comment" cols="40" rows="8" disabled>dddd{{ mypage.profile }}</textarea>
+        <button class="detailChange1 editButton1" type="button" value="4">編集</button>
       </div>
     </div>
   </div>
@@ -98,4 +98,8 @@
       <small>&copy;2023 SnapSketch</small>
     </div>
   </footer>
+{% endblock %}
+{% block js %}
+  <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
+  <script src="{% static 'js\myPage.js' %}"></script>
 {% endblock %}

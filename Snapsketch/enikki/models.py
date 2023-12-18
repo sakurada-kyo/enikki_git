@@ -23,7 +23,10 @@ class GroupMaster(models.Model):
     group_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     groupname = models.CharField(max_length=255,null=False)
     group_icon_path = models.ImageField(upload_to=directory_path)
-     
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(blank=True,null=True)
+    
 # # 投稿マスタ
 class PostMaster(models.Model):
     post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -76,7 +79,7 @@ class GroupPostTable(models.Model):
            models.UniqueConstraint(fields=['group_id', 'post_id'], name='unique_GroupPost')
         ]
 
-# #友達申請テーブル
-class RequestTable(models.Model):
-    request_user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='request_user_id')
-    user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='user_id')
+# # #友達申請テーブル
+# class RequestTable(models.Model):
+#     request_user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='request_user_id')
+#     user_id = models.ForeignKey(userInstance,  on_delete=models.CASCADE, related_name='user_id')

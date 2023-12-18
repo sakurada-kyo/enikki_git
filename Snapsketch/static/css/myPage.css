@@ -7,17 +7,16 @@ body {
 /*ここからメイン*/
 main{
     text-align: center;
-    height:940px;
     width: 100%;
 }
 
 main #box{
     margin: auto;
-    width: 1350px;
+    width: 630px;
     height: 700px;
-    display:flex;
-    justify-content:space-between;
-    flex-shrink:0;
+    padding-right: 100px;
+    padding-left: 150px;
+    float: left;
 }
 
 h1 {
@@ -35,19 +34,20 @@ h1 {
 
 .myPageLeft {
     text-align: left;
-    width: 45%;
+ 
     height: 100%;
     margin-left:60px;
 
 }
 
 .myPageRight {
-    width: 45%;
+    width: 30%;
     height: 100%;
+    float: left;
 }
 
 .introduction {
-   width: 100%;
+   /* width: 100%; */
     height: 100%;
 }
 

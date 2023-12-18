@@ -86,6 +86,10 @@ main{
     width:100%;
 }
 
+#save{
+    width:100%;
+}
+
 #canvas{
     width: 800px;
     float:left;

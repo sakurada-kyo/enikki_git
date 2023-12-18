@@ -77,6 +77,9 @@ p{
 
 .user_icon{
     float:left;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
 }
 
 .user_name{
@@ -150,7 +153,7 @@ button{
 }
 
 .diary{
-    background-color: red;
+    background-color: #e0e0e0;
     height: 200px;
     width: 100%;
 }
