@@ -3,6 +3,7 @@
 {% block css %}
   <link rel="stylesheet" href="{% static 'css\group.css' %}" />
 {% endblock %}
+
 {% block content %}
   <h2>グループ一覧</h2>
   {% if error %}
@@ -16,8 +17,7 @@
     </div>
     {% endfor %}
   {% endif %}
-
-  <!-- ポップアップ表示 -->
+<!-- ポップアップ表示 -->
 <div id="members-popup" style="display: none;">
   <div id="popup-inside">
     <div id="close">x</div>
@@ -34,6 +34,7 @@
   </div>
 </div>
 {% endblock %}
+
 {% block side %}
   <li>
     <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
@@ -51,6 +52,7 @@
     <a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a>
   </li>
 {% endblock %}
+
 {% block footer %}
   <footer>
     <div id="kotei">

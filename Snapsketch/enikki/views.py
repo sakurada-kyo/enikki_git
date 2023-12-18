@@ -707,10 +707,11 @@ class GroupMembersListView(View):
             return friends
         except Follower.DoesNotExist:
             raise Http404("You have no friends.")
-        
+
 def ajax_groupmembers_list(request):
     
     return
+
 #ユーザー検索機能
 # class SearchView(TemplateView):
 
