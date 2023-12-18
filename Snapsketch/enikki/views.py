@@ -1,11 +1,12 @@
 from audioop import reverse
+import calendar
 from django.conf import settings
 from django.views.generic import TemplateView
 import json
 import os
-import base64
+from django.db.models import Q
 import tempfile
-import datetime
+from datetime import datetime
 from django.http import Http404, HttpResponse, HttpResponseServerError, JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from .models import PostMaster
@@ -50,18 +51,17 @@ class TimelineView(TemplateView):
                 print('グループを取得できませんでした')
         else:
             print('groupListがない')
-        
-                
+
         if 'currentGroup' in request.session:
             # セッションからグループ名取得
             currentGroup = request.session['currentGroup']
             print(f'currentGroupTimelineView:{currentGroup}')
             try:
-                
                 user = request.user
+                
                 # グループ内の投稿記事持ってくる
                 if currentGroup:
-
+                    
                     # グループ名を使って関連する投稿を取得
                     group_posts = GroupPostTable.objects.filter(
                         group__groupname=currentGroup)
@@ -272,7 +272,7 @@ def ajax_changeGroup(request):
         return JsonResponse({'error': 'POSTメソッドを使用してください'})
 
 
-# # コメントページ表示
+# コメントページ表示
 class CommentView(TemplateView):
     def get(self, request, *args, **kwargs):
         context = {}
@@ -300,31 +300,27 @@ class CommentView(TemplateView):
                 'post__like_count',
                 'post__comment_count',
                 'post__user__username',
-                'post__user__user_icon_path'
+                'post__user__user_icon_path',
                 'page'
                 )
             )
-
-        # いいね情報を取得
-        likes = (
-            LikeTable.objects.filter(
-                user=user, post=group_post).values_list('post_id', flat=True)
-        )
-
-        # いいねされているかどうか
-        if likes:
-            group_post['is_liked'] = True
-        else:
-            group_post['is_liked'] = False
+        
+        group_post_list = list(group_post)  # QuerySet をリストに変換
+        
+        # 投稿 ID を取得
+        post_id =   str(group_post_list[0]['post__post_id'])
+        
+        for post in group_post_list:
+            post_likes = LikeTable.objects.filter(user=user, post__post_id=post_id).exists()
+            post['is_liked'] = post_likes
+            post.pop('post__post_id', None)  # 'post__post_id' を削除
 
         # post_idセッションの有無
         if 'post_id' in request.session:
             del request.session['post_id']
 
-        post_id = group_post['post__post_id']
-
         # post_idセッション設定
-        request.session['post_id'] = group_post['post__post_id']
+        request.session['post_id'] = post_id
 
         # 投稿に紐づくコメントを取得
         comments = (
@@ -332,7 +328,7 @@ class CommentView(TemplateView):
             .select_related('user')
             .values(
                 "user__username",
-                "user__icon_path",
+                "user__user_icon_path",
                 "comment",
             )
         )
@@ -341,32 +337,37 @@ class CommentView(TemplateView):
             context['error'] = 'コメントがありません'
             
         context['comments'] = comments
-        context['post'] = group_post
+        context['post'] = group_post_list[0]
 
         return render(request, "comment.html", context)
-        
-    
+
 def ajax_comment(request):
+    print(f'ajax_comment')
     if request.method == 'POST':
         user = request.user
-        comment = request.POST.get("comment")
+        comment = request.POST.get('comment')
         if comment:
             if 'post_id' in request.session:
                 post_id = request.session['post_id']
+                print(f'post_id:{post_id}')
                 post = PostMaster.objects.get(pk=post_id)
                 # 新しいコメントを作成する例
                 new_comment = CommentMaster(
                     user=user,  # ユーザーは適切な方法で取得する必要があります
                     post=post,  # セッションから取得したpost_idに紐づくPostMasterインスタンスを指定
                     comment=comment  # コメントの内容を適切なものに置き換える
-                    # 他のフィールドも適宜設定する
                 )
                 new_comment.save()  # 新しいコメントを保存する
-                
-                return JsonResponse({'new_comment':new_comment})
+
+                comment_data = {
+                    'username': new_comment.user.username,
+                    'usericon': new_comment.user.user_icon_path.url,
+                    'comment': new_comment.comment,
+                }
+
+                return JsonResponse({'comment_data':comment_data})
             else:
                 return JsonResponse({'error':'post_idがありません'})
-            
         else:
             return JsonResponse({'error':'コメントがありません'})
 
@@ -580,70 +581,83 @@ class CreateView(TemplateView):
         return redirect('enikki:timeline')
 
 # カレンダー画面
-class CalenderView(TemplateView):
+class CalendarView(TemplateView):
 
     template_name = 'calendar.html'
 
     def get(self, request, *args, **kwargs):
-        print('GET')
-        return render(request, self.template_name)
-
-    def post(self, request, *args, **kwargs):
-        print('POST')
-
-        # POSTリクエスト(日付)取得
-        date = request.POST['date']
-
-        # ユーザー取得
+        print('GET:CalendarView')
+        context = {}
+        # セッションから現在のグループ取得
+        currentGroup = request.session['currentGroup']
+        # ログインユーザー取得
         user = self.request.user
+        # DBから投稿した日付を取得
+        dates = (
+            GroupPostTable.objects.filter(
+                post__user = user,
+                group__groupname=currentGroup
+            )
+        .select_related('post','group')
+        .values_list('post__created_at',flat=True)
+        .distinct()
+        )
 
-        # グループ取得
-        groupName = request.session['group']
+        # 日付を文字列に変換
+        formatted_dates = [date.strftime('%Y-%m-%d') for date in dates]
 
-        if groupName:
-            # ユーザーと日付で該当する投稿の post_id を取得
-            page = GroupPostTable.objects.filter(
-                post__user=user,
-                post__created_at__date=date,
-                group__groupname=groupName,
-            ).values_list('page', flat=True).first()
+        context['dates'] = json.dumps(formatted_dates)
 
-            # 最初に該当する投稿の page を取得する
-            if page is not None:
-                url = reverse('timeline') + f'?page={page}'
-                return redirect(url)
-            else:
-                return None  # 該当する投稿が見つからなかった場合の処理
+        return render(request, self.template_name,context)
 
 
 def ajax_calendar(request):
     if request.method == 'POST':
-        userId = request.user.user_id
-        date = request.POST.get('date')
-        print(f'date{date}')
-        if date:
-            try:
-                # すべてのグループメンバーによって選択された日付の投稿を取得
-                posts = PostMaster.objects.filter(created_at=date, group__members=request.user)
-                
-                # シリアライズされた投稿データを格納するリストを作成
-                serialized_posts = []
-                
-                for post in posts:
-                    # PostMasterモデルに対するシリアライザがあると仮定
-                    serialized_post = {
-                        'user_name': post.user_name,
-                        'like_count': post.like_count,
-                        'comment_count': post.comment_count,
-                        # ポップアップで表示したい他のフィールドを追加
-                    }
-                    serialized_posts.append(serialized_post)
-                
-                return JsonResponse({'posts': serialized_posts})
-            except PostMaster.DoesNotExist:
-                return JsonResponse({'error': '該当する投稿がありません'})
-    # リクエストが POST でない場合のデフォルトのレスポンス
-    return HttpResponse(status=405)
+        print('ajax_calendar')
+        user = request.user # ログインユーザー
+        currentGroup = request.session['currentGroup'] # 現在グループ取得
+        dateStr = request.POST.get('date') # 日付取得
+        
+        # 日付文字列を適切な型に変換（例：YYYY-MM-DDの文字列をdatetimeオブジェクトに変換）
+        date = datetime.strptime(dateStr, '%Y-%m-%d').date()
+
+        # 日付からグループ内の投稿取得
+        groupposts = (
+            GroupPostTable.objects
+            .filter(group__groupname=currentGroup)
+            .filter(post__created_at = date)
+            .select_related('post','group')
+            .values(
+                    'post__post_id',
+                    'post__sketch_path',
+                    'post__diary',
+                    'post__user__username',
+                    'post__user__user_icon_path',
+                    'post__like_count',
+                    'post__comment_count',
+                    'page'
+            )
+            .distinct()
+        )
+        
+
+        # いいね情報を取得
+        post_ids = [post['post__post_id'] for post in groupposts]
+        likes = LikeTable.objects.filter(user=user, post__post_id__in=post_ids).values_list('post__post_id', flat=True)
+
+        # ポストにいいね情報を追加
+        for post in groupposts:
+            post_id = post['post__post_id']
+            # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
+            post['is_liked'] = post_id in likes
+            del post['post__post_id']
+
+        print(f'groupposts:{groupposts}')
+        
+        groupposts_list = list(groupposts)
+
+        # リクエストが POST でない場合のデフォルトのレスポンス
+        return JsonResponse({'posts':json.dumps(groupposts_list),'currentGroup':currentGroup})
 
 class FriendView(TemplateView):
     template_name = 'friend.html'
@@ -675,24 +689,7 @@ def view_accountConfView(request):
 
 class GroupMembersListView(View):
     print('GroupMembersList')
-    # def get(self, request, *args, **kwargs):
-    #     group_name = request.GET.get('group')
-    #     members = self.get_group_members(group_name)
-
-    #     # メンバー一覧をJSON形式でレスポンス
-    #     members_data = [{'username': member.followee.username} for member in members]
-    #     return JsonResponse(members_data, safe=False)
-
-    # def get_group_members(self, group_name):
-    #     try:
-    #         # グループごとのメンバー一覧を取得するロジック
-    #         # 例: members = Follower.objects.filter(group=group_name)
-    #         # モデルとフィールド名は実際のデータモデルに合わせて変更してください
-    #         return JsonResponse({'error':'error'})
-    #     except Follower.DoesNotExist:
-    #         raise Http404("Group members not found.")
-
-# class group_members_list(View):
+    
     template_name = 'Group.html'
 
     def get(self, request, *args, **kwargs):
@@ -710,6 +707,10 @@ class GroupMembersListView(View):
             return friends
         except Follower.DoesNotExist:
             raise Http404("You have no friends.")
+        
+def ajax_groupmembers_list(request):
+    
+    return
 #ユーザー検索機能
 # class SearchView(TemplateView):
 
