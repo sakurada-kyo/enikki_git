@@ -14,13 +14,11 @@ urlpatterns = [
     path('mypage/',views.MypageView.as_view(), name='mypage'),
     path('ajax_mypage_detail/', views.ajax_mypage_detail, name='ajax_mypage_detail'),
     path('ajax_mypage_icon/', views.mypage_icon, name='mypage_icon'),
-    # path('account/', views.view_accountView, name='account'),
     path("calendar/", views.CalendarView.as_view(), name="calendar"),
     path("calendar/ajax_calendar/", views.ajax_calendar, name="ajax_calendar"),
     path('comment/ajax_comment/',views.ajax_comment, name='ajax_comment'),
     path('friend/', views.FriendView.as_view(), name='friend'),
     path('group/',views.GroupView.as_view(), name='group'),
-    # path('group/members/list/', views.group_members_list.as_view(), name='group_members_list'),
     path('group/members/list/', views.GroupMembersListView.as_view(), name='group_members_list'),
     path('ajax_changeGroup/',views.ajax_changeGroup, name='changeGroup'),
 

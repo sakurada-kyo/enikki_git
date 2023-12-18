@@ -340,29 +340,34 @@ class CommentView(TemplateView):
         context['post'] = group_post_list[0]
 
         return render(request, "comment.html", context)
-        
-    
+
 def ajax_comment(request):
+    print(f'ajax_comment')
     if request.method == 'POST':
         user = request.user
-        comment = request.POST.get("comment")
+        comment = request.POST.get('comment')
         if comment:
             if 'post_id' in request.session:
                 post_id = request.session['post_id']
+                print(f'post_id:{post_id}')
                 post = PostMaster.objects.get(pk=post_id)
                 # 新しいコメントを作成する例
                 new_comment = CommentMaster(
                     user=user,  # ユーザーは適切な方法で取得する必要があります
                     post=post,  # セッションから取得したpost_idに紐づくPostMasterインスタンスを指定
                     comment=comment  # コメントの内容を適切なものに置き換える
-                    # 他のフィールドも適宜設定する
                 )
                 new_comment.save()  # 新しいコメントを保存する
-                
-                return JsonResponse({'new_comment':new_comment})
+
+                comment_data = {
+                    'username': new_comment.user.username,
+                    'usericon': new_comment.user.user_icon_path.url,
+                    'comment': new_comment.comment,
+                }
+
+                return JsonResponse({'comment_data':comment_data})
             else:
                 return JsonResponse({'error':'post_idがありません'})
-            
         else:
             return JsonResponse({'error':'コメントがありません'})
 
@@ -703,6 +708,9 @@ class GroupMembersListView(View):
         except Follower.DoesNotExist:
             raise Http404("You have no friends.")
         
+def ajax_groupmembers_list(request):
+    
+    return
 #ユーザー検索機能
 # class SearchView(TemplateView):
 

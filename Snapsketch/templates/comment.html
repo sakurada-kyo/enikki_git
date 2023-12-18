@@ -43,17 +43,16 @@
           <input id="open" type="checkbox"/>
           <label for="open" class="open-btn">コメントをする</label>
           <label for="open" class="overlay"></label>
-
           <div class="popup-content">
             <div class="reply">
               <h2>コメント返信</h2>
             </div>
-            <textarea name="comment"></textarea>
-            <input type="submit" class="reply" value="返信" />
+            <textarea name="comment" id="comment"></textarea>
+            <input type="submit" id="toukou" value="返信"/>
           </div>
         </div>
       </div>
-      <!-- ここからコメント返信画面 -->
+
       <div class="comment-area">
         {% if error %}
         <p id="error">{{ error }}</p>
@@ -66,7 +65,6 @@
         </div>
         {% endfor %}
       </div>
-    
   </div>
 {% endblock %}
 
