@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/myPage.css' %}" />
+  <!-- Bootstrapのスタイルを追加 -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 {% endblock %}
+
 {% block content %}
   <div class="myPageLeft">
     <div class="profile">
@@ -12,23 +17,19 @@
         </div>
 
         <div class="avatar">
-          <img class="user_icon" src="{{ mypage.user_icon.url }}" alt="アバター表示" wight="130" height="193" />
+          <img class="user_icon" src="{{ user_icon }}" alt="アバター表示" wight="130" height="193" />
         </div>
 
         <div class="avatarChange">
-          <button class="change" type="button">アイコン変更</button>
+          <input type="file" id="iconInput" name ="iconInput"style="display: none;" accept="image/*">
+          <label for="iconInput" class="change">アイコン変更</label>
         </div>
       </div>
 
-      
-      <div class="friend">
-        <button class="friendButton" type="button" onclick="move()">友達一覧</button>
-      </div>
-    </div>
 
       <div class="address">
         <div class="detail">
-          <table>
+          <table class="table">
             <tr>
               <th>ユーザ名：</th>
               <td>
@@ -50,11 +51,11 @@
             <tr>
               <th>パスワード：</th>
               <td>
-                <input type="password" class="editField e3" value="{{ password}}" disabled>
+                <input type="password" class="editField e3" value="{{password}}" disabled>
               </td>
-              <td>
+              {% comment %} <td>
                 <button class="detailChange1 editButton" type="button" value="3">編集</button>
-              </td>
+              </td> {% endcomment %}
             </tr>
           </table>
         </div>
@@ -62,19 +63,11 @@
     </div>
   </div>
 
-  <div class="myPageRight">
-    <div class="introduction">
-      <h3>自己紹介</h3>
 
-      <div class="memo">
-        <textarea class="editField1 e4" name="comment" cols="40" rows="8" disabled>dddd{{ mypage.profile }}</textarea>
-        <button class="detailChange1 editButton1" type="button" value="4">編集</button>
-      </div>
-    </div>
-  </div>
 {% endblock %}
 
 {% block side %}
+  <!-- サイドバーの内容をそのまま残す -->
   <li>
     <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
   </li>
@@ -93,6 +86,7 @@
 {% endblock %}
 
 {% block footer %}
+  <!-- フッターの内容をそのまま残す -->
   <footer>
     <div id="kotei">
       <small>&copy;2023 SnapSketch</small>

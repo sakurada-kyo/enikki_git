@@ -1,3 +1,4 @@
+
 // CSRFトークン
 function getCookie(name) {
     var cookieValue = null;
@@ -30,106 +31,120 @@ $.ajaxSetup({
     }
 });
 
-//マイページajax処理
+//アイコン編集
 $(function () {
-    $('.detaiChange1').on('click', function () {
+    $('#iconInput').click(); // ファイル選択ダイアログを開く
+
+    // ファイルが選択された時の処理
+    $('#iconInput').on('change', function () {
+        var formData = new FormData();
+        formData.append('user_icon', this.files[0]);
+
+        // Ajaxリクエストを送信してファイルをアップロード
         $.ajax({
-            url: 'ajax_myPage/',
+            url: '/enikki/ajax_mypage_icon/', // 適切なURLに変更
             type: 'POST',
-            data: {
-                'mypage': $('mypage').val(),
-                // 'mypage_icon': $('.user_icon').attr('src')
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: { 'X-CSRFToken': csrftoken },
+            success: function (data) {
+                // アップロードが成功した場合の処理
+                if (data.success) {
+                    $('.user_icon').attr('src', data.icon_url);
+                    alert('アイコンが変更されました！');
+                } else {
+                    alert('アップロードに失敗しました。');
+                }
             },
-            headers: { 'X-CSRFToken': csrftoken }
-        })
-            .done((data) => {
-                add_comment(data);
-            })
-            // Ajax通信が失敗したら発動
-            .fail((jqXHR, textStatus, errorThrown) => {
-                alert('Ajax通信に失敗しました。');
-                console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-                console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-                console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
-            });
-    })
-});
-
-
-function add_mypage() {
-    var fragment = document.createDocumentFragment();
-
-    for (var cnt = 0; cnt < 2; cnt++) {
-        var mypageContent = document.createElement('td');
-        var mypageP = document.createElment('p');
-        var mypageBtn = document.createElement('button');
-
-        mypageContent.setAttribute("td", "td");
-        mypageContent.appendChild(mypageP);
-        mypageContent.appendChild(mypageBtn);
-
-    }
-    return fragment;
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    // ボタンのクリックイベントを設定
-    var editButtons = document.querySelectorAll('.editButton');
-    var editField = document.querySelector('.editField');
-
-    var editButtons1 = document.querySelectorAll('.editButton1');
-    var editField1 = document.querySelector('.editField1');
-
-    console.log(editField);
-    console.log(editField1);
-
-    editButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            // ボタンがクリックされたときの処理
-            var buttonValue = button.value; // ボタンのvalue属性を取得
-
-            // 対応する入力フィールドを取得
-            var editField;
-            if (buttonValue === '1') {
-                editField = document.querySelector('.e1');
-            } else if (buttonValue === '2') {
-                editField = document.querySelector('.e2');
-            } else if (buttonValue === '3') {
-                editField = document.querySelector('.e3');
-            } 
-
-            // 入力フィールドのdisabled属性をトル
-            editField.disabled = !editField.disabled;
-
-            // ボタンのテキストを変更
-            if (editField.disabled) {
-                button.innerText = '編集';
-            } else {
-                button.innerText = '保存';
+            error: function () {
+                alert('通信エラーが発生しました。');
             }
         });
     });
-    // テキストエリア
-    editButtons1.forEach(function (button){
-        button.addEventListener('click',function(){
-            var buttonValue = button.value;
-
-            var editField1;
-            if (buttonValue === '4'){
-                editField1 = document.querySelector('.e4');
-            }
-
-            editField1.disabled = !editField1.disabled;
-            
-            if (editField1.disabled) {
-                button.innerText = '編集';
-            } else {
-                button.innerText = '保存';
-            }
-        })
-    })
-
 });
+
+//メールアドレス、名前編集のajax
+function mypage_detail_ajax(data,flg,button,editField){
+    console.log(`data:${data},flg:${flg},button:${button},editField:${editField}`);
+    $.ajax({
+        url: '/enikki/ajax_mypage_detail/', // 適切なURLに変更
+        type: 'POST',
+        data:{
+            'data':data,
+            'flg':flg
+        },
+        headers: { 'X-CSRFToken': csrftoken },
+        success: function (response) {
+            if (response.error) {
+                var error = response.error
+                console.log(`${error}`);
+            } else {
+                var msg = response.msg;
+                if(flg){
+                    // ユーザー名更新
+                    var usernameField = $(button).closest('tr').find('.e1');
+                    usernameField.val(data);
+                    usernameField.prop('disabled', true);
+                }else{
+                    var emailField = $(button).closest('tr').find('.e2');
+                    emailField.val(data);
+                    emailField.prop('disabled', true);
+                }
+
+                $(button).text('編集');
+                $(editField).prop('disabled', true);
+
+                alert(`${msg}`);
+            }
+        },
+        error: function () {
+            alert('通信エラーが発生しました。');
+        }
+    });
+}
+
+$(function () {
+    // 編集ボタンがクリックされた時の処理
+    $('.editButton').on('click', function() {
+        var button = $(this);
+        var buttonValue = button.val(); // 対応する入力フィールドを取得
+        var editField;
+        if (buttonValue === '1') {
+            editField = document.querySelector('.e1');
+        } else if (buttonValue === '2') {
+            editField = document.querySelector('.e2');
+        }
+
+        // 編集モードと保存モードを切り替える
+        if ($(editField).prop('disabled')) {
+            $(editField).prop('disabled', false);
+            button.text('保存');
+        } else {
+            $(editField).prop('disabled', true);
+            button.text('編集');
+
+            var flg;
+            var data;
+
+            if ($(editField).hasClass('e1')) {
+                // ユーザー名
+                console.log('e1クラスを持っています');
+                data = $(editField).val();
+                flg = true;
+            } else {
+                // メールアドレス
+                console.log('e1クラスを持っていません');
+                data = $(editField).val();
+                flg = false;
+            }
+
+            mypage_detail_ajax(data,flg,button,editField);
+        }
+    });
+});
+
+
 function move() {
     location.href = '/enikki/friend/';
 }

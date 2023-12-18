@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-  {% comment %} <link rel="stylesheet" href="{% static 'css\group.css' %}" /> {% endcomment %}
+  <link rel="stylesheet" href="{% static 'css\group.css' %}" />
 {% endblock %}
+
 {% block content %}
   <h2>グループ一覧</h2>
   {% if error %}
@@ -10,12 +11,30 @@
   {% else %}
     {% for group in groups %}
     <div class="grp">
-      <img src="/media/{{ group.group__group_icon_path }}" />
-      <p>{{ group.groupname }}</p>
+      <img src="/media/{{ group.group.group_icon_path }}" />
+      <p>{{ group.group.groupname }}</p>
+      <input type="button" class="add" value="メンバーを追加する">
     </div>
     {% endfor %}
   {% endif %}
+<!-- ポップアップ表示 -->
+<div id="members-popup" style="display: none;">
+  <div id="popup-inside">
+    <div id="close">x</div>
+    {% comment %} <form action="" method="post"> {% endcomment %}
+      {% csrf_token %}
+      <h2>グループメンバー一覧</h2>
+      <!-- メンバー一覧を表示するロジックを追加 -->
+      {% for friend in friends %}
+        <input type="checkbox" id="scales" name="scales">
+        <p>{{ friend.followee.username }}</p>
+      {% endfor %}
+      <input id="invite" type="submit" value="招待">
+    {% comment %} </form> {% endcomment %}
+  </div>
+</div>
 {% endblock %}
+
 {% block side %}
   <li>
     <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
@@ -33,6 +52,7 @@
     <a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a>
   </li>
 {% endblock %}
+
 {% block footer %}
   <footer>
     <div id="kotei">
@@ -41,5 +61,6 @@
   </footer>
 {% endblock %}
 {% block js %}
+<script src="{% static 'js/group.js' %}"></script>
   {% comment %} <script src="{% static 'js/group.js' %}"></script> {% endcomment %}
 {% endblock %}

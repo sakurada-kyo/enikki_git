@@ -9,3 +9,5 @@ admin.site.register(Follower)
 admin.site.register(UserGroupTable)
 admin.site.register(PostMaster)
 admin.site.register(GroupMaster)
+admin.site.register(FrequestTable)
+
