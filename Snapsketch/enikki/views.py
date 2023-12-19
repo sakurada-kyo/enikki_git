@@ -765,6 +765,7 @@ class GroupMembersListView(View):
 
 #         return render(request,'usersearch.html',{'form':form})
 
+
 # マイページ機能
 class MypageView(TemplateView):
     template_name = 'myPage.html'
