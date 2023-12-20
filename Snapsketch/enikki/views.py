@@ -909,7 +909,4 @@ def ajax_groupmembers_list(request):
 
         # AJAX以外のリクエストには対応しない
         response_data = {'error': 'Invalid Request'}
-        return JsonResponse(response_data, status=400)
-    
-def index(request, *args, **kwargs):
-   return render(request, 'index.html')    
+        return JsonResponse(response_data, status=400)    
