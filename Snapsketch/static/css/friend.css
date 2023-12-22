@@ -1,18 +1,15 @@
-h3 {
-    font-size: 22px;
-    margin: 0;
-    margin-top: 10px;
+#register h2 {
+    font-size: 30px;
 }
 
 .account-form {
-    padding-right: 140px;
-    padding-left: 300px;
     display: flex;
     background-color: rgba(217, 217, 217, 1);
-    width: 600px;
+    width: 60%;
     height: 85px;
-    padding-left: 50px;
-    margin-bottom: 18px;
+    text-align: center;
+    margin: 30px auto; /* コンテナを垂直方向に中央揃え */
+    padding: 0 30px; /* 両側に余白を追加 */
 }
 
 .account-form .circle {
@@ -23,28 +20,30 @@ h3 {
     margin: auto 0;
 }
 
+.circle img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
 .account-form h4 {
     color: black;
     margin: auto 0;
     font-size: 25px;
-    padding-left: 25px;
+    padding-left: 30px; /* 余白を調整 */
 }
 
-/* #button {
-    display: inline-flex;
-    flex-direction: column;
-    padding-top: 50px;
-    padding-left: 160px;
-} */
+@media screen and (max-width: 768px) {
+    /* 小さい画面に対するスタイルの調整 */
+    .account-form {
+        width: 80%; /* 小さい画面に対して幅を調整 */
+        margin-left: auto; /* コンテナを水平方向に中央揃え */
+        margin-right: auto;
+    }
 
-.edit {
-    display: block;
-    width: 280px;
-    background: transparent;
-    padding: 20px;
-    text-align: center;
-    text-decoration: none;
-    color: #FFF;
-    font-size: 20px;
-    font-weight: bold;
+    .account-form h4 {
+        font-size: 20px; /* 小さい画面に対してフォントサイズを調整 */
+    }
 }
+
+/* 他の画面サイズに対する必要に応じて、追加のメディアクエリを追加してください */
