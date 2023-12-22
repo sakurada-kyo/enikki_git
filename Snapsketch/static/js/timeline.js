@@ -451,6 +451,7 @@ $(function () {
         //削除
         for (let i = maxObj; i <= lastPage; i++) {
           console.log("削除");
+          delete_posts(i);
         }
       }
     };
@@ -542,8 +543,14 @@ $(function () {
 
   }
 
-  function hide_posts(){
-    
+  function delete_posts(delPage){
+    // data-pageがtargetPageの要素を取得
+    var elementToRemove = document.querySelector('[data-page="' + delPage + '"]');
+
+    // 要素が存在する場合は削除
+    if (elementToRemove) {
+        elementToRemove.parentNode.removeChild(elementToRemove);
+    }
   }
   //------------------------投稿更新----------------------------
   //-----------------------グループ切り替え機能-----------------------
