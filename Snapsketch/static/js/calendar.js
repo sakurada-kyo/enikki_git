@@ -55,6 +55,20 @@ function generateCalendar(year, month) {
     }
 
     calendar.appendChild(daysContainer);
+
+    var dayTags = document.querySelectorAll("[data-post]");
+    dayTags.forEach((element) => {
+      element.addEventListener('click', () => {
+        console.log('data-post:click');
+        $('#popup-wrapper').fadeIn();
+        ajax_open(element);
+      });
+    });
+    $('#close , #popup-wrapper').click(function(){
+      $('#popup-wrapper').fadeOut();
+      // 特定のIDを持つ要素内の全ての子要素を削除
+      $('#popup-inside').empty();
+    });
 }
 
 function showPreviousMonth() {
@@ -77,27 +91,10 @@ function showNextMonth() {
   generateCalendar(currentYear, currentMonth);
 }
 
-var dayTags = document.querySelectorAll("[data-post]");
-dayTags.forEach(element => {
-    element.addEventListener("click", () => {
-        ajax_open(element);
-    });
-});
-
 var currentDate = new Date();
 currentYear = currentDate.getFullYear();
 currentMonth = currentDate.getMonth();
 generateCalendar(currentYear, currentMonth);
-generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
-
-var form = document.getElementById("form");
-var dayTags = document.querySelectorAll(".day");
-console.log(`dayTags:${dayTags}`);
-dayTags.forEach(element => {
-    element.addEventListener("click", () => {
-      ajax_open(element);
-    });
-});
 //----------------------カレンダー生成----------------------
 
 //-----------------------1桁→2桁の処理関数-----------------------
@@ -108,14 +105,7 @@ function padZero(num) {
 //-----------------------1桁→2桁の処理関数-----------------------
 
 //----------------------ポップアップ表示フェード----------------------
-$(function () {
-    $('.day').click(function(){
-        $('#popup-wrapper').fadeIn();
-    });
-    $('#close , #popup-wrapper').click(function(){
-      $('#popup-wrapper').fadeOut();
-    });
-});
+
 //----------------------ポップアップ表示フェード----------------------
 
 //-----------------------CSRFトークン-----------------------
@@ -154,10 +144,8 @@ $(function () {
 //-----------------------ajax処理-----------------------
 function ajax_open(element) {
   date = $(element).attr('data-date');
-  console.log(`date:${date}`);
   var formData = new FormData($('#calendar-form').get(0));
   formData.append('date',date);
-  console.log(`formData:${formData.get('date')}`);
   $.ajax({
       url: '/enikki/calendar/ajax_calendar/',
       type: 'POST',
@@ -174,7 +162,7 @@ function ajax_open(element) {
       } else {
           var postsArray = JSON.parse(data.posts);//JSONText→JSONObject
           var fragment = showPosts(postsArray);
-          $('.popContents').append(fragment);
+          $('#popup-inside').append(fragment);
       }
       })
       .fail((jqXHR, textStatus, errorThrown) => {
@@ -190,7 +178,6 @@ function ajax_open(element) {
 function showPosts(posts){
     var fragment = document.createDocumentFragment();
     posts.forEach(function(post){
-      console.log(post.post__user__user_icon_path);
         const postSketchPath = `/media/${post.post__sketch_path}`; // 絵パス情報を取得
         const postDiary = post.post__diary; // 日記情報を取得
         const postUserName = post.post__user__username; // ユーザー名情報を取得
@@ -247,7 +234,9 @@ function showPosts(posts){
         content.setAttribute('data-page', postPage);
 
         fragment.appendChild(content); // fragmentの追加する
+        
     });
+
     return fragment;
 }
 //-----------------------ポップアップ投稿表示-----------------------
@@ -271,7 +260,6 @@ function showPosts(posts){
     likeBtn.addEventListener('click', e => {
       var parent = e.currentTarget;
       var parentContent = parent.closest(".content");
-      console.log(parent);
       var likeCount = parent.nextElementSibling.innerHTML;
       e.preventDefault();
 

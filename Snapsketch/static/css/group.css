@@ -26,3 +26,11 @@
     right: 5px;
     cursor: pointer;
 }
+
+@media screen and (max-width: 768px) {
+    /* ウィンドウの幅が小さい場合のスタイル調整 */
+    #popup-inside {
+        width: 90%; /* ウィンドウの90%までの幅に制限 */
+        margin: 5% auto; /* 上下のマージンを調整 */
+    }
+}
