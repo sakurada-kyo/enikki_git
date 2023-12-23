@@ -409,7 +409,11 @@ $(function () {
             var error = response.error;
             console.log(error);
           } else {
-            change_group(response);
+            if(response){
+              const postsArray = JSON.parse(response.data);
+              console.log(postsArray);
+              change_group(postsArray);
+            }
           }
         })
         // Ajax通信が失敗したら発動
@@ -425,12 +429,18 @@ $(function () {
 
   //------------------------投稿更新----------------------------
   function change_group(data) {
+    console.log(`change_group`);
+    console.log(`data:${data}`)
     const fragment = document.createDocumentFragment();
     if (Array.isArray(data)) {
-      maxObj = data.length;
-      const parent = $('#scroll');
-      const lastElement = parent.lastElementChild;
+      const maxObj = data.length;      
+      const lastElement = $('#scroll').children(":last");
+      if(lastElement){
+        console.log('要素あり');
+      }
       const lastPage = lastElement.getAttribute("data-page");
+      console.log(`maxObj:${maxObj},lastPage:${lastPage}`);
+
       if (maxObj >= lastPage) {
         //更新
         console.log("更新");
@@ -451,6 +461,7 @@ $(function () {
         //削除
         for (let i = maxObj; i <= lastPage; i++) {
           console.log("削除");
+          delete_posts(i);
         }
       }
     };
@@ -542,8 +553,14 @@ $(function () {
 
   }
 
-  function hide_posts(){
-    
+  function delete_posts(delPage){
+    // data-pageがtargetPageの要素を取得
+    var elementToRemove = document.querySelector('[data-page="' + delPage + '"]');
+
+    // 要素が存在する場合は削除
+    if (elementToRemove) {
+        elementToRemove.parentNode.removeChild(elementToRemove);
+    }
   }
   //------------------------投稿更新----------------------------
   //-----------------------グループ切り替え機能-----------------------

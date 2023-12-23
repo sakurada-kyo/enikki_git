@@ -231,6 +231,13 @@ def ajax_changeGroup(request):
         try:
             groupname = request.POST.get('groupname', '')  # グループ名
             if groupname:
+                # セッションからグループ名取得
+                currentGroup = request.session['currentGroup']
+
+                if currentGroup == groupname:
+                    print('グループ名一致のため、グループ切り替え処理しない')
+                    JsonResponse({'response':None})
+
                 group_posts = (
                     GroupPostTable.objects
                     .filter(group__groupname=groupname)
@@ -245,6 +252,7 @@ def ajax_changeGroup(request):
                         'post__comment_count',
                         'page'
                     )
+                    .order_by('post__updated_at')
                 )
 
                 if group_posts.exists():
@@ -257,8 +265,11 @@ def ajax_changeGroup(request):
                     for entry in group_posts:
                         post_id = entry['post__post_id']
                         entry['is_liked'] = post_id in liked_posts
+                        del entry['post__post_id']
 
-                    return JsonResponse({'data': list(group_posts)})
+                    grouppostsList = list(group_posts)
+
+                    return JsonResponse({'data': json.dumps(grouppostsList)})
                 else:
                     raise Http404('読み込みデータがありません')
             else:

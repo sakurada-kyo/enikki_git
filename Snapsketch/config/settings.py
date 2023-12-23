@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'enikki.apps.EnikkiConfig',
     'login_app.apps.LoginAppConfig',
-    'rest_framework',
+    #'rest_framework',
 ]
 
 MIDDLEWARE = [
