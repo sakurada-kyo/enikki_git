@@ -410,7 +410,9 @@ $(function () {
             console.log(error);
           } else {
             if(response){
-              change_group(response);
+              const postsArray = JSON.parse(response.data);
+              console.log(postsArray);
+              change_group(postsArray);
             }
           }
         })
@@ -427,12 +429,18 @@ $(function () {
 
   //------------------------投稿更新----------------------------
   function change_group(data) {
+    console.log(`change_group`);
+    console.log(`data:${data}`)
     const fragment = document.createDocumentFragment();
     if (Array.isArray(data)) {
-      const maxObj = data.length;
-      const parent = $('#scroll');
-      const lastElement = parent.lastElementChild;
+      const maxObj = data.length;      
+      const lastElement = $('#scroll').children(":last");
+      if(lastElement){
+        console.log('要素あり');
+      }
       const lastPage = lastElement.getAttribute("data-page");
+      console.log(`maxObj:${maxObj},lastPage:${lastPage}`);
+
       if (maxObj >= lastPage) {
         //更新
         console.log("更新");

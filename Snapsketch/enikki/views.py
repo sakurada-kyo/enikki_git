@@ -265,8 +265,11 @@ def ajax_changeGroup(request):
                     for entry in group_posts:
                         post_id = entry['post__post_id']
                         entry['is_liked'] = post_id in liked_posts
+                        del entry['post__post_id']
 
-                    return JsonResponse({'data': list(group_posts)})
+                    grouppostsList = list(group_posts)
+
+                    return JsonResponse({'data': json.dumps(grouppostsList)})
                 else:
                     raise Http404('読み込みデータがありません')
             else:
