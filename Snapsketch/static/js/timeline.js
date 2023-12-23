@@ -409,7 +409,9 @@ $(function () {
             var error = response.error;
             console.log(error);
           } else {
-            change_group(response);
+            if(response){
+              change_group(response);
+            }
           }
         })
         // Ajax通信が失敗したら発動
@@ -427,7 +429,7 @@ $(function () {
   function change_group(data) {
     const fragment = document.createDocumentFragment();
     if (Array.isArray(data)) {
-      maxObj = data.length;
+      const maxObj = data.length;
       const parent = $('#scroll');
       const lastElement = parent.lastElementChild;
       const lastPage = lastElement.getAttribute("data-page");

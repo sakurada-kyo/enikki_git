@@ -231,6 +231,13 @@ def ajax_changeGroup(request):
         try:
             groupname = request.POST.get('groupname', '')  # グループ名
             if groupname:
+                # セッションからグループ名取得
+                currentGroup = request.session['currentGroup']
+
+                if currentGroup == groupname:
+                    print('グループ名一致のため、グループ切り替え処理しない')
+                    JsonResponse({'response':None})
+
                 group_posts = (
                     GroupPostTable.objects
                     .filter(group__groupname=groupname)
@@ -245,6 +252,7 @@ def ajax_changeGroup(request):
                         'post__comment_count',
                         'page'
                     )
+                    .order_by('post__updated_at')
                 )
 
                 if group_posts.exists():
