@@ -409,17 +409,21 @@ $(function () {
             var error = response.error;
             console.log(error);
           } else {
-            if(response){
-              const postsArray = JSON.parse(response.data);
-              console.log(postsArray);
-              change_group(postsArray);
+            if (response) {
+              //全要素削除
+              const scrollElement = document.getElementById('scroll');
+              scrollElement.innerHTML = '';
+              const responseDataes = response.data;
+              console.log(responseDataes);
+              const fragment = change_group(responseDataes);
+              scrollElement.appendChild(fragment);
             }
           }
         })
         // Ajax通信が失敗したら発動
         .fail((jqXHR, textStatus, errorThrown) => {
           console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
-          console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+          console.log("textStatus: " + textStatus); sketch_path   // タイムアウト、パースエラーなどのエラー情報を表示
           console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
         });
       // 追加するコード
@@ -428,76 +432,18 @@ $(function () {
   });
 
   //------------------------投稿更新----------------------------
-  function change_group(data) {
-    console.log(`change_group`);
-    console.log(`data:${data}`)
-    const fragment = document.createDocumentFragment();
-    if (Array.isArray(data)) {
-      const maxObj = data.length;      
-      const lastElement = $('#scroll').children(":last");
-      if(lastElement){
-        console.log('要素あり');
-      }
-      const lastPage = lastElement.getAttribute("data-page");
-      console.log(`maxObj:${maxObj},lastPage:${lastPage}`);
-
-      if (maxObj >= lastPage) {
-        //更新
-        console.log("更新");
-        update_post(data, lastPage);
-
-        if (maxObj != lastPage) {
-          //追加
-          console.log("追加");
-          fragment = add_posts(data, lastPage + 1, maxObj);
-        }
-      } else {
-        //更新
-        for (let i = 1; i <= maxObj; i++) {
-          console.log("更新");
-          update_post(data, lastPage);
-        }
-
-        //削除
-        for (let i = maxObj; i <= lastPage; i++) {
-          console.log("削除");
-          delete_posts(i);
-        }
-      }
-    };
-
-    // 最後に追加！
-    $('#scroll').append(fragment);
-  }
-
-  function update_post(data, length) {
-    for (let i = 1; i <= length; i++) {
-      console.log("更新");
-      var selector = '[data-page="' + i + '"]';
-      var foundElement = parent.find(selector);
-      foundElement.find('.user_icon').attr('src', data[i].post__user__user_icon_path);
-      foundElement.find('.user_name').innerHTML = data[i].post__user__username;
-      if (data[i].is_liked) {
-        foundElement.find('.fa-heart').attr('class', 'fas');
-      } else {
-        foundElement.find('.fa-heart').attr('class', 'far');
-      }
-      foundElement.find('.like-count').html(data[i].post__like_count);
-      foundElement.find('.fa-comment').attr('href', `/enikki/comment/?page=${data[i].page}`);
-      foundElement.find('.comment-count').html(data[i].post__comment_count);
-    }
-  }
-
-  function add_posts(data, start, length) {
-    for (let i = start; i <= length; i++) {
-      const postSketchPath = data[i].post__sketch_path; // 絵パス情報を取得
-      const postDiary = data[i].post__diary; // 日記情報を取得
-      const postUserName = data[i].post__user__username; // ユーザー名情報を取得
-      const postLikeCount = data[i].post__like_count; // いいね数情報を取得
-      const postCommentCount = data[i].post__comment_count; // コメント数情報を取得
-      const page = data[i].page; //ページ番号
-      const isLiked = data[i].is_liked; // いいね情報を取得
-      const postUserIcon = data[i].post__user__user_icon_path;
+  function change_group(responseDataes) {
+    parseResponseDataes = JSON.parse(responseDataes);
+    var fragment = document.createDocumentFragment();
+    parseResponseDataes.forEach((data) => {
+      const dataSketchPath = `/media/${data.post__sketch_path}`; // 絵パス情報を取得
+      const dataDiary = data.post__diary; // 日記情報を取得
+      const dataUserIcon = `/media/${data.post__user__user_icon_path}`;
+      const dataUserName = data.post__user__username; // ユーザー名情報を取得
+      const dataLikeCount = data.post__likeCount; // いいね数情報を取得
+      const dataCommentCount = data.post__commentCount; // コメント数情報を取得
+      const page = data.page;
+      const isLiked = data.is_liked; // いいね情報を取得
 
       var content = createAndAppendElement('article', 'content', '');
 
@@ -505,10 +451,10 @@ $(function () {
       content.appendChild(contentHeader);
 
       var userIcon = createAndAppendElement('img', 'user_icon');
-      userIcon.setAttribute('src', postUserIcon);//ユーザーアイコン
+      userIcon.setAttribute('src', dataUserIcon);//ユーザーアイコン
       contentHeader.appendChild(userIcon);
 
-      var userName = createAndAppendElement('p', 'user_name', postUserName);
+      var userName = createAndAppendElement('p', 'user_name', dataUserName);
       contentHeader.appendChild(userName);
 
       var like = createAndAppendElement('div', 'like', '');
@@ -520,7 +466,7 @@ $(function () {
       var likeIcon = createAndAppendElement('i', isLiked ? 'fas fa-heart text-danger' : 'far fa-heart text-danger', '');
       likeBtn.appendChild(likeIcon);
 
-      var likeCount = createAndAppendElement('span', 'like-count', postLikeCount);
+      var likeCount = createAndAppendElement('span', 'like-count', dataLikeCount);
       like.appendChild(likeCount);
 
       var comment = createAndAppendElement('div', 'comment', '');
@@ -529,38 +475,25 @@ $(function () {
       var commentIcon = createAndAppendElement('i', 'fa-regular fa-comment', '');
       comment.appendChild(commentIcon);
 
-      var commentCount = createAndAppendElement('span', 'comment-count', postCommentCount);
+      var commentCount = createAndAppendElement('span', 'comment-count', dataCommentCount);
       comment.appendChild(commentCount);
 
       var drawDiary = createAndAppendElement('section', 'draw_diary', '');
       content.appendChild(drawDiary);
 
       var draw = createAndAppendElement('img', 'draw');
-      draw.setAttribute('src', postSketchPath);
+      draw.setAttribute('src', dataSketchPath);
       drawDiary.appendChild(draw);
 
-      var diary = createAndAppendElement('p', 'diary', postDiary);
+      var diary = createAndAppendElement('p', 'diary', dataDiary);
       drawDiary.appendChild(diary);
 
-      content.setAttribute('data-group', group);
       content.setAttribute('data-page', page);
 
       fragment.appendChild(content); // fragmentの追加する
-
-    }
+    })
 
     return fragment;
-
-  }
-
-  function delete_posts(delPage){
-    // data-pageがtargetPageの要素を取得
-    var elementToRemove = document.querySelector('[data-page="' + delPage + '"]');
-
-    // 要素が存在する場合は削除
-    if (elementToRemove) {
-        elementToRemove.parentNode.removeChild(elementToRemove);
-    }
   }
   //------------------------投稿更新----------------------------
   //-----------------------グループ切り替え機能-----------------------

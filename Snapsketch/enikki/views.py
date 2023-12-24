@@ -235,9 +235,12 @@ def ajax_changeGroup(request):
                 currentGroup = request.session['currentGroup']
 
                 if currentGroup == groupname:
+                    print(f'currentGroup:{currentGroup},requestGroupname:{groupname}')
                     print('グループ名一致のため、グループ切り替え処理しない')
                     JsonResponse({'response':None})
 
+                request.session['currentGroup'] = groupname
+                
                 group_posts = (
                     GroupPostTable.objects
                     .filter(group__groupname=groupname)
@@ -548,14 +551,10 @@ class CreateView(TemplateView):
                 post.diary = diary  # 日記を更新
                 post.save()
 
-            print(f'groupList前')
             grouplist = request.session['groupList']
-            print(f'grouplist:{grouplist}')
             if 'groupList' in request.session:
-                print(f'groupList後')
                 group_names = request.session['groupList']
                 groups = GroupMaster.objects.filter(groupname__in=group_names)
-                print(f'groups:{groups}')
                 max_pages = (
                     GroupPostTable.objects
                     .filter(group__in=groups)
@@ -563,7 +562,6 @@ class CreateView(TemplateView):
                     .annotate(max_page=Max('page'))
                     .values('max_page')
                 )
-                print(f'max_pages{max_pages}')
                 
                 new_group_posts = []
                 
@@ -579,8 +577,6 @@ class CreateView(TemplateView):
                         page_value = 1 if max_page is None else max_page['max_page'] + 1
                         new_group_posts.append(GroupPostTable(
                             group=group, post=post, page=page_value))
-                        print(f'GroupPostTable:group:{group},post:{post},page:{page_value}')
-                        print(f'new_group_posts:{new_group_posts}')
 
 
                 GroupPostTable.objects.bulk_create(new_group_posts)
