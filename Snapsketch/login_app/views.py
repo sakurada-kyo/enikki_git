@@ -85,8 +85,8 @@ class PasswordChangeDone(LoginRequiredMixin,PasswordChangeDoneView):
 
 class PasswordReset(PasswordResetView):
     # """パスワード変更用URLの送付ページ"""
-    subject_template_name = 'templates/mail/subject.txt'
-    email_template_name = 'templates/mail/message.txt'
+    subject_template_name = 'mail/subject.txt'
+    email_template_name = 'mail/message.txt'
     template_name = 'password_reset_form.html'
     success_url = reverse_lazy('password_reset_done')
 
