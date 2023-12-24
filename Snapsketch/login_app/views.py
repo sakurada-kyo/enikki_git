@@ -71,7 +71,7 @@ class index(LoginRequiredMixin, generic.TemplateView):
 
 class PasswordChange(LoginRequiredMixin, PasswordChangeView):
     # """パスワード変更ビュー"""
-    success_url = reverse_lazy('accounts:password_change_done')
+    success_url = reverse_lazy('password_change_done')
     template_name = 'password_change.html'
 
     def get_context_data(self, **kwargs):
@@ -85,23 +85,23 @@ class PasswordChangeDone(LoginRequiredMixin,PasswordChangeDoneView):
 
 class PasswordReset(PasswordResetView):
     # """パスワード変更用URLの送付ページ"""
-    subject_template_name = 'accounts/mail_template/reset/subject.txt'
-    email_template_name = 'accounts/mail_template/reset/message.txt'
-    template_name = 'accounts/password_reset_form.html'
-    success_url = reverse_lazy('accounts:password_reset_done')
+    subject_template_name = 'templates/mail/subject.txt'
+    email_template_name = 'templates/mail/message.txt'
+    template_name = 'password_reset_form.html'
+    success_url = reverse_lazy('password_reset_done')
 
 
 class PasswordResetDone(PasswordResetDoneView):
     # """パスワード変更用URLを送りましたページ"""
-    template_name = 'accounts/password_reset_done.html'
+    template_name = 'password_reset_done.html'
 
 
 class PasswordResetConfirm(PasswordResetConfirmView):
     # """新パスワード入力ページ"""
-    success_url = reverse_lazy('accounts:password_reset_complete')
-    template_name = 'accounts/password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+    template_name = 'password_reset_confirm.html'
 
 
 class PasswordResetComplete(PasswordResetCompleteView):
     # """新パスワード設定しましたページ"""
-    template_name = 'accounts/password_reset_complete.html'
+    template_name = 'password_reset_complete.html'
