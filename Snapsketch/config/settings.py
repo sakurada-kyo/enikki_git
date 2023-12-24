@@ -135,3 +135,9 @@ AUTH_USER_MODEL = 'login_app.CustomUser'
 
 # ログイン後のリダイレクト先を設定する場合
 LOGIN_REDIRECT_URL = 'enikki:timeline'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sotuken1470@gmail.com'
+EMAIL_HOST_PASSWORD = 'Sotu1224:1130'
+EMAIL_USE_TLS = True
