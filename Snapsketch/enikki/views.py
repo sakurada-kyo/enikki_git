@@ -755,7 +755,7 @@ class GroupMembersListView(View):
 
 # ユーザー検索機能
 class SearchView(TemplateView):
-    template_name = "search.html"
+    template_name = "usersearch.html"
 
     def post(self, request, *args, **kwargs):
         # 検索されたuserIdを取得する
@@ -768,7 +768,7 @@ class SearchView(TemplateView):
             user = get_user_model()
             results = user.objects.filter(user_id__exact=userId)
             return render(
-                request, "usersearch.html", {"query": userId, "results": results}
+                request, self.template_name, {"query": userId, "results": results}
             )
 
         except Http404:
@@ -776,15 +776,33 @@ class SearchView(TemplateView):
             return
         
 #友達申請処理
-
+class RequestView(TemplateView):
+    template_name = "usersearch.html"
+    
+    def post(self, request, *args, **kwargs):
+        
+        form = FrequestTable(request.POST)
+        if form.is_valid():
+            
+            request_user_id = request.user.user_id
+            user_id = request.POST.get("followerId")
+            FrequestTable.save()
+            return 
+        
+        
+        
+        
+        
+    
+    
 
 # リクエスト承認機能
-class AllowView(TemplateView):
-    template_name = "request.html"
+# class AllowView(TemplateView):
+#     template_name = "request.html"
 
-    def post(self, request, *args, **kwargs):
-        # 検索機能：検索して表示して 申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
-        userId = request.POST.get("1")
+#     def post(self, request, *args, **kwargs):
+#         # 検索機能：検索して表示して 申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
+#         userId = request.POST.get("1")
 
 #　リクエスト拒否機能
 #class DenialView(TemplateView):

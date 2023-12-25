@@ -15,10 +15,10 @@
 
 
 {% if results %}
-<form>
+<form action = "{% url 'パスの名前' %}" name="request" method="post" >
     <h2>Results for "{{ query }}"</h2>
     <ul>
-        <li><img src={{user.user_icon_path}}>{{ user.username }}</li>
+        <li><img src={{user.user_icon_path}}>{{ user.username }}<input type =hidden name = followerId></li>
         <dd><button type="submit">友達申請</button></dd>
     </ul>
     {% else %}
