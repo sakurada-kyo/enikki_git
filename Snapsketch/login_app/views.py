@@ -22,6 +22,7 @@ class CustomLoginView(LoginView):
 
         # ログインが成功したユーザー情報を取得する
         user = self.request.user
+        print(user.user_id)
 
         # ユーザーに紐づくグループ取得
         groups = (
@@ -58,31 +59,8 @@ class SignUpConfirmationView(View):
             print(form.errors)
             # フォームが無効な場合、新規登録画面に戻る
             return redirect('signup')
-        
+
 #######################################################################
-class index(LoginRequiredMixin, generic.TemplateView):
-    # """メニュービュー"""
-    template_name = 'top.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) # 継承元のメソッドCALL
-        context["form_name"] = "top"
-        return context
-
-class PasswordChange(LoginRequiredMixin, PasswordChangeView):
-    # """パスワード変更ビュー"""
-    success_url = reverse_lazy('password_change_done')
-    template_name = 'password_change.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) # 継承元のメソッドCALL
-        context["form_name"] = "password_change"
-        return context
-
-class PasswordChangeDone(LoginRequiredMixin,PasswordChangeDoneView):
-    # """パスワード変更完了"""
-    template_name = 'password_change_done.html'
-
 class PasswordReset(PasswordResetView):
     # """パスワード変更用URLの送付ページ"""
     subject_template_name = 'mail/subject.txt'
@@ -90,17 +68,14 @@ class PasswordReset(PasswordResetView):
     template_name = 'password_reset_form.html'
     success_url = reverse_lazy('password_reset_done')
 
-
 class PasswordResetDone(PasswordResetDoneView):
     # """パスワード変更用URLを送りましたページ"""
     template_name = 'password_reset_done.html'
-
 
 class PasswordResetConfirm(PasswordResetConfirmView):
     # """新パスワード入力ページ"""
     success_url = reverse_lazy('password_reset_complete')
     template_name = 'password_reset_confirm.html'
-
 
 class PasswordResetComplete(PasswordResetCompleteView):
     # """新パスワード設定しましたページ"""
