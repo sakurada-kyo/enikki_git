@@ -48,12 +48,27 @@ function generateCalendar(year, month) {
         // datesに含まれているか確認
         if (datesFromDjango.includes(date)) {
           dayElement.style.backgroundColor = 'red';
+          dayElement.setAttribute("data-post","true");
         }
         dayElement.setAttribute("data-date", date);
         daysContainer.appendChild(dayElement);
     }
 
     calendar.appendChild(daysContainer);
+
+    var dayTags = document.querySelectorAll("[data-post]");
+    dayTags.forEach((element) => {
+      element.addEventListener('click', () => {
+        console.log('data-post:click');
+        $('#popup-wrapper').fadeIn();
+        ajax_open(element);
+      });
+    });
+    $('#close , #popup-wrapper').click(function(){
+      $('#popup-wrapper').fadeOut();
+      // 特定のIDを持つ要素内の全ての子要素を削除
+      $('#popup-inside').empty();
+    });
 }
 
 function showPreviousMonth() {
@@ -76,28 +91,10 @@ function showNextMonth() {
   generateCalendar(currentYear, currentMonth);
 }
 
-var dayTags = document.querySelectorAll(".day");
-dayTags.forEach(element => {
-    element.addEventListener("click", () => {
-        ajax_open(element);
-    });
-});
-
 var currentDate = new Date();
 currentYear = currentDate.getFullYear();
 currentMonth = currentDate.getMonth();
 generateCalendar(currentYear, currentMonth);
-generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
-
-var form = document.getElementById("form");
-var dayTags = document.querySelectorAll(".day");
-console.log(`dayTags:${dayTags}`);
-dayTags.forEach(element => {
-    element.addEventListener("click", () => {
-      console.log(`element:${element}:${element.innerHTML}`);
-      ajax_open(element);
-    });
-});
 //----------------------カレンダー生成----------------------
 
 //-----------------------1桁→2桁の処理関数-----------------------
@@ -108,14 +105,7 @@ function padZero(num) {
 //-----------------------1桁→2桁の処理関数-----------------------
 
 //----------------------ポップアップ表示フェード----------------------
-$(function () {
-    $('.day').click(function(){
-        $('#popup').fadeIn();
-    });
-    $('#close , #popBg').click(function(){
-      $('#popup').fadeOut();
-    });
-});
+
 //----------------------ポップアップ表示フェード----------------------
 
 //-----------------------CSRFトークン-----------------------
@@ -151,13 +141,11 @@ $(function () {
   });
 //-----------------------CSRFトークン-----------------------
 
-//-----------------------タイムラインajax処理-----------------------
+//-----------------------ajax処理-----------------------
 function ajax_open(element) {
   date = $(element).attr('data-date');
-  console.log(`date:${date}`);
   var formData = new FormData($('#calendar-form').get(0));
   formData.append('date',date);
-  console.log(`formData:${formData.get('date')}`);
   $.ajax({
       url: '/enikki/calendar/ajax_calendar/',
       type: 'POST',
@@ -168,11 +156,13 @@ function ajax_open(element) {
       headers: { 'X-CSRFToken': csrftoken }
   })
       .done(function (data) {
+        
       if ('error' in data) {
           console.log(data.error);
       } else {
-          var fragment = showPosts(data);
-          $('.popContents').append(fragment);
+          var postsArray = JSON.parse(data.posts);//JSONText→JSONObject
+          var fragment = showPosts(postsArray);
+          $('#popup-inside').append(fragment);
       }
       })
       .fail((jqXHR, textStatus, errorThrown) => {
@@ -182,20 +172,20 @@ function ajax_open(element) {
       console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
       });
 }
-//-----------------------タイムラインajax処理-----------------------
+//-----------------------ajax処理-----------------------
 
 //-----------------------ポップアップ投稿表示-----------------------
 function showPosts(posts){
     var fragment = document.createDocumentFragment();
     posts.forEach(function(post){
-        const postSketchPath = post.sketch_path; // 絵パス情報を取得
-        const postDiary = post.diary; // 日記情報を取得
-        const postUserName = post.user__username; // ユーザー名情報を取得
-        const postLikeCount = post.likeCount; // いいね数情報を取得
-        const postCommentCount = post.commentCount; // コメント数情報を取得
+        const postSketchPath = `/media/${post.post__sketch_path}`; // 絵パス情報を取得
+        const postDiary = post.post__diary; // 日記情報を取得
+        const postUserName = post.post__user__username; // ユーザー名情報を取得
+        const postLikeCount = post.post__like_count; // いいね数情報を取得
+        const postCommentCount = post.post__comment_count; // コメント数情報を取得
         const postPage = post.page; //ページ番号取得
         const isLiked = post.is_liked; // いいね情報を取得
-        const postUserIcon = post.user__user_icon_path; // ユーザーアイコン
+        const postUserIcon = `/media/${post.post__user__user_icon_path}`; // ユーザーアイコン
 
 
         var content = createAndAppendElement('article', 'content', '');
@@ -244,7 +234,9 @@ function showPosts(posts){
         content.setAttribute('data-page', postPage);
 
         fragment.appendChild(content); // fragmentの追加する
+        
     });
+
     return fragment;
 }
 //-----------------------ポップアップ投稿表示-----------------------
@@ -268,7 +260,6 @@ function showPosts(posts){
     likeBtn.addEventListener('click', e => {
       var parent = e.currentTarget;
       var parentContent = parent.closest(".content");
-      console.log(parent);
       var likeCount = parent.nextElementSibling.innerHTML;
       e.preventDefault();
 

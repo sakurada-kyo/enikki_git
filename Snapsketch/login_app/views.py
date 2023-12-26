@@ -8,6 +8,9 @@ from enikki.models import *
 from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import login
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import generic
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'  # ログインフォームが表示されるテンプレートの指定
@@ -19,6 +22,7 @@ class CustomLoginView(LoginView):
 
         # ログインが成功したユーザー情報を取得する
         user = self.request.user
+        print(user.user_id)
 
         # ユーザーに紐づくグループ取得
         groups = (
@@ -55,3 +59,24 @@ class SignUpConfirmationView(View):
             print(form.errors)
             # フォームが無効な場合、新規登録画面に戻る
             return redirect('signup')
+
+#######################################################################
+class PasswordReset(PasswordResetView):
+    # """パスワード変更用URLの送付ページ"""
+    subject_template_name = 'mail/subject.txt'
+    email_template_name = 'mail/message.txt'
+    template_name = 'password_reset_form.html'
+    success_url = reverse_lazy('password_reset_done')
+
+class PasswordResetDone(PasswordResetDoneView):
+    # """パスワード変更用URLを送りましたページ"""
+    template_name = 'password_reset_done.html'
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+    # """新パスワード入力ページ"""
+    success_url = reverse_lazy('password_reset_complete')
+    template_name = 'password_reset_confirm.html'
+
+class PasswordResetComplete(PasswordResetCompleteView):
+    # """新パスワード設定しましたページ"""
+    template_name = 'password_reset_complete.html'

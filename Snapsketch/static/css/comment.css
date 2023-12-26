@@ -83,7 +83,7 @@ img{
     border-color: #ffffff;
 }
 
-#scroll{
+#post-comment-wrap{
     width: 80%;
     float: left;
     /* margin-top:10px; */
@@ -267,7 +267,7 @@ textarea{
     width: 95%;
 }
 
-.toukou{
+#toukou{
     margin-top: 10px;
     float: right;
     width: 15%;
@@ -276,12 +276,12 @@ textarea{
 
 input#open{display: none;}
 /*コメント返信欄*/
-.comment_area{
+.comment-area{
     width: 95%;
     padding: 20px;
     margin: 0;
 }
-.comment_content{
+.comment-content{
     background-color: #fff;
     color: #000;
     width: 95%;
@@ -289,18 +289,18 @@ input#open{display: none;}
     padding: 20px;
     margin-bottom: 10px;
 }
-.comment_name{
+.comment-name{
     font-size: 20px;
     margin-top: 20px;
     margin-left: 10px;
     float: left;
 }
 
-.comment_icon{
+.comment-icon{
     float: left;
 }
 
-.comment_sentence{
+.comment-sentence{
     font-size: 20px;
     float: left;
     margin-top: 40px;

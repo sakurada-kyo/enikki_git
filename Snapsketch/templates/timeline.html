@@ -42,7 +42,7 @@
         <div id="scroll">
             {% if posts %}
                 {% for post in posts %}
-                    <article class="content" data-group="" data-page="{{ post.page }}">
+                    <article class="content" data-page="{{ post.page }}">
                         <div class="content_header">
                             <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
                             <p class="user_name">{{ post.user__username }}</p>

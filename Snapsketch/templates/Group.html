@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/group.css' %}" />
-<!-- Bootstrapのスタイルを追加 -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  {% endblock %}
+  <link rel="stylesheet" href="{% static 'css\group.css' %}" />
+{% endblock %}
+
 {% block content %}
   <h2>グループ一覧</h2>
   {% if error %}
@@ -19,12 +17,11 @@
     </div>
     {% endfor %}
   {% endif %}
-
-  <!-- ポップアップ表示 -->
+<!-- ポップアップ表示 -->
 <div id="members-popup" style="display: none;">
   <div id="popup-inside">
     <div id="close">x</div>
-    <form action="" method="post">
+    {% comment %} <form action="" method="post"> {% endcomment %}
       {% csrf_token %}
       <h2>グループメンバー一覧</h2>
       <!-- メンバー一覧を表示するロジックを追加 -->
@@ -33,10 +30,11 @@
         <p>{{ friend.followee.username }}</p>
       {% endfor %}
       <input id="invite" type="submit" value="招待">
-    </form>
+    {% comment %} </form> {% endcomment %}
   </div>
 </div>
 {% endblock %}
+
 {% block side %}
   <li>
     <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
@@ -54,6 +52,7 @@
     <a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a>
   </li>
 {% endblock %}
+
 {% block footer %}
   <footer>
     <div id="kotei">
