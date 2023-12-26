@@ -1,33 +1,37 @@
-                                                        {% extends 'base.html' %}
-                                                        {% load static %}
-                                                        {% block css %}
-                                                          <link rel="stylesheet" href="{% static 'css/friend.css' %}" />
-                                                        {% endblock %}
-                                                        {% block content %}
-                                                          <div id="register">
-                                                            <h3>フレンド一覧</h3><br/>
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/friend.css' %}" />
+<!-- Bootstrapのスタイルを追加 -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+{% endblock %}
 
-                                                            {% for friend in friends %}
-                                                              <div class="account-form">
-                                                                <div class="circle"><img src= "{{ friend.followee.user_icon_path.url }}"></div>
-                                                                <h4>{{ friend.followee.username }}</h4>
-                                                              </div>
-                                                            {% endfor %}
-                                                          </div>
-                                                        {% endblock %}
+{% block content %}
+<div id="register">
+  <p>フレンド一覧</p><br />
 
-                                                        {% block side %}
-                                                          <li><a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a></li>
-                                                          <li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
-                                                          <li><a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a></li>
-                                                          <li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
-                                                          <li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
-                                                        {% endblock %}
+  {% for friend in friends %}
+  <div class="account-form">
+    <div class="circle"><img src="{{ friend.followee.user_icon_path.url }}"></div>
+    <h4>{{ friend.followee.username }}</h4>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
 
-                                                        {% block footer %}
-                                                          <footer>
-                                                            <div id="kotei">
-                                                              <small>&copy;2023 SnapSketch</small>
-                                                            </div>
-                                                          </footer>
-                                                        {% endblock %}
+{% block side %}
+<li><a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
+<li><a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a></li>
+<li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
+<li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
+{% endblock %}
+
+{% block footer %}
+<footer>
+  <div id="kotei">
+    <small>&copy;2023 SnapSketch</small>
+  </div>
+</footer>
+{% endblock %}

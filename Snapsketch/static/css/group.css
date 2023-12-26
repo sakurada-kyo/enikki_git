@@ -26,3 +26,8 @@
     right: 5px;
     cursor: pointer;
 }
+
+/* ポップアップ前 */
+main #box {
+    margin-left: 15%;
+}
