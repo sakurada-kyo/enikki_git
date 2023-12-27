@@ -3,24 +3,48 @@ import Group from './Group'
 
 const GroupNav = (props) => {
     const [groupList, setGroupList] = useState([]);
-    const [currentGroup, setCurrentGroup] = useState([]);
+    
+    useEffect(() => {
+        fetchGroupList(); // 初回のグループリストのデータ取得
+      }, []);
 
+    // グループリスト取得
     const fetchGroupList = async () => {
-        const url = "/enikki/fetch_posts/";
+        const url = '/enikki/fetch_grouplists/';
         const options = {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                page: 0 //最後のページ番号を渡す
-            })
+                'Content-Type': 'application/json',
+            }
+        }
+
+        try{
+            // fetch APIを使ってデータを取得
+            const res = await fetch(url,options);
+
+            // レスポンスをJSON形式に変換
+            const responseData = await res.json();
+
+            // postsにセット
+            setGroupList(responseData.group_list);
+        } catch(e){
+            console.log('エラーが発生しました')
         }
     }
+
+    // グループがクリックされたときのハンドラー
+    const handleGroupClick = (groupname) => {
+        
+    };
+
     return (
         <>
             {groupList.map((group) => {
-                <Group currentGroup={currentGroup} {...group} />
+                <Group 
+                    currentGroup={currentGroup} 
+                    group={group} 
+                    onClick={handleGroupClick}
+                />
             })}
         </>
     );
@@ -28,5 +52,5 @@ const GroupNav = (props) => {
 
 export default GroupNav;
 
-// グループリストを取得
-// 現在のグループを取得
+//グループ変更時、タイムラインを切り替える
+//→親のsetPosts使う
