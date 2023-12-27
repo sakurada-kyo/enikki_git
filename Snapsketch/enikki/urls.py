@@ -12,6 +12,7 @@ urlpatterns = [
     path('canvas/', views.CanvasView.as_view(), name='canvas'),
     path('create/', views.CreateView.as_view(), name='create'),
     path('mypage/',views.MypageView.as_view(), name='mypage'),
+# <<<<<<< Updated upstream
     path('ajax_mypage_detail/', views.ajax_mypage_detail, name='ajax_mypage_detail'),
     path('ajax_mypage_icon/', views.mypage_icon, name='mypage_icon'),
     path("calendar/", views.CalendarView.as_view(), name="calendar"),
