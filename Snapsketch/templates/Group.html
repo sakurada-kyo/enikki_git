@@ -19,20 +19,25 @@
   {% endif %}
 <!-- ポップアップ表示 -->
 <div id="members-popup" style="display: none;">
-  <div id="popup-inside">
-    <div id="close">x</div>
-    {% comment %} <form action="" method="post"> {% endcomment %}
+    <div id="popup-inside">
+      <div id="close">x</div>
       {% csrf_token %}
       <h2>グループメンバー一覧</h2>
-      <!-- メンバー一覧を表示するロジックを追加 -->
-      {% for friend in friends %}
-        <input type="checkbox" id="scales" name="scales">
-        <p>{{ friend.followee.username }}</p>
-      {% endfor %}
-      <input id="invite" type="submit" value="追加">
-    {% comment %} </form> {% endcomment %}
+      {% if friends %}
+        <!-- 友達がいる場合の表示 -->
+        {% for friend in friends %}
+          <input type="checkbox" id="scales" name="scales">
+          <p>{{ friend.followee.username }}</p>
+        {% endfor %}
+        <input id="invite" type="submit" value="追加">
+      {% else %}
+        <!-- 友達がいない場合の表示 -->
+        <p>フレンドはいません。</p>
+        <!-- 追加ボタンを無効化 -->
+        <input id="invite" type="submit" value="追加" disabled>
+      {% endif %}
+    </div>
   </div>
-</div>
 {% endblock %}
 
 {% block side %}

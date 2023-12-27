@@ -33,6 +33,11 @@
     padding-left: 30px; /* 余白を調整 */
 }
 
+.delete {
+    margin: auto;
+    margin-right: 10px;
+}
+
 @media screen and (max-width: 768px) {
     /* 小さい画面に対するスタイルの調整 */
     .account-form {

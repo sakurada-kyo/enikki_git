@@ -717,7 +717,16 @@ class FriendView(LoginRequiredMixin,TemplateView):
             return friends
         except Follower.DoesNotExist:
             raise Http404("You have no friends.")
+    def post(self, request, *args, **kwargs):
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            username = request.POST.get('username')
 
+            friend = get_object_or_404(Follower, follower=request.user, followee__username=username)
+            friend.delete()
+
+            return JsonResponse({'success': True})
+
+        return JsonResponse({'error': 'Invalid Request'}, status=400)
 
 def view_accountConfView(request):
     # print('view_accountConf')

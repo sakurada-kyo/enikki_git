@@ -14,7 +14,7 @@
         </div>
         <h4>{{ friend.followee.username }}</h4>
         {% comment %} 友達を削除するボタン {% endcomment %}
-        {% comment %} <input type="button" class="delete" value="削除"> {% endcomment %}
+        <input type="button" class="delete" value="削除">
       </div>
     {% endfor %}
   </div>
@@ -44,4 +44,9 @@
       <small>&copy;2023 SnapSketch</small>
     </div>
   </footer>
+{% endblock %}
+{% block js %}
+<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/friend.js' %}"></script>
+
 {% endblock %}
