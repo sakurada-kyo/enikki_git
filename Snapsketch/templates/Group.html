@@ -29,7 +29,7 @@
         <input type="checkbox" id="scales" name="scales">
         <p>{{ friend.followee.username }}</p>
       {% endfor %}
-      <input id="invite" type="submit" value="招待">
+      <input id="invite" type="submit" value="追加">
     {% comment %} </form> {% endcomment %}
   </div>
 </div>
@@ -62,5 +62,9 @@
 {% endblock %}
 {% block js %}
 <script src="{% static 'js/group.js' %}"></script>
+<script>
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+</script>
+
   {% comment %} <script src="{% static 'js/group.js' %}"></script> {% endcomment %}
 {% endblock %}

@@ -16,9 +16,9 @@ document.getElementById('close').addEventListener('click', function() {
   document.getElementById('members-popup').style.display = 'none';
 });
 
-document.getElementById('invite').addEventListener('click', function(){
-  document.getElmentById('members-popup').style.display = 'none';
-})
+// document.getElementById('invite').addEventListener('click', function(){
+//   document.getElmentById('members-popup').style.display = 'none';
+// })
 
 //-----------------------ajax処理-----------------------
   function ajax_open(lastElement) {
@@ -55,13 +55,44 @@ document.getElementById('invite').addEventListener('click', function(){
 
 
   // ユーザを招待する
-invite.addEventListener('click', function() {
+// invite.addEventListener('click', function() {
+//   var checkboxes = document.querySelectorAll('input[name="scales"]:checked');
+//   var selectedUsers = [];
+  
+//   checkboxes.forEach(checkbox => {
+//     selectedUsers.push(checkbox.nextElementSibling.textContent);
+//   });
+
+document.getElementById('invite').addEventListener('click', function() {
   var checkboxes = document.querySelectorAll('input[name="scales"]:checked');
   var selectedUsers = [];
-  
+
   checkboxes.forEach(checkbox => {
-    selectedUsers.push(checkbox.nextElementSibling.textContent);
+      selectedUsers.push(checkbox.nextElementSibling.textContent);
   });
+
+  // Ajaxリクエストを送信
+//   $.ajax({
+//       url: '/enikki/group/ajax_groupmembers_list/', 
+//       type: 'POST',
+//       data: {
+//           'selected_users': selectedUsers,
+//           'group_id': '{{ group.id }}',  // グループのIDを取得する方法に注意してください
+//       },
+//       dataType: 'json',
+//       headers: { 'X-CSRFToken': csrftoken }
+//   })
+//   .done(function(data) {
+//       console.log('招待が成功しました。');
+//   })
+//   .fail(function(jqXHR, textStatus, errorThrown) {
+//       alert('Ajax通信に失敗しました。');
+//       console.log("jqXHR          : " + jqXHR.status);
+//       console.log("textStatus     : " + textStatus);
+//       console.log("errorThrown    : " + errorThrown.message);
+//   });
+// });
+
   
   // Ajaxリクエストを送信
   $.ajax({
@@ -69,6 +100,7 @@ invite.addEventListener('click', function() {
     type: 'POST',
     data: {
       'selected_users': selectedUsers,
+      'group_id': '{{ group.id }}', 
     },
     // processData: false,
     // contentType: false,
@@ -86,4 +118,4 @@ invite.addEventListener('click', function() {
       console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
       console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
     });
-});
+  });
