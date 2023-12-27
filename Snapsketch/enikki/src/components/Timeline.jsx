@@ -10,7 +10,6 @@ const Timeline = () => {
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
 
-
   useEffect(() => {
     fetchPosts(); // 初回の投稿データ取得
   }, []);
@@ -23,6 +22,7 @@ const Timeline = () => {
     changeGroup(); // グループ切り替え取得
   }, [posts]);
 
+  //投稿を取得
   const fetchPosts = async () => {
     // データを取得する処理を記述する
     // setPostsやsetHasMoreを使用して状態を更新する
@@ -46,9 +46,6 @@ const Timeline = () => {
 
       // postsにセット
       setPosts(responseData.posts);
-
-      // groupListにセット
-      setGroupList(responseData.group_list);
 
     } catch (e) {
       console.log("エラーが発生しました", e);

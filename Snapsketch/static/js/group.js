@@ -16,53 +16,6 @@ document.getElementById('close').addEventListener('click', function() {
   document.getElementById('members-popup').style.display = 'none';
 });
 
-// document.getElementById('invite').addEventListener('click', function(){
-//   document.getElmentById('members-popup').style.display = 'none';
-// })
-
-//-----------------------ajax処理-----------------------
-  function ajax_open(lastElement) {
-    console.log("page:" + $(lastElement).attr('data-page'));
-    $.ajax({
-      url: 'ajax_timeline/',
-      type: 'POST',
-      data: {
-        'page': $(lastElement).attr('data-page'),
-      },
-      dataType: 'json',
-      headers: { 'X-CSRFToken': csrftoken }
-    })
-      .done(function (data) {
-        // const allPagesData = data.all_pages_data;
-        if ('error' in data) {
-          console.log(data.error);
-        } else {
-          // データがnullでない場合の処理
-          var fragment = add_article(data, true);
-          $('#scroll').append(fragment);
-          updates_sign();
-        }
-      })
-      .fail((jqXHR, textStatus, errorThrown) => {
-        alert('Ajax通信に失敗しました。');
-        console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-        console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-        console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
-      });
-  }
-  //-----------------------ajax処理-----------------------
-
-
-
-  // ユーザを招待する
-// invite.addEventListener('click', function() {
-//   var checkboxes = document.querySelectorAll('input[name="scales"]:checked');
-//   var selectedUsers = [];
-  
-//   checkboxes.forEach(checkbox => {
-//     selectedUsers.push(checkbox.nextElementSibling.textContent);
-//   });
-
 document.getElementById('invite').addEventListener('click', function() {
   var checkboxes = document.querySelectorAll('input[name="scales"]:checked');
   var selectedUsers = [];
@@ -71,29 +24,8 @@ document.getElementById('invite').addEventListener('click', function() {
       selectedUsers.push(checkbox.nextElementSibling.textContent);
   });
 
-  // Ajaxリクエストを送信
-//   $.ajax({
-//       url: '/enikki/group/ajax_groupmembers_list/', 
-//       type: 'POST',
-//       data: {
-//           'selected_users': selectedUsers,
-//           'group_id': '{{ group.id }}',  // グループのIDを取得する方法に注意してください
-//       },
-//       dataType: 'json',
-//       headers: { 'X-CSRFToken': csrftoken }
-//   })
-//   .done(function(data) {
-//       console.log('招待が成功しました。');
-//   })
-//   .fail(function(jqXHR, textStatus, errorThrown) {
-//       alert('Ajax通信に失敗しました。');
-//       console.log("jqXHR          : " + jqXHR.status);
-//       console.log("textStatus     : " + textStatus);
-//       console.log("errorThrown    : " + errorThrown.message);
-//   });
-// });
+  console.log(`selectedUsers:${selectedUsers}`);
 
-  
   // Ajaxリクエストを送信
   $.ajax({
     url: '/enikki/group/ajax_groupmembers_list/', 
@@ -102,8 +34,6 @@ document.getElementById('invite').addEventListener('click', function() {
       'selected_users': selectedUsers,
       'group_id': '{{ group.id }}', 
     },
-    // processData: false,
-    // contentType: false,
     dataType: 'json',
     headers: { 'X-CSRFToken': csrftoken }
   })

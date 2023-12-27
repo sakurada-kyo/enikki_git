@@ -950,11 +950,12 @@ def ajax_inviteGroup(request):
 
 
 def ajax_groupmembers_list(request):
-    print('ajax_groupmembers')
+    print('ajax_groupmembers_list')
     if request.method == "POST":
         selected_users = request.POST.getlist(
             "selected_users[]"
-        )  # AJAXリクエストから選択されたユーザーを取得
+        )  
+        # AJAXリクエストから選択されたユーザーを取得
         print(f'selected_users:{selected_users}')
         
         if selected_users:
@@ -976,8 +977,9 @@ def ajax_groupmembers_list(request):
 def index(request, *args, **kwargs):
     return render(request, "index.html")
 
-# Reactタイムライン
+# React投稿取得
 def fetch_posts(request):
+    # リクエストにグループ名があるかどうか(有:currentGroup変更)
     response_datas = ''
     return JsonResponse({'response':response_datas})
 
@@ -986,6 +988,7 @@ def fetch_posts_add(request):
     response_datas = ''
     return JsonResponse({'response':response_datas})
 
+# Reactグループリスト取得
 def fetch_grouplists(request):
     response_datas = ''
     return JsonResponse({'response':response_datas})
