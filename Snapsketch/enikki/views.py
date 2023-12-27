@@ -974,11 +974,15 @@ def index(request, *args, **kwargs):
     return render(request, "index.html")
 
 # Reactタイムライン
-def react_timeline(request):
-    response_dataes = ''
-    return JsonResponse({'response':response_dataes})
+def fetch_posts(request):
+    response_datas = ''
+    return JsonResponse({'response':response_datas})
 
 # Reactタイムライン投稿追加
-def react_timeline_add(request):
-    response_dataes = ''
-    return JsonResponse({'response':response_dataes})
+def fetch_posts_add(request):
+    response_datas = ''
+    return JsonResponse({'response':response_datas})
+
+def fetch_grouplists(request):
+    response_datas = ''
+    return JsonResponse({'response':response_datas})

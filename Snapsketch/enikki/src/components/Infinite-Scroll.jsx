@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
-const InfiniteScroll = () => {
+const InfiniteScroll = (props) => {
+  const posts = props.posts;
     return(
+      <div id='scroll'>
         <InfiniteScroll
           pageStart={0}
           loadMore={loadMore}
@@ -14,6 +16,7 @@ const InfiniteScroll = () => {
           })}
           
         </InfiniteScroll>
+      </div>
     )
 }
 export default InfiniteScroll;

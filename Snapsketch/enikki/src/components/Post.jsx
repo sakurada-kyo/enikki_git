@@ -12,7 +12,7 @@ const Post = (props) => {
     
     return (
         <>
-            <div key={index} className="content" data-page={page}> {/*key値はUUID使う*/}
+            <div key={index} className="content" data-page={page}> {/*key値はpost_id使う*/}
                 <div className="content_header">
                     <img className="user_icon" src={userIcon} alt="ユーザーアイコン" />
                     <p className="user_name">{username}</p>
