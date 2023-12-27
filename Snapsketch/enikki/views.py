@@ -109,7 +109,6 @@ class TimelineView(LoginRequiredMixin,TemplateView):
             print("currentGroupがない")
         return render(request, self.template_name, context)
 
-
 # ajaxタイムライン
 def ajax_timeline(request):
     if request.method == "POST":
@@ -973,3 +972,13 @@ def ajax_groupmembers_list(request):
 
 def index(request, *args, **kwargs):
     return render(request, "index.html")
+
+# Reactタイムライン
+def react_timeline(request):
+    response_dataes = ''
+    return JsonResponse({'response':response_dataes})
+
+# Reactタイムライン投稿追加
+def react_timeline_add(request):
+    response_dataes = ''
+    return JsonResponse({'response':response_dataes})
