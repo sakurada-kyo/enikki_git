@@ -116,7 +116,6 @@ def ajax_timeline(request):
     else:
         return JsonResponse({"error": "POSTメソッドを使用してください"})
 
-
 # 投稿取得関数
 def getPost(request):
     try:
@@ -202,7 +201,6 @@ def getPost(request):
         print("読み込みデータがありません")
         return JsonResponse({"error": "読み込みデータがありません"})
 
-
 # いいね機能
 def ajax_like(request):
     print("ajax_like")
@@ -241,7 +239,6 @@ def ajax_like(request):
     data["like_count"] = likeCount
 
     return JsonResponse(data)
-
 
 # グループ切り替え処理
 def ajax_changeGroup(request):
@@ -296,11 +293,9 @@ def ajax_changeGroup(request):
                     raise Http404("読み込みデータがありません")
             else:
                 return JsonResponse({"error": "グループ名がありません"})
-
         except Http404 as e:
             print(str(e))  # デバッグ用のエラーメッセージ
             return JsonResponse({"error": "読み込みデータがありません"})
-
     else:
         return JsonResponse({"error": "POSTメソッドを使用してください"})
 
@@ -309,7 +304,7 @@ def ajax_changeGroup(request):
 class CommentView(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
         context = {}
-
+        
         user = request.user
 
         # セッションからグループ名取得
@@ -375,6 +370,7 @@ class CommentView(LoginRequiredMixin,TemplateView):
 
         return render(request, "comment.html", context)
 
+# ajaxコメント
 def ajax_comment(request):
     print(f"ajax_comment")
     if request.method == "POST":
@@ -404,7 +400,6 @@ def ajax_comment(request):
                 return JsonResponse({"error": "post_idがありません"})
         else:
             return JsonResponse({"error": "コメントがありません"})
-
 
 # グループ追加
 def ajax_group(request):
@@ -443,7 +438,6 @@ def ajax_group(request):
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors})
 
-
 # 一時ファイル保存
 def save_uploaded_file(file):
     try:
@@ -462,7 +456,6 @@ def save_uploaded_file(file):
         return destination  # ファイルの保存先パスを返す
     finally:
         temp_file.close()  # 一時ファイルをクローズする
-
 
 # キャンバス画面
 class CanvasView(LoginRequiredMixin,TemplateView):
@@ -749,6 +742,7 @@ class GroupMembersListView(LoginRequiredMixin,TemplateView):
             return friends
         except Follower.DoesNotExist:
             raise Http404("You have no friends.")
+        
 # ユーザー検索機能
 class SearchView(TemplateView):
     template_name = "usersearch.html"
@@ -963,8 +957,6 @@ def ajax_groupmembers_list(request):
             for username in selected_users:
                 # ユーザーモデルに適した処理に変更
                 user = UserGroupTable.objects.get(username=username)
-                # 登録のための処理を追加
-
                 # 成功を示すJSONレスポンスを返す
                 response_data = {"success": True}
                 return JsonResponse(response_data)
@@ -972,7 +964,6 @@ def ajax_groupmembers_list(request):
         # AJAX以外のリクエストには対応しない
         response_data = {"error": "Invalid Request"}
         return JsonResponse(response_data, status=400)
-
 
 def index(request, *args, **kwargs):
     return render(request, "index.html")

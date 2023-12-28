@@ -44,8 +44,8 @@ document.getElementById('invite').addEventListener('click', function() {
     })
     .fail((jqXHR, textStatus, errorThrown) => {
       alert('Ajax通信に失敗しました。');
-      console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-      console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-      console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
+      console.log("jqXHR: " + jqXHR.status); // HTTPステータスを表示
+      console.log("textStatus: " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+      console.log("errorThrown: " + errorThrown.message); // 例外情報を表示
     });
   });
