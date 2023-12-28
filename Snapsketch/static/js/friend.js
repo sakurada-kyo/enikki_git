@@ -1,5 +1,3 @@
-// friend.js
-
 document.addEventListener('DOMContentLoaded', function () {
     var deleteButtons = document.querySelectorAll('.delete');
     deleteButtons.forEach(function (button) {

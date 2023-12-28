@@ -12,8 +12,10 @@
     {% for group in groups %}
     <div class="grp">
       <img src="/media/{{ group.group.group_icon_path }}" />
-      <p>{{ group.group.groupname }}</p>
-      <input type="button" class="add" value="メンバーを追加する">
+      <p class="group-name">{{ group.group.groupname }}</p>
+      <!-- <input type="button" class="add" value="メンバーを追加する"> -->
+      <button class="add" data-group-name="{{ group.group.groupname }}">メンバーを追加する</button>
+
     </div>
     {% endfor %}
   {% endif %}
@@ -28,6 +30,7 @@
         {% for friend in friends %}
           <input type="checkbox" id="scales" name="scales">
           <p>{{ friend.followee.username }}</p>
+          
         {% endfor %}
         <input id="invite" type="submit" value="追加">
       {% else %}
@@ -66,10 +69,6 @@
   </footer>
 {% endblock %}
 {% block js %}
+<script src="{% static 'js/app.js' %}"></script>
 <script src="{% static 'js/group.js' %}"></script>
-<script>
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-</script>
-
-  {% comment %} <script src="{% static 'js/group.js' %}"></script> {% endcomment %}
 {% endblock %}
