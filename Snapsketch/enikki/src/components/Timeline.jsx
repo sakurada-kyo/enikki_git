@@ -4,8 +4,6 @@ import GroupNav from './GroupNav';
 import Post from './Post';
 import InfiniteScroll from './Infinite-Scroll';
 
-// 他の必要なコンポーネントやライブラリのインポート
-
 const Timeline = () => {
   const [posts, setPosts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -59,7 +57,7 @@ const Timeline = () => {
 
   const changeGroup = () => {
     // 切り替えたグループの投稿を取得する処理
-
+    
   };
 
   return (
