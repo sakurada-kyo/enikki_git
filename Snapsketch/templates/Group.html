@@ -13,8 +13,9 @@
     <div class="grp">
       <img src="/media/{{ group.group.group_icon_path }}" />
       <p class="group-name">{{ group.group.groupname }}</p>
-      <!-- <input type="button" class="add" value="メンバーを追加する"> -->
       <button class="add" data-group-name="{{ group.group.groupname }}">メンバーを追加する</button>
+      
+      <button class="del" data-group-name="{{ group.group.groupname }}">メンバーを削除する</button>
 
     </div>
     {% endfor %}
@@ -32,7 +33,9 @@
           <p>{{ friend.followee.username }}</p>
           
         {% endfor %}
-        <input id="invite" type="submit" value="追加">
+        
+        <input id="invite" type="submit" name="action" value="追加">
+        <input id="delete" type="submit" name="action" value="削除">
       {% else %}
         <!-- 友達がいない場合の表示 -->
         <p>フレンドはいません。</p>
