@@ -20,7 +20,7 @@
     </div>
     {% endfor %}
   {% endif %}
-<!-- ポップアップ表示 -->
+<!-- ポップアップ(友達追加)表示 -->
 <div id="members-popup" style="display: none;">
     <div id="popup-inside">
       <div id="close">x</div>
@@ -35,7 +35,7 @@
         {% endfor %}
         
         <input id="invite" type="submit" name="action" value="追加">
-        <input id="delete" type="submit" name="action" value="削除">
+        <!-- <input id="delete" type="submit" name="action" value="削除"> -->
       {% else %}
         <!-- 友達がいない場合の表示 -->
         <p>フレンドはいません。</p>
@@ -44,6 +44,20 @@
       {% endif %}
     </div>
   </div>
+</div>
+<!-- ポップアップ(友達削除)表示 -->
+<div id="delete-popup" style="display: none;">
+  <div id="close">×</div>
+  {% csrf_token %}
+  <h2>グループメンバー一覧</h2>
+  {% for friend in friends %}
+    <input type="checkbox" id="scales" name="scales">
+    <p>{{ friend.UserGroupTable.user }}</p>
+  {% endfor %}
+
+  <input id="delete" type="submit" name="action" value="削除">
+
+</div>
 {% endblock %}
 
 {% block side %}

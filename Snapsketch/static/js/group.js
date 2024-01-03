@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var inviteButton = document.getElementById('invite');
   var closeButton = document.getElementById('close');
   var deleteButton = document.getElementById('delete');
+  var delButtons = document.getElementById('.del');
 
   addButtons.forEach(function(button) {
     button.addEventListener('click', function() {
@@ -11,9 +12,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  delButtons.forEach(function(button){
+    button.addEventListener('click', function(){
+      var delpopUp = document.getElementById('delete-popup');
+      delpopUp.style.display = 'block';
+    })
+  })
+
   closeButton.addEventListener('click', function() {
     var popUp = document.getElementById('members-popup');
     popUp.style.display = 'none';
+
+    var delpopUp = document.getElementById('delete-popup');
+    delpopUp.style.display = 'none';
   });
 
 
