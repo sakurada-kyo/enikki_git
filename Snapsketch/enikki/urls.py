@@ -21,6 +21,7 @@ urlpatterns = [
     path('group/',views.GroupView.as_view(), name='group'),
     path('group/members/list/', views.GroupMembersListView.as_view(), name='group_members_list'),
     path('group/ajax_groupmembers_list/',views.ajax_groupmembers_list, name='ajax_groupmembers_list'),
+    path('group/ajax_deletemembers_list/',views.ajax_deletemembers_list, name='ajax_deletemembers_list'),
     path('ajax_changeGroup/',views.ajax_changeGroup, name='changeGroup'),
     
     path('', views.index,name='index'),

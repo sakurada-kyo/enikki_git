@@ -976,6 +976,8 @@ def ajax_groupmembers_list(request):
                         user = usermodel.objects.get(username=username)
                         user_group, created = UserGroupTable.objects.get_or_create(user=user, group=group)
                         # 必要に応じて user_group の追加処理
+                        # user_group = UserGroupTable.objects.get(user=user, group=group)
+                        # user_group.delete()
 
                     except UserGroupTable.DoesNotExist:
                         response_data = {"error": f"ユーザーが見つかりません: {username}"}
@@ -992,6 +994,48 @@ def ajax_groupmembers_list(request):
         # selected_users または group_name が不足している場合
         response_data = {"error": "無効なリクエスト"}
         return JsonResponse(response_data, status=400)
+   
+def ajax_deletemembers_list(request):
+   if request.method == "POST":
+        selected_users = request.POST.getlist("selected_users[]")
+        group_name = request.POST.get("group_name")
+        
+        print("Selected Users:", selected_users)
+        print("Group Name:", group_name)  
+
+        if selected_users and group_name:
+            print("Received POST request")
+
+            try:
+                # グループを識別するために GroupMaster モデルに 'name' フィールドがあると仮定
+                group = GroupMaster.objects.get(groupname=group_name)
+
+                # 選択されたユーザーを反復処理してグループに追加
+                for username in selected_users:
+                    print("user_id"+username)
+                    try:
+                        usermodel=get_user_model()
+                        user = usermodel.objects.get(username=username)
+                        # user_group, created = UserGroupTable.objects.get_or_create(user=user, group=group)
+                        # 必要に応じて user_group の追加処理
+                        user_group = UserGroupTable.objects.get(user=user, group=group)
+                        user_group.delete()
+
+                    except UserGroupTable.DoesNotExist:
+                        response_data = {"error": f"ユーザーが見つかりません: {username}"}
+                        return JsonResponse(response_data, status=404)
+
+            except GroupMaster.DoesNotExist:
+                response_data = {"error": f"グループが見つかりません: {group_name}"}
+                return JsonResponse(response_data, status=404)
+
+            # 成功応答を返す
+            response_data = {"success": True}
+            return JsonResponse(response_data)
+
+        # selected_users または group_name が不足している場合
+        response_data = {"error": "無効なリクエスト"}
+        return JsonResponse(response_data, status=400)   
    
 def index(request, *args, **kwargs):
     return render(request, "index.html")
