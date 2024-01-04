@@ -23,6 +23,10 @@ urlpatterns = [
     path('group/ajax_groupmembers_list/',views.ajax_groupmembers_list, name='ajax_groupmembers_list'),
     path('ajax_changeGroup/',views.ajax_changeGroup, name='changeGroup'),
     
-   path('', views.index,name='index')
+    path('', views.index,name='index'),
+    path('grouptest/', views.fetch_grouplists_test,name='grouptest'),
+    path('fetch_posts/', views.fetch_posts,name='fetch_posts'),
+    path('fetch_loadmore/', views.fetch_loadmore,name='fetch_loadmore'),
+    
     # path('frequest/',views.RequestView,name='friend_request') #view関数はまだわからないから適当
 ]

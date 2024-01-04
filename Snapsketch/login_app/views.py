@@ -8,13 +8,13 @@ from enikki.models import *
 from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import login
-from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'  # ログインフォームが表示されるテンプレートの指定
-    success_url = reverse_lazy('enikki:timeline')  # ログイン成功時のリダイレクト先
+    success_url = reverse_lazy('enikki:index')  # ログイン成功時のリダイレクト先
 
     def form_valid(self, form):
         # 親クラスの form_valid メソッドを実行してログインを完了させる

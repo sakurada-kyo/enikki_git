@@ -1,5 +1,6 @@
 from audioop import reverse
 import calendar
+from uuid import UUID
 from django.conf import settings
 from django.views.generic import TemplateView
 import json
@@ -34,80 +35,80 @@ class TimelineView(LoginRequiredMixin,TemplateView):
 
     def get(self, request, *args, **kwargs):
         print("GET")
-        context = {}
-        # ページ番号
-        page = request.GET.get("page", 1)
+        # context = {}
+        # # ページ番号
+        # page = request.GET.get("page", 1)
 
-        # セッションから全グループ取得
-        if "groupList" in request.session:
-            groupList = request.session["groupList"]
-            try:
-                if groupList:
-                    groups = (
-                        GroupMaster.objects.filter(groupname__in=groupList)
-                        .values("groupname", "group_icon_path")
-                        .order_by("created_at")
-                    )
-                    context["groupList"] = groups
-                else:
-                    raise Http404
-            except Http404:
-                print("グループを取得できませんでした")
-        else:
-            print("groupListがない")
+        # # セッションから全グループ取得
+        # if "groupList" in request.session:
+        #     groupList = request.session["groupList"]
+        #     try:
+        #         if groupList:
+        #             groups = (
+        #                 GroupMaster.objects.filter(groupname__in=groupList)
+        #                 .values("groupname", "group_icon_path")
+        #                 .order_by("created_at")
+        #             )
+        #             context["groupList"] = groups
+        #         else:
+        #             raise Http404
+        #     except Http404:
+        #         print("グループを取得できませんでした")
+        # else:
+        #     print("groupListがない")
 
-        if "currentGroup" in request.session:
-            # セッションからグループ名取得
-            currentGroup = request.session["currentGroup"]
-            print(f"currentGroupTimelineView:{currentGroup}")
-            try:
-                user = request.user
+        # if "currentGroup" in request.session:
+        #     # セッションからグループ名取得
+        #     currentGroup = request.session["currentGroup"]
+        #     print(f"currentGroupTimelineView:{currentGroup}")
+        #     try:
+        #         user = request.user
 
-                # グループ内の投稿記事持ってくる
-                if currentGroup:
-                    # グループ名を使って関連する投稿を取得
-                    group_posts = GroupPostTable.objects.filter(
-                        group__groupname=currentGroup
-                    )
-                    post_ids = group_posts.values_list("post__post_id", flat=True)
+        #         # グループ内の投稿記事持ってくる
+        #         if currentGroup:
+        #             # グループ名を使って関連する投稿を取得
+        #             group_posts = GroupPostTable.objects.filter(
+        #                 group__groupname=currentGroup
+        #             )
+        #             post_ids = group_posts.values_list("post__post_id", flat=True)
 
-                    posts = (
-                        PostMaster.objects.filter(post_id__in=post_ids)
-                        .values(
-                            "post_id",
-                            "sketch_path",
-                            "diary",
-                            "user__username",
-                            "user__user_icon_path",
-                            "like_count",
-                            "comment_count",
-                        )
-                        .order_by("updated_at")
-                    )
+        #             posts = (
+        #                 PostMaster.objects.filter(post_id__in=post_ids)
+        #                 .values(
+        #                     "post_id",
+        #                     "sketch_path",
+        #                     "diary",
+        #                     "user__username",
+        #                     "user__user_icon_path",
+        #                     "like_count",
+        #                     "comment_count",
+        #                 )
+        #                 .order_by("updated_at")
+        #             )
 
-                    # いいね情報を取得
-                    likes = LikeTable.objects.filter(
-                        user=user, post__in=post_ids
-                    ).values_list("post_id", flat=True)
+        #             # いいね情報を取得
+        #             likes = LikeTable.objects.filter(
+        #                 user=user, post__in=post_ids
+        #             ).values_list("post_id", flat=True)
 
-                    # ポストにいいね情報を追加
-                    for post in posts:
-                        post_id = post["post_id"]
-                        # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
-                        post["is_liked"] = post_id in likes
+        #             # ポストにいいね情報を追加
+        #             for post in posts:
+        #                 post_id = post["post_id"]
+        #                 # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
+        #                 post["is_liked"] = post_id in likes
 
-                    # GroupPostTable内のpage情報をpostsに追加
-                    for post, group_post in zip(posts, group_posts):
-                        post["page"] = group_post.page
-                    print(f"TimelineView:posts:{posts}")
-                    context["posts"] = posts
-                else:
-                    raise Http404
-            except Http404:
-                print("グループ内で投稿がありません")
-        else:
-            print("currentGroupがない")
-        return render(request, self.template_name, context)
+        #             # GroupPostTable内のpage情報をpostsに追加
+        #             for post, group_post in zip(posts, group_posts):
+        #                 post["page"] = group_post.page
+        #             print(f"TimelineView:posts:{posts}")
+        #             context["posts"] = posts
+        #         else:
+        #             raise Http404
+        #     except Http404:
+        #         print("グループ内で投稿がありません")
+        # else:
+        #     print("currentGroupがない")
+        return render(request, self.template_name)
 
 # ajaxタイムライン
 def ajax_timeline(request):
@@ -997,16 +998,162 @@ def index(request, *args, **kwargs):
 
 # React投稿取得
 def fetch_posts(request):
-    # リクエストにグループ名があるかどうか(有:currentGroup変更)
-    response_datas = ''
-    return JsonResponse({'response':response_datas})
+    print('fetch_posts')
+    if request.method == 'POST':
+
+        if request.body:
+            # JSONデータをPythonの辞書に変換
+            data = json.loads(request.body)
+
+            # 'group'キーを使ってgroupnameを取得
+            groupname = data.get('group')
+
+            if groupname:
+                request.session['currentGroup'] = groupname
+
+        # セッションから現在グループ名を取得
+        groupname = request.session['currentGroup']
+
+        # ログインユーザー取得
+        user_id = request.user.user_id
+
+        # 投稿取得
+        posts = (
+            GroupPostTable.objects
+            .filter(group__groupname = groupname)
+            .select_related('post')
+            .values(
+                'post__post_id',
+                'post__sketch_path',
+                'post__diary',
+                'post__user__username',
+                'post__user__user_icon_path',
+                'post__like_count',
+                'post__comment_count'
+            )
+            .order_by('post__updated_at')
+        )
+        
+        # いいね情報取得用のpost_id
+        post_ids = posts.values_list("post__post_id", flat=True)
+
+        # いいね情報を取得
+        likes = LikeTable.objects.filter(
+            user__user_id=user_id, post__post_id__in=post_ids
+        ).values_list("post__post_id", flat=True)
+
+        # ポストにいいね情報を追加
+        for post in posts:
+            post_id = post["post__post_id"]
+            # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
+            post["is_liked"] = post_id in likes
+
+        # postsをJSONレスポンスに変換
+        posts_data = list(posts)  # QuerySetをリストに変換
+        for post in posts_data:
+            for key, value in post.items():
+                post[key] = convert_uuid_to_str(value)  # UUIDを文字列に変換
+
+        print(f'posts_data:{posts_data}')
+
+        # JSONレスポンスの作成
+        return JsonResponse({'posts':posts_data})
+    
+
 
 # Reactタイムライン投稿追加
-def fetch_posts_add(request):
-    response_datas = ''
-    return JsonResponse({'response':response_datas})
+def fetch_loadmore(request):
+    print('fetch_loadmore')
+    if request.method == 'POST':
+
+        # JSONデータをPythonの辞書に変換
+        data = json.loads(request.body)
+
+        # 'group'キーを使ってgroupnameを取得
+        groupname = data.get('group')
+        page = data.get('page')
+        page_num = int(page)
+
+        # ログインユーザー取得
+        user_id = request.user.user_id
+
+        # 追加の投稿取得
+        posts = (
+            GroupPostTable.objects
+                .filter(group__groupname=groupname,page__gt=page_num)
+                .select_related('post')
+                .values(
+                    'post__post_id',
+                    'post__sketch_path',
+                    'post__diary',
+                    'post__user__username',
+                    'post__user__user_icon_path',
+                    'post__like_count',
+                    'post__comment_count'
+                )
+        )
+
+        # いいね情報取得用のpost_id
+        post_ids = posts.values_list("post__post_id", flat=True)
+
+        # いいね情報を取得
+        likes = LikeTable.objects.filter(
+            user__user_id=user_id, post__post_id__in=post_ids
+        ).values_list("post__post_id", flat=True)
+
+        # ポストにいいね情報を追加
+        for post in posts:
+            post_id = post["post__post_id"]
+            # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
+            post["is_liked"] = post_id in likes
+
+        # postsをJSONレスポンスに変換
+        posts_data = list(posts)  # QuerySetをリストに変換
+        for post in posts_data:
+            for key, value in post.items():
+                post[key] = convert_uuid_to_str(value)  # UUIDを文字列に変換
+
+        # JSONレスポンスの作成
+        return JsonResponse({'posts':posts_data})
 
 # Reactグループリスト取得
 def fetch_grouplists(request):
     response_datas = ''
     return JsonResponse({'response':response_datas})
+
+# Reactグループリスト取得
+def fetch_grouplists_test(request):
+    user_id = 'a82bc430-b9ae-4f6c-8740-df061c7a5aeb'
+
+    # ログインユーザー
+    # user_id = request.user.user_id
+
+    # 現在グループ取得
+    # currentGroup = request.session['currentGroup']
+
+    # 所属するグループ取得
+    groups = (
+        UserGroupTable.objects
+            .filter(user__user_id = user_id)
+            .select_related('group')
+            .values(
+                'group__group_id',
+                'group__groupname',
+                'group__group_icon_path',
+            )
+            .order_by('group__created_at')
+    )
+
+    # postsをJSONレスポンスに変換
+    groups_data = list(groups)  # QuerySetをリストに変換
+    for group in groups_data:
+        for key, value in group.items():
+            group[key] = convert_uuid_to_str(value)  # UUIDを文字列に変換
+
+    return JsonResponse({'group_list':groups_data})
+
+# UUID型を文字列に変換する関数
+def convert_uuid_to_str(obj):
+    if isinstance(obj, UUID):
+        return str(obj)
+    return obj
