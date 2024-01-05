@@ -729,28 +729,28 @@ def view_accountConfView(request):
     return render(request, 'accountConf.html', context)
 
 
-class GroupMembersListView(LoginRequiredMixin,TemplateView):
-    print('GroupMembersList')
+# class GroupMembersListView(LoginRequiredMixin,TemplateView):
+#     print('GroupMembersList')
     
-    template_name = 'Group.html'
+#     template_name = 'Group.html'
 
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        friends = self.get_mutual_members(user)
-        print(f"friend{friends}")
+#     def get(self, request, *args, **kwargs):
+#         user = request.user
+#         friends = self.get_mutual_members(user)
+#         print(f"friend{friends}")
 
-        context = {"friends": friends}
-        return render(request, self.template_name, context)
+#         context = {"friends": friends}
+#         return render(request, self.template_name, context)
 
-    def get_mutual_members(self, user):
-        try:
-            follower_ids = Follower.objects.filter(followee=user).values_list(
-                "follower", flat=True
-            )
-            friends = Follower.objects.filter(follower=user, followee__in=follower_ids)
-            return friends
-        except Follower.DoesNotExist:
-            raise Http404("You have no friends.")
+#     def get_mutual_members(self, user):
+#         try:
+#             follower_ids = Follower.objects.filter(followee=user).values_list(
+#                 "follower", flat=True
+#             )
+#             friends = Follower.objects.filter(follower=user, followee__in=follower_ids)
+#             return friends
+#         except Follower.DoesNotExist:
+#             raise Http404("You have no friends.")
         
 # ユーザー検索機能
 class SearchView(TemplateView):
@@ -932,25 +932,44 @@ class GroupView(LoginRequiredMixin,TemplateView):
             return friends
         except Follower.DoesNotExist:
             raise Http404("You have no friends.")
+        
+    def get_mutual_group(self, user):
+        group_members = UserGroupTable.objects.filter(user='usesrs')
+        context = {'group_members': group_members}
+        try:
+            # UserGroupTableのuserを取得
+            user_group_users = UserGroupTable.objects.filter(user=user).values_list(
+                "user", flat=True
+            )
+            # ユーザを含むUserGroupTableのインスタンスを取得
+            users = UserGroupTable.objects.filter(user=user, user__in=user_group_users).exclude(user=user)
+            # ユーザーネームだけを取得してリストに格納
+            user_names = [user.user.username for user in users]
+            return user_names
+        except UserGroupTable.DoesNotExist:
+            raise Http404("You have no groupuser.")
+        
+        # return render(request, self.template_name, context)
 
     def get(self, request, *args, **kwargs):
         user = request.user
         try:
             friends = self.get_mutual_members(user)
             print(f"friend{friends}")
+            # users = self.get_mutual_group(user)
+            # print(f"user{users}")
+        
             # 現在のユーザーが所属しているグループの一覧を取得
             groups = UserGroupTable.objects.filter(user=user).select_related("group")
-            context = {"groups": groups, "friends": friends}
+            context = {"groups": groups, "friends": friends, "users": user}
         except UserGroupTable.DoesNotExist:
             context = {"error": "所属しているグループはありません"}
         return render(request, self.template_name, context)
-
 
 def ajax_inviteGroup(request):
     print(f"ajax_inviteGroup")
     if request.method == "POST":
         return
-
 
 def ajax_groupmembers_list(request):
    if request.method == "POST":
@@ -995,7 +1014,7 @@ def ajax_groupmembers_list(request):
         return JsonResponse(response_data, status=400)
    
 def ajax_deletemembers_list(request):
-   if request.method == "POST":
+    if request.method == "POST":
         selected_users = request.POST.getlist("selected_users[]")
         group_name = request.POST.get("group_name")
         
@@ -1035,7 +1054,23 @@ def ajax_deletemembers_list(request):
         # selected_users または group_name が不足している場合
         response_data = {"error": "無効なリクエスト"}
         return JsonResponse(response_data, status=400)   
-   
+    #     group = GroupMaster.objects.get(groupname=group_name)
+
+    #     deleted_users = []
+    #     for user in selected_users:
+    #         print("user_id"+user)
+    #         UserGroupTable.objects.filter(user=user, group=group).delete()
+
+    #         deleted_users.append(user)
+            
+    #     print('Deleted users:', deleted_users) 
+
+    #     response_data = {'deleted_users': deleted_users}
+    #     return JsonResponse(response_data)
+    # else:
+    #     return JsonResponse({'error': 'Invalid request'})
+
+    
 def index(request, *args, **kwargs):
     return render(request, "index.html")
 

@@ -2,8 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
   var addButtons = document.querySelectorAll('.add');
   var inviteButton = document.getElementById('invite');
   var closeButton = document.getElementById('close');
+  var close1Button = document.getElementById('close1');
   var deleteButton = document.getElementById('delete');
-  var delButtons = document.getElementById('.del');
+  var delButtons = document.querySelectorAll('.del'); // 複数の要素を選択するためにquerySelectorAllを使用
 
   addButtons.forEach(function(button) {
     button.addEventListener('click', function() {
@@ -12,18 +13,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  delButtons.forEach(function(button){
-    button.addEventListener('click', function(){
-      var delpopUp = document.getElementById('delete-popup');
+  delButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      var delpopUp = document.getElementById('delete-popup-content');
       delpopUp.style.display = 'block';
-    })
-  })
+    });
+  });
 
+  //ポップアップを閉じる
   closeButton.addEventListener('click', function() {
     var popUp = document.getElementById('members-popup');
     popUp.style.display = 'none';
-
-    var delpopUp = document.getElementById('delete-popup');
+  });
+  close1Button.addEventListener('click',function() {
+    var delpopUp = document.getElementById('delete-popup-content');
     delpopUp.style.display = 'none';
   });
 
@@ -68,43 +71,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 削除ボタンにクリックイベントリスナーを追加
   deleteButton.addEventListener('click', function() {
+    console.log('Delete button clicked');
     var checkboxes = document.querySelectorAll('input[name="scales"]:checked');
     var selectedUsers = [];
-  
-    checkboxes.forEach(function (checkbox) {
+
+    checkboxes.forEach(function(checkbox) {
       selectedUsers.push(checkbox.nextElementSibling.textContent.trim());
     });
-  
+
     var groupNameElement = document.querySelector('.group-name');
     var groupName = groupNameElement.textContent.trim();
-  
+
     console.log('Group Name:', groupName);
     console.log('Selected Users for Deletion:', selectedUsers);
-  
+
     $.ajax({
       url: '/enikki/group/ajax_deletemembers_list/',
       type: 'POST',
       data: {
-        // 'action': 'delete',  // 'action' パラメータを追加
         'selected_users': selectedUsers,
         'group_name': groupName,
       },
       dataType: 'json',
-      headers: { 'X-CSRFToken': csrftoken }
-    })
-    .done(function (data) {
-      // 削除が成功した場合の処理
-      console.log('友達を削除しました。');
-      var popUp = document.getElementById('members-popup');
-      popUp.style.display = 'none';
-    })
-    .fail(function (jqXHR, textStatus, errorThrown) {
-      // エラーが発生した場合の処理
-      alert('友達の削除に失敗しました。');
-      console.log("jqXHR          : " + jqXHR.status);
-      console.log("textStatus     : " + textStatus);
-      console.log("errorThrown    : " + errorThrown.message);
-    });
+      headers: { 'X-CSRFToken': csrftoken },
+      success: function(data) {
+        console.log('削除しました。');
+        var popUp = document.getElementById('delete-popup-content');
+        popUp.style.display = 'none';
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert('すでに削除されています');
+        console.log("jqXHR          : " + jqXHR.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      },
+    });    
   });
-})
-
+});
