@@ -31,48 +31,7 @@
                 </form>
             </div>
         </div>
-        <div id="group-nav">
-            {% if groupList %}
-            {% for group in groupList %}
-            <img class="group-icon" src="/media/{{ group.group_icon_path }}" alt="グループアイコン" data-group="{{ group.groupname }}">
-            {% endfor %}
-            {% endif %}
-            <i class="fa-solid fa-plus"></i>
-        </div>
-        <div id="scroll">
-            {% if posts %}
-                {% for post in posts %}
-                    <article class="content" data-page="{{ post.page }}">
-                        <div class="content_header">
-                            <img class="user_icon" src="{% static 'images/test_icon.jpeg' %}" alt="ユーザーアイコン">
-                            <p class="user_name">{{ post.user__username }}</p>
-                            <div class="like">
-                                {% if post.is_liked %}
-                                <button type="button" class="ajax-like">
-                                <!-- すでにいいねしている時はfasクラス -->
-                                <i class="fas fa-heart text-danger"></i>
-                                </button>
-                                {% else %}
-                                <button type="button" class="ajax-like">
-                                <!-- いいねしていないときはfarクラス -->
-                                <i class="far fa-heart text-danger"></i>
-                                </button>
-                                {% endif %}
-                                <!-- いいねの数 -->
-                                <span class="like-count">{{ post.like_count }}</span>
-                            </div>
-                            <div class="comment"><!--グループ名とページ番号送信-->
-                                <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?page={{ post.page }}"></a>
-                                <span class="comment-count">{{ post.comment_count }}</span>
-                            </div>
-                        </div>
-                        <section class="draw_diary">
-                            <img class="draw" src="/media/{{ post.sketch_path }}" alt="絵日記の絵">
-                            <p class="diary">{{ post.diary }}</p>
-                        </section>
-                    </article>
-                {% endfor %}
-            {% endif %}
+        <div id="timeline">
         </div>
 {% endblock %}
 
@@ -85,12 +44,6 @@
 {% endblock %}
 
 {% block js %}
-    <footer>
-        <div id="kotei">
-        <small>&copy;2023 SnapSketch</small>
-        </div>
-    </footer>
-        <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
-        {% comment %} <script src="{% static 'js\infinite-scroll.pkgd.min.js' %}"></script> {% endcomment %}
-        <script src="{% static 'js\timeline.js' %}"></script>
+        <script src="{% static 'frontend/main.js' %}"></script>
+        {% comment %} <script src="{% static 'js\timeline.js' %}"></script> {% endcomment %}
 {% endblock %}
