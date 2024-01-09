@@ -1,21 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import GroupCreatePopup from './GroupCreatePopup'; 
 
 const GroupNav = (props) => {
     const [groupList, setGroupList] = useState([]);
     const [currentGroup,setCurrentGroup] = useState('');
+    const [showComponent, setShowComponent] = useState(false);
     
     useEffect(() => {
         fetchGroupList(); // 初回のグループリストのデータ取得
       }, []);
 
     // グループ追加 
-    const handleAddGroup = (addGroup) => {
-        setGroupList(prevGroupList => [...prevGroupList,...addGroup])
+    const handleAddGroup = (data) => {
+        setGroupList(prevGroupList => [...prevGroupList,...data])
     }
     
     const handleGroupClick = (groupname) => {
         props.onGroupClick(groupname); // グループがクリックされたときにonGroupClickを呼び出す
     };
+
+    //ポップアップ表示
+    const showPopup = () => {
+        setShowComponent(true);
+    }
+
+    const unShowPopup = () => {
+        setShowComponent(false);
+    }
 
     // グループリスト取得
     const fetchGroupList = async () => {
@@ -61,16 +72,18 @@ const GroupNav = (props) => {
                         <img 
                             className='group-image' 
                             src={`/media/${group.group__group_icon_path}`} 
-                            style={{border: "solid 2px #392eff"}} 
+                            style={{border: "solid 5px #000000"}} 
                         />
                     )}
                     
                 </div>
             ))}
-            <i class="fa-solid fa-plus" />
+            {showComponent && <GroupCreatePopup unShowPopup={unShowPopup} handleAddGroup={handleAddGroup} />}
+            <i className="fa-solid fa-plus" onClick={showPopup}  />
         </div>
     );
 };
 export default GroupNav;
 
 //グループ作成機能
+//グループ選択時、フォーカス機能

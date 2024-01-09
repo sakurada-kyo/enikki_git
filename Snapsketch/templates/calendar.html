@@ -25,6 +25,7 @@
 {% block js %}
   <script>
     var datesFromDjango = JSON.parse('{{ dates|escapejs }}')
+    console.log(`datesFromDjango:${datesFromDjango}`)
   </script>
   <script src="{% static 'js/calendar.js' %}"></script>
 {% endblock %}

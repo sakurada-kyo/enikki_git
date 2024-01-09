@@ -7,7 +7,7 @@ urlpatterns = [
     path("timeline/", views.TimelineView.as_view(), name="timeline"),
     path('timeline/ajax_timeline/', views.ajax_timeline, name='ajax_timeline'),
     path('timeline/ajax_like/', views.ajax_like, name='ajax_like'),
-    path('timeline/creategroup/', views.ajax_group, name='ajax_group'),
+    path('timeline/creategroup/', views.fetch_group_create, name='fetch_group_create'),
     path("comment/", views.CommentView.as_view(), name="comment"),
     path('canvas/', views.CanvasView.as_view(), name='canvas'),
     path('create/', views.CreateView.as_view(), name='create'),
@@ -23,9 +23,7 @@ urlpatterns = [
     path('group/ajax_groupmembers_list/',views.ajax_groupmembers_list, name='ajax_groupmembers_list'),
     path('group/ajax_deletemembers_list/',views.ajax_deletemembers_list, name='ajax_deletemembers_list'),
     path('ajax_changeGroup/',views.ajax_changeGroup, name='changeGroup'),
-    
-    path('', views.index,name='index'),
-    path('grouptest/', views.fetch_grouplists_test,name='grouptest'),
+    path('grouptest/', views.fetch_grouplist,name='grouptest'),
     path('fetch_posts/', views.fetch_posts,name='fetch_posts'),
     path('fetch_loadmore/', views.fetch_loadmore,name='fetch_loadmore'),
     

@@ -7,8 +7,6 @@ const Timeline = () => {
   const [newFlg,setNewFlg] = useState(true);
 
   // 新規会員ならグループ作成ポップアップ
-  
-
   const handleGroupClick = (groupname) => {
     setSelectedGroup(groupname); // グループがクリックされたときの処理
   };

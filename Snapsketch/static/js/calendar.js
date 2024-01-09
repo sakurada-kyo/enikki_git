@@ -35,8 +35,9 @@ function generateCalendar(year, month) {
         emptyDay.classList.add("day");
         daysContainer.appendChild(emptyDay);
     }
-
-    const datePartial = `${currentYear}-${currentMonth + 1}-`;
+    
+    const padCurrentMonth = padZero(currentMonth + 1);
+    const datePartial = `${currentYear}-${padCurrentMonth}-`;
 
     for (let i = 1; i <= daysInMonth; i++) {
         const dayElement = document.createElement("div");

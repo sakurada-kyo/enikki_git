@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-        {% if groupList %}<div id="popup-wrapper">{% else %}<div id="popup-wrapper" style="display: block;">{% endif %}
+        {% comment %} {% if groupList %}<div id="popup-wrapper">{% else %}<div id="popup-wrapper" style="display: block;">{% endif %}
             <div id="popup-inside">
                 <div id="close">x</div>
                 <form method="post" id="group-form" action="{% url 'enikki:ajax_group' %}" enctype="multipart/form-data">
@@ -30,7 +30,7 @@
                         <input type="submit" id="createBtn" value="作成する">
                 </form>
             </div>
-        </div>
+        </div> {% endcomment %}
         <div id="timeline">
         </div>
 {% endblock %}

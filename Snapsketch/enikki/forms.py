@@ -1,17 +1,16 @@
 from django import forms
 
 class UpLoadProfileImgForm(forms.Form):
-    avator = forms.ImageField(required=True)
+    groupIcon = forms.ImageField(required=True)
     groupname = forms.CharField(required=True)
 
-    def clean_avator(self):
-        print('clean_avator')
-        avator = self.cleaned_data['avator']
-        if not avator:
-            print('clean_avator:失敗')
+    def clean_groupIcon(self):
+        group_icon = self.cleaned_data['groupIcon']
+        if not group_icon:
+            print('clean_groupIcon:失敗')
             raise forms.ValidationError('画像がアップロードされていません。')
-        print('clean_avator:成功')
-        return avator
+        print('clean_groupIcon:成功')
+        return group_icon
 
     def clean_groupname(self):
         print('clean_groupname')

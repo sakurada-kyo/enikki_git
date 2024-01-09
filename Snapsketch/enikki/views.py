@@ -202,45 +202,6 @@ def getPost(request):
         print("読み込みデータがありません")
         return JsonResponse({"error": "読み込みデータがありません"})
 
-# いいね機能
-def ajax_like(request):
-    print("ajax_like")
-    likeCount = request.POST.get("likeCount")
-    group = request.POST.get("currentGroup")
-    page = request.POST.get("page")
-    userId = request.user.user_id
-
-    # GroupPostTableから投稿を特定
-    postId = GroupPostTable.objects.filter(group=group, page=page).values_list(
-        "post", flat=True
-    )
-
-    if likeCount.isdigit():
-        likeCount = int(likeCount)
-    else:
-        print("likeCount" + likeCount)
-
-    data = {}
-
-    # likeテーブルから対象記事IDとユーザーIDが同じ行を持ってくる
-    like = LikeTable.objects.filter(user_id=userId, post=postId)
-
-    # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか)
-    if like.exists():
-        like.delete()
-        data["method"] = "delete"
-        likeCount -= 1
-    else:
-        like.create(user_id=userId, post=postId)
-        data["method"] = "create"
-        likeCount += 1
-
-    # 対応するPostMasterのlike_countを更新する
-    PostMaster.objects.filter(post_id__in=postId).update(like_count=F("like_count") + 1)
-    data["like_count"] = likeCount
-
-    return JsonResponse(data)
-
 # グループ切り替え処理
 def ajax_changeGroup(request):
     print("ajax_changeGroup")
@@ -402,42 +363,7 @@ def ajax_comment(request):
         else:
             return JsonResponse({"error": "コメントがありません"})
 
-# グループ追加
-def ajax_group(request):
-    if request.method == "POST":
-        user = request.user
-        form = UpLoadProfileImgForm(request.POST, request.FILES)
-        if form.is_valid():
-            print("バリデーション成功")
-            groupName = form.cleaned_data["groupname"]
-            imageFile = form.cleaned_data["avator"]
-            imageFileName = f"/media/group/{groupName}/{imageFile.name}"
 
-            group = GroupMaster.objects.create(
-                groupname=groupName, group_icon_path=imageFile
-            )
-            UserGroupTable.objects.create(user=user, group=group)
-
-            if "groupList" not in request.session:
-                groupListSession = list()  # 空のリストを作成
-                groupListSession.append(groupName)
-                request.session["groupList"] = groupListSession
-                print(f"grouplist追加{groupListSession}")
-
-            if "currentGroup" not in request.session:
-                request.session["currentGroup"] = groupListSession[0]
-
-            context = {
-                "groupName": groupName,
-                "imageFileName": imageFileName,
-                "msg": "グループ作成完了",
-            }
-            return JsonResponse(context)
-        else:
-            print("バリデーションエラー")
-            # バリデーションエラーの場合、エラーメッセージをJSONとして返す
-            errors = form.errors.as_json()
-            return JsonResponse({"errors": errors})
 
 # 一時ファイル保存
 def save_uploaded_file(file):
@@ -572,7 +498,6 @@ class CreateView(LoginRequiredMixin,TemplateView):
                 post.diary = diary  # 日記を更新
                 post.save()
 
-            grouplist = request.session["groupList"]
             if "groupList" in request.session:
                 group_names = request.session["groupList"]
                 groups = GroupMaster.objects.filter(groupname__in=group_names)
@@ -590,7 +515,6 @@ class CreateView(LoginRequiredMixin,TemplateView):
                         new_group_posts.append(
                             GroupPostTable(group=group, post=post, page=1)
                         )  # pageを1に設定
-                        print(f"GroupPostTable:group:{group},post:{post}")
                 else:
                     for group in groups:
                         max_page = (
@@ -1036,9 +960,7 @@ def ajax_deletemembers_list(request):
         # selected_users または group_name が不足している場合
         response_data = {"error": "無効なリクエスト"}
         return JsonResponse(response_data, status=400)   
-   
-def index(request, *args, **kwargs):
-    return render(request, "index.html")
+
 
 # React投稿取得
 def fetch_posts(request):
@@ -1161,19 +1083,10 @@ def fetch_loadmore(request):
         return JsonResponse({'posts':posts_data})
 
 # Reactグループリスト取得
-def fetch_grouplists(request):
-    response_datas = ''
-    return JsonResponse({'response':response_datas})
-
-# Reactグループリスト取得
-def fetch_grouplists_test(request):
-    user_id = 'a82bc430-b9ae-4f6c-8740-df061c7a5aeb'
+def fetch_grouplist(request):
 
     # ログインユーザー
-    # user_id = request.user.user_id
-
-    # 現在グループ取得
-    # currentGroup = request.session['currentGroup']
+    user_id = request.user.user_id
 
     # 所属するグループ取得
     groups = (
@@ -1196,8 +1109,88 @@ def fetch_grouplists_test(request):
 
     return JsonResponse({'group_list':groups_data})
 
+# グループ追加
+def fetch_group_create(request):
+    print('fetch_group_create')
+    if request.method == "POST":
+        user = request.user
+        req_groupname = request.POST.get('groupname')
+        req_group_icon = request.FILES.get('groupIcon')
+
+        # DBへ保存
+        group = GroupMaster.objects.create(
+            groupname=req_groupname, group_icon_path=req_group_icon
+        )
+        UserGroupTable.objects.create(user=user, group=group)
+
+        # 追加グループ取得
+        ##################同じグループ名の時の処理##################
+        group = GroupMaster.objects.filter(groupname=req_groupname)
+        ##################同じグループ名の時の処理##################
+        group_list = [convert_group_to_dict(g) for g in group]
+        
+        # グループリストセッション
+        if "groupList" not in request.session:
+            groupListSession = list()
+            groupListSession.append(req_groupname)
+            request.session["groupList"] = groupListSession
+
+        # 現在グループセッション
+        if "currentGroup" not in request.session:
+            request.session["currentGroup"] = groupListSession[0]
+
+        return JsonResponse({'data':group_list})
+    
+# いいね機能
+def fetch_like(request):
+    print("fetch_like")
+    likeCount = request.POST.get("likeCount")
+    group = request.POST.get("currentGroup")
+    page = request.POST.get("page")
+    userId = request.user.user_id
+
+    # GroupPostTableから投稿を特定
+    postId = GroupPostTable.objects.filter(group=group, page=page).values_list(
+        "post", flat=True
+    )
+
+    if likeCount.isdigit():
+        likeCount = int(likeCount)
+    else:
+        print("likeCount" + likeCount)
+
+    data = {}
+
+    # likeテーブルから対象記事IDとユーザーIDが同じ行を持ってくる
+    like = LikeTable.objects.filter(user_id=userId, post=postId)
+
+    # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか)
+    if like.exists():
+        like.delete()
+        data["method"] = "delete"
+        likeCount -= 1
+    else:
+        like.create(user_id=userId, post=postId)
+        data["method"] = "create"
+        likeCount += 1
+
+    # 対応するPostMasterのlike_countを更新する
+    PostMaster.objects.filter(post_id__in=postId).update(like_count=F("like_count") + 1)
+    data["like_count"] = likeCount
+
+    return JsonResponse(data)
+
 # UUID型を文字列に変換する関数
 def convert_uuid_to_str(obj):
     if isinstance(obj, UUID):
         return str(obj)
     return obj
+
+# GroupMaster オブジェクトから必要な情報を抽出し辞書に格納する関数
+def convert_group_to_dict(group):
+    return {
+        'group__group_id':group.group_id,
+        'group__groupname': group.groupname,
+        'group__group_icon_path': str(group.group_icon_path),  # 必要に応じて適切な形式に変換する
+        # 他の属性も同様に追加する
+    }
