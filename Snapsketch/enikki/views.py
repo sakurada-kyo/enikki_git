@@ -363,7 +363,9 @@ def ajax_group(request):
             # バリデーションエラーの場合、エラーメッセージをJSONとして返す
             errors = form.errors.as_json()
             return JsonResponse({'errors': errors})
-
+    else:
+        return JsonResponse({'errors': 'POSTメソッドではありません'})
+        
 # 一時ファイル保存
 def save_uploaded_file(file):
     try:
