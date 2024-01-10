@@ -68,36 +68,29 @@
 }
 
 
-.popup {
-    display: none;
+/* ポップアップ用のスタイル */
+#popup-wrapper {
+    background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
-    z-index: 10;
-    /*サイトによってここの数値は調整 */
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    display: none;
 }
 
-.popBg {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(30, 30, 30, 0.9);
-}
-
-.popWrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+#popup-inside {
+    overflow-y:scroll;
+    text-align: center;
     width: 70%;
-    max-width: 620px;
-    padding: 10px 30px;
-    background-color: #fff;
+    background: white;
+    margin: 3% auto;
+    padding: 10px;
+    position: relative;
+    min-height: 200px; /* 最小の高さ */
+    max-height: 800px; /* 最大の高さ */
 }
 
 .draw_diary {
-
     height: 550px;
 }   
 
@@ -108,17 +101,10 @@
     cursor: pointer;
 }
 
-#scroll{
-    /* width: 80%; */
-    float: left;
-    margin-top:10px;
-    margin-bottom: 10px;
-}
-
 .content{
-    overflow-y:scroll;
-    width: 605px;
-    height: 680px;
+    /* overflow-y:scroll; */
+    width: 100%;
+    /* height: 680px; */
     padding-left: 10px;
 }
 
@@ -131,7 +117,7 @@
 
 .user_name{
     font-size:25px;
-    padding-top:17px;
+    padding-top:30px;
     padding-left:15px;
     float: left;
     color: black;
@@ -203,6 +189,7 @@
 
 .diary{
     background-color: red;
-    height: 200px;
+    /* height: 200px; */
+    height: 40px;
     width: 100%;
 }

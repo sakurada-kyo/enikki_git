@@ -32,11 +32,12 @@ main #box{
 }
 
 #side{
-    margin-top: 150px;
-    margin-right: 150px;
+    /* margin-top: 150px; */
+    margin-top: 10%;
+    /* margin-right: 150px; */
+    margin-right: 10%;
     float: right;
     font-size: 30px;
-    
     list-style: none;
 }
 
@@ -44,7 +45,9 @@ main #box{
     text-decoration: none;
     color: #000;
     /* width: 5%; */
-}
+ }  
+
+
 
 .wrapper{
     box-sizing: border-box;

@@ -22,7 +22,6 @@ p {
     left: 0;
     width: 100%;
     height: 100%;
-    display: none;
 }
 
 #popup-inside {
@@ -39,8 +38,6 @@ p {
 /* Bootstrapでのボタンスタイル */
 #createBtn {
     background-image: url(../images/button.png);
-    /* Bootstrapのボタンスタイルを追加 */
-    /* class: 'btn btn-primary'; */
 }
 
 #close {
@@ -50,10 +47,8 @@ p {
     cursor: pointer;
 }
 
-/* Bootstrapでのテーブルスタイル */
 table {
     margin: auto;
-    /* class: 'table'; */
 }
 
 /* グループナビゲーションのスタイル */
@@ -66,16 +61,12 @@ table {
 /* Bootstrapでのアイコンスタイル */
 .group-icon {
     margin-bottom: 5px;
-    /* class: 'rounded-circle'; */
 }
 
-/* .fa-plus {
-    /* Bootstrapのアイコンスタイルを追加 */
-    /* class: 'fas fa-plus-circle'; */
-/* }  */
+
 
 /* コンテンツのスタイル */
-#scroll {
+#timeline {
     width: 80%;
     float: left;
     margin-top: 10px;
@@ -106,14 +97,6 @@ table {
 }
 
 
-/* .fas {
-    /* class: 'fas fa-heart text-danger'; */
-/* }
-
-.far {
-    /* class: 'far fa-heart text-danger'; */
-/* }  */
-
 .fa-heart {
     font-size: 35px;
 }
@@ -124,8 +107,6 @@ table {
 }
 
 button {
-    /* Bootstrapでのボタンスタイル */
-    /* class: 'btn btn-transparent'; */
     cursor: pointer;
     outline: none;
     padding: 0px;
@@ -163,8 +144,6 @@ button {
     height: 500px;
     margin-top: 5px;
     width: 100%;
-    /* Bootstrapのイメージスタイルを追加 */
-    /* class: 'img-fluid'; */
 }
 
 /* 日記のテキストのスタイル */
