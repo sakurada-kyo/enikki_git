@@ -646,6 +646,7 @@ class FriendView(LoginRequiredMixin,TemplateView):
 
         return JsonResponse({'error': 'Invalid Request'}, status=400)
 
+
 def view_accountConfView(request):
     # print('view_accountConf')
     # template_name = 'login.html'
@@ -653,97 +654,85 @@ def view_accountConfView(request):
 
     return render(request, 'accountConf.html', context)
 
-
-# class GroupMembersListView(LoginRequiredMixin,TemplateView):
-#     print('GroupMembersList')
-    
-#     template_name = 'Group.html'
-
-#     def get(self, request, *args, **kwargs):
-#         user = request.user
-#         friends = self.get_mutual_members(user)
-#         print(f"friend{friends}")
-
-#         context = {"friends": friends}
-#         return render(request, self.template_name, context)
-
-#     def get_mutual_members(self, user):
-#         try:
-#             follower_ids = Follower.objects.filter(followee=user).values_list(
-#                 "follower", flat=True
-#             )
-#             friends = Follower.objects.filter(follower=user, followee__in=follower_ids)
-#             return friends
-#         except Follower.DoesNotExist:
-#             raise Http404("You have no friends.")
-        
 # ユーザー検索機能
 class SearchView(TemplateView):
     template_name = "usersearch.html"
 
-    def post(self, request, *args, **kwargs):
-        # 検索されたuserIdを取得する
-        userId = request.POST.get("serach")
-        # 検索機能：検索して表示して申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
-        try:
-            # 指定した日付とログインユーザーに基づいてレコードを抽出
-            post = get_object_or_404(PostMaster, user_id=userId)
-            # データが存在するか調べる
-            user = get_user_model()
-            results = user.objects.filter(user_id__exact=userId)
-            return render(
-                request, self.template_name, {"query": userId, "results": results}
-            )
+    def get(self, request, *args, **kwargs):
+        render(request, self.template_name)
 
-        except Http404:
-            PostMaster.objects.create(user=userId)
-            return
-        
+# ユーザー検索ajax
+def ajax_search(request):
+    if request.method == "POST":
+        search_id = request.POST.get('searchId')
+        user_model = get_user_model()
+        result = (
+            user_model.objects
+            .filter(user_id__exact = search_id)
+            .values(
+                'user_id',
+                'username',
+                'user_icon_path',
+            )
+        )
+
+        context = {
+            'user_id':result[0].user_id,
+            'username':result[0].username,
+            'user_icon_path':result[0].user_icon_path
+        }
+
+        return JsonResponse({'context':context})
+
+def ajax_follow(request):
+    if request.method == "POST":
+        follwed_id = request.POST.get('followId') # フォローするユーザID
+        user_id = request.user.user_id
+        Follower.objects.create(follower=follwed_id, followee=user_id)
+        return JsonResponse({'msg':'フォロー成功'})
+
 #友達申請処理
 class RequestView(TemplateView):
-    template_name = "usersearch.html"
-    
-    def post(self, request, *args, **kwargs):
-        
-        form = FrequestTable(request.POST)
-        if form.is_valid():
-            
-            request_user_id = request.user.user_id
-            user_id = request.POST.get("followerId")
-            FrequestTable.save()
-            return 
-        
-        
-        
-        
-        
-    
-    
+    template_name = "request.html"
 
-# リクエスト承認機能
-# class AllowView(TemplateView):
-#     template_name = "request.html"
+    def get(self, request, *args, **kwargs):
+        user_id = request.user.user_id
+        follower = (
+            Follower.objects
+                .filter(follower_id=user_id)
+                .select_related('followee')
+                .values_list(
+                    'followee__user_id',
+                    'followee__username',
+                    'followee__user_icon_path'
+                )
+        )
+        
+        context = {
+            'follower':follower
+        }
+        
+        return render(request,self.template_name,context)
 
-#     def post(self, request, *args, **kwargs):
-#         # 検索機能：検索して表示して 申請ボタンをつける　リクエストを送信する機能　受け取って表示する機能
-#         userId = request.POST.get("1")
+def allow(request):
+    userId = request.POST.get("1")
 
 #　リクエスト拒否機能
-#class DenialView(TemplateView):
+class DenialView(TemplateView):
 
-# user = get_user_model()
-# デフォルトのuserモデルを参照して情報を引っ張る
+    user = get_user_model()
+    # デフォルトのuserモデルを参照して情報を引っ張る
 
-#     def friend_request(request):
-#         if request.method =='POST':
-#             form = FrequestTable(request.POST)
-#             if form.is_valid():
-#                 form.save()
-#                 return redirect('success page') #👈保存成功時に遷移するページのURLに変更
-#         else:
-#             form = FrequestTable()
+    def friend_request(request):
+        if request.method =='POST':
+            form = FrequestTable(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('success page') # 保存成功時に遷移するページのURLに変更
+        else:
+            form = FrequestTable()
 
-#           return render(request,'usersearch.html',{'form':form})
+        return render(request,'usersearch.html',{'form':form})
 
 # マイページ機能
 class MypageView(LoginRequiredMixin,TemplateView):
@@ -859,8 +848,7 @@ class GroupView(LoginRequiredMixin,TemplateView):
             raise Http404("You have no friends.")
         
     def get_mutual_group(self, user):
-        group_members = UserGroupTable.objects.filter(user='usesrs')
-        context = {'group_members': group_members}
+        
         try:
             # UserGroupTableのuserを取得
             user_group_users = UserGroupTable.objects.filter(user=user).values_list(
@@ -944,7 +932,7 @@ def ajax_deletemembers_list(request):
         group_name = request.POST.get("group_name")
         
         print("Selected Users:", selected_users)
-        print("Group Name:", group_name)  
+        print("Group Name:", group_name)
 
         if selected_users and group_name:
             print("Received POST request")
