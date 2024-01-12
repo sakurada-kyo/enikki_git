@@ -5,12 +5,16 @@
 {% endblock %}
 {% block content %}
   <div id="register">
-    <h3>フレンド一覧</h3><br />
+    <h2>フレンド一覧</h2><br />
 
     {% for friend in friends %}
       <div class="account-form">
-        <div class="circle">{{ friend.icon_id.url }}</div>
-        <h4>{{ friend.name }}</h4>
+        <div class="circle">
+          <img src="{{ friend.followee.user_icon_path.url }}" />
+        </div>
+        <h4>{{ friend.followee.username }}</h4>
+        {% comment %} 友達を削除するボタン {% endcomment %}
+        <input type="button" class="delete" value="削除">
       </div>
     {% endfor %}
   </div>
@@ -40,4 +44,9 @@
       <small>&copy;2023 SnapSketch</small>
     </div>
   </footer>
+{% endblock %}
+{% block js %}
+<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/friend.js' %}"></script>
+
 {% endblock %}

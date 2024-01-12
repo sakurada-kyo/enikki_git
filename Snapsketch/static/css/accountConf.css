@@ -1,5 +1,5 @@
 body{
-    font-family: "Franklin Gothic";
+    font-family: "MS micho";
     text-align: center;
     background-color: #B0E0E6;
 }
@@ -65,7 +65,7 @@ td{
 }
 
 main #mid p{
-    color: #ffffff;
+    color: #000000;
 }
 
 #radio{
