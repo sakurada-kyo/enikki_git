@@ -1,47 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>base</title>
-  <link rel="stylesheet" href="{% static 'css/request.css' %}">
-</head>
-<body>
-<header>
-        <div id = "logo">Snap Sketch</div>
-</header>
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/request.css' %}">
+{% endblock  %}
 
-<div class="wrapper">
-    <div id = "foot">
-        <p>マイページ</p><br>
-        <p>カレンダー</p><br>
-        <p>ガチャ</p>
+{% block content %}
+<div class="search">
+    <input type="text">
+    <input type="button" value="検索">
+</div>
+<div class="request">
+    <div class="top">
+        <img src="{{ followee__user_icon_path }}" width="110px" height="110px">
     </div>
-<main>
-    {% comment %} <!-ここから中身作成-> {% endcomment %}
-    <div id = "box">
-        <div class="search">
-            <input type="text">
-            <input type="button" value="検索">
-        </div>
-        <div class="request">
-            <div class="top">
-                <img src={{ followee__user_icon_path }} width="110px" height="110px">
-            </div>
-            <div class="who">
-                <p>*****************************<br>があなたをフォローしました。</p>
-            </div>
-            <div class="approve">
-                <button type = submit class="allow" type="button" name="1">承認</button>
-                <button type = submit class="delete" type="button" name="2">削除</button>
-            </div>
-        </div>
+    <div class="who">
+        <p>ユーザーID:{{ follower.followee__user_id }}
+            <br>ユーザー名:{{ follower.followee__username }}
+            <br>からフレンド申請があります。</p>
     </div>
-</main>
+    <div class="approve">
+        <input type="submit" class="allow" name="1">承認</button>
+        <input type="submit" class="delete" name="2">削除</button>
+    </div>
+</div>
+{% endblock  %}
+
+{% block footer %}
 <footer>
     <div id = "kotei">
         <small>&copy;2023 SnapSketch</small>
     </div>
 </footer>
-</div>
-</body>
-</html>
+{% endblock %}

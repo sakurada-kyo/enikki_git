@@ -714,25 +714,14 @@ class RequestView(TemplateView):
         
         return render(request,self.template_name,context)
 
+# フォローリクエスト許可機能
 def allow(request):
     userId = request.POST.get("1")
-
-#　リクエスト拒否機能
-class DenialView(TemplateView):
-
-    user = get_user_model()
-    # デフォルトのuserモデルを参照して情報を引っ張る
-
-    def friend_request(request):
-        if request.method =='POST':
-            form = FrequestTable(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('success page') # 保存成功時に遷移するページのURLに変更
-        else:
-            form = FrequestTable()
-
-        return render(request,'usersearch.html',{'form':form})
+    return JsonResponse
+    
+# フォローリクエスト拒否機能
+def deny(request):
+    return JsonResponse
 
 # マイページ機能
 class MypageView(LoginRequiredMixin,TemplateView):

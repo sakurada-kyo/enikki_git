@@ -79,7 +79,7 @@ main #box{
     padding-bottom: 120px;/*←footerの高さ*/
     box-sizing: border-box;
     min-width: 1000px;
-  overflow: hidden;
+    overflow: hidden;
 }
 
 
