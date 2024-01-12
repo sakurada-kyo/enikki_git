@@ -648,6 +648,8 @@ def view_accountView(request):
 
 #         return render(request,'usersearch.html',{'form':form})
 
+#承認/拒否機能
+
 
 # マイページ機能
 class MypageView(TemplateView):
