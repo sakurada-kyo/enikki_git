@@ -9,7 +9,7 @@
     <input type="text">
     <input type="button" value="検索">
 </div>
-<div class="request">
+<form class="request-form">
     <div class="top">
         <img src="{{ followee__user_icon_path }}" width="110px" height="110px">
     </div>
@@ -22,7 +22,7 @@
         <input type="submit" class="allow" name="1">承認</button>
         <input type="submit" class="delete" name="2">削除</button>
     </div>
-</div>
+</form>
 {% endblock  %}
 
 {% block footer %}
