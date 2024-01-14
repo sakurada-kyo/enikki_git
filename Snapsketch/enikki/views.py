@@ -1159,41 +1159,42 @@ def fetch_group_create(request):
 # いいね機能
 def fetch_like(request):
     print("fetch_like")
-    likeCount = request.POST.get("likeCount")
-    group = request.POST.get("currentGroup")
-    page = request.POST.get("page")
-    userId = request.user.user_id
+    if request.method == "POST":
+        likeCount = request.POST.get("likeCount")
+        group = request.session["currentGroup"]
+        page = request.POST.get("page")
+        userId = request.user.user_id
 
-    # GroupPostTableから投稿を特定
-    postId = GroupPostTable.objects.filter(group=group, page=page).values_list(
-        "post", flat=True
-    )
+        # GroupPostTableから投稿を特定
+        postId = GroupPostTable.objects.filter(group=group, page=page).values_list(
+            "post", flat=True
+        )
 
-    if likeCount.isdigit():
-        likeCount = int(likeCount)
-    else:
-        print("likeCount" + likeCount)
+        if likeCount.isdigit():
+            likeCount = int(likeCount)
+        else:
+            print("likeCount" + likeCount)
 
-    data = {}
+        data = {}
 
-    # likeテーブルから対象記事IDとユーザーIDが同じ行を持ってくる
-    like = LikeTable.objects.filter(user_id=userId, post=postId)
+        # likeテーブルから対象記事IDとユーザーIDが同じ行を持ってくる
+        like = LikeTable.objects.filter(user_id=userId, post=postId)
 
-    # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか)
-    if like.exists():
-        like.delete()
-        data["method"] = "delete"
-        likeCount -= 1
-    else:
-        like.create(user_id=userId, post=postId)
-        data["method"] = "create"
-        likeCount += 1
+        # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか)
+        if like.exists():
+            like.delete()
+            data["method"] = "delete"
+            likeCount -= 1
+        else:
+            like.create(user_id=userId, post=postId)
+            data["method"] = "create"
+            likeCount += 1
 
-    # 対応するPostMasterのlike_countを更新する
-    PostMaster.objects.filter(post_id__in=postId).update(like_count=F("like_count") + 1)
-    data["like_count"] = likeCount
+        # 対応するPostMasterのlike_countを更新する
+        PostMaster.objects.filter(post_id__in=postId).update(like_count=F("like_count") + 1)
+        data["like_count"] = likeCount
 
-    return JsonResponse(data)
+        return JsonResponse(data)
 
 # UUID型を文字列に変換する関数
 def convert_uuid_to_str(obj):

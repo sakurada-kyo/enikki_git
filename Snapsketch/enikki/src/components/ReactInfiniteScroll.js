@@ -28,19 +28,15 @@ const ReactInfiniteScroll = (props) => {
   //いいね
   const fetchLike = async() => {
     const formData = new FormData();
-    formData.append('groupIcon', groupIcon);
-    formData.append('groupname', groupname);
+    formData.append('likeCount', groupIcon);
+    formData.append('page', groupname);
     const url = '/enikki/fetch_posts/';
     const options = {
       method: "POST",
       headers: {
         'X-CSRFToken': csrftoken
       },
-      body: JSON.stringify({
-        group: '', // 現在のグループ
-        page: page, // クリックした投稿のページ番号
-        likeCount: '' // 現在のいいね数
-      })
+      body: formData
     }
 
     try{
