@@ -686,9 +686,9 @@ def ajax_search(request):
 
 def ajax_follow(request):
     if request.method == "POST":
-        follwed_id = request.POST.get('followId') # フォローするユーザID
+        followed_id = request.POST.get('followId') # フォローするユーザID
         user_id = request.user.user_id
-        Follower.objects.create(follower=follwed_id, followee=user_id)
+        Follower.objects.create(follower=followed_id, followee=user_id)
         return JsonResponse({'msg':'フォロー成功'})
 
 #友達申請処理
@@ -697,31 +697,33 @@ class RequestView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         user_id = request.user.user_id
-        follower = (
+        
+        followers = (
             Follower.objects
-                .filter(follower_id=user_id)
-                .select_related('followee')
-                .values_list(
-                    'followee__user_id',
-                    'followee__username',
-                    'followee__user_icon_path'
-                )
+            .filter(follower__user_id=user_id)
+            .exclude(followee__user_id=user_id)
+            .select_related('followee')
+            .values(
+                'followee__user_id',
+                'followee__username',
+                'followee__user_icon_path'
+            )
         )
         
         context = {
-            'follower':follower
+            'followers':followers
         }
         
         return render(request,self.template_name,context)
 
 # フォローリクエスト許可機能
 def allow(request):
-    userId = request.POST.get("1")
-    return JsonResponse
-    
-# フォローリクエスト拒否機能
-def deny(request):
-    return JsonResponse
+    print('allow')
+    if request.method == 'POST':
+        followed_id = request.POST.get('followerID')
+        user_id = request.user.user_id
+        Follower.objects.create(follower=followed_id, followee=user_id)
+        return JsonResponse({'msg':'承認しました'})
 
 # マイページ機能
 class MypageView(LoginRequiredMixin,TemplateView):
