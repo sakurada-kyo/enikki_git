@@ -7,7 +7,6 @@ const ReactInfiniteScroll = (props) => {
   const [hasMore,setHasMore] = useState(true)
   const selectedGroup = props.selectedGroup;
   const [clickedPage,setClickedPage] = useState('')
-  const [likeCnt,setLikeCnt] = useState('')
   // const currentGroup = props.currentGroup; 
 
   useEffect(() => {
@@ -28,7 +27,6 @@ const ReactInfiniteScroll = (props) => {
   //いいね
   const fetchLike = async() => {
     const formData = new FormData();
-    formData.append('likeCount', groupIcon);
     formData.append('page', groupname);
     const url = '/enikki/fetch_posts/';
     const options = {
@@ -46,11 +44,6 @@ const ReactInfiniteScroll = (props) => {
         // レスポンスをJSON形式に変換
         const responseData = await res.json();
 
-        // いいね数
-        
-
-        // いいねマーク
-        
 
     } catch(e){
         console.log(e);
@@ -82,7 +75,7 @@ const ReactInfiniteScroll = (props) => {
 
         // const parsePostList = JSON.parse(responseData.posts);
         const parsePostList = responseData.posts;
-        
+
         // postsにセット
         setPosts(parsePostList);
 
@@ -134,8 +127,6 @@ const ReactInfiniteScroll = (props) => {
     }
   }
 
-
-
     return(
       <div id='scroll'>
         <InfiniteScroll
@@ -176,7 +167,3 @@ const ReactInfiniteScroll = (props) => {
     )
 }
 export default ReactInfiniteScroll;
-
-// いいね機能
-// いいねボタンクリックハンドラ
-// レスポンス：いいね有無、いいね数をレンダリング

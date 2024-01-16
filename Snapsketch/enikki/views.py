@@ -697,7 +697,7 @@ class RequestView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         user_id = request.user.user_id
-        
+
         followers = (
             Follower.objects
             .filter(follower__user_id=user_id)
@@ -709,11 +709,11 @@ class RequestView(TemplateView):
                 'followee__user_icon_path'
             )
         )
-        
+
         context = {
             'followers':followers
         }
-        
+
         return render(request,self.template_name,context)
 
 # フォローリクエスト許可機能
@@ -1010,7 +1010,8 @@ def fetch_posts(request):
                 'post__user__username',
                 'post__user__user_icon_path',
                 'post__like_count',
-                'post__comment_count'
+                'post__comment_count',
+                'page'
             )
             .order_by('post__updated_at')
         )
@@ -1143,7 +1144,7 @@ def fetch_group_create(request):
         group = GroupMaster.objects.filter(groupname=req_groupname)
         ##################同じグループ名の時の処理##################
         group_list = [convert_group_to_dict(g) for g in group]
-        
+
         # グループリストセッション
         if "groupList" not in request.session:
             groupListSession = list()
@@ -1155,46 +1156,72 @@ def fetch_group_create(request):
             request.session["currentGroup"] = groupListSession[0]
 
         return JsonResponse({'data':group_list})
-    
+
 # いいね機能
 def fetch_like(request):
     print("fetch_like")
     if request.method == "POST":
-        likeCount = request.POST.get("likeCount")
         group = request.session["currentGroup"]
         page = request.POST.get("page")
-        userId = request.user.user_id
+        user_id = request.user.user_id
 
         # GroupPostTableから投稿を特定
-        postId = GroupPostTable.objects.filter(group=group, page=page).values_list(
+        postId = GroupPostTable.objects.filter(group__groupname=group, page=page).values_list(
             "post", flat=True
         )
 
-        if likeCount.isdigit():
-            likeCount = int(likeCount)
-        else:
-            print("likeCount" + likeCount)
-
-        data = {}
-
         # likeテーブルから対象記事IDとユーザーIDが同じ行を持ってくる
-        like = LikeTable.objects.filter(user_id=userId, post=postId)
+        like = LikeTable.objects.filter(user__user_id=user_id, post__post_id=postId)
 
         # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか)
         if like.exists():
             like.delete()
-            data["method"] = "delete"
-            likeCount -= 1
         else:
-            like.create(user_id=userId, post=postId)
-            data["method"] = "create"
-            likeCount += 1
+            like.create(user_id=user_id, post=postId)
 
         # 対応するPostMasterのlike_countを更新する
         PostMaster.objects.filter(post_id__in=postId).update(like_count=F("like_count") + 1)
-        data["like_count"] = likeCount
 
-        return JsonResponse(data)
+        # 投稿取得
+        posts = (
+            GroupPostTable.objects
+            .filter(group__groupname = group)
+            .select_related('post')
+            .values(
+                'post__post_id',
+                'post__sketch_path',
+                'post__diary',
+                'post__user__username',
+                'post__user__user_icon_path',
+                'post__like_count',
+                'post__comment_count'
+            )
+            .order_by('post__updated_at')
+        )
+        
+        # いいね情報取得用のpost_id
+        post_ids = posts.values_list("post__post_id", flat=True)
+
+        # いいね情報を取得
+        likes = LikeTable.objects.filter(
+            user__user_id=user_id, post__post_id__in=post_ids
+        ).values_list("post__post_id", flat=True)
+
+        # ポストにいいね情報を追加
+        for post in posts:
+            post_id = post["post__post_id"]
+            # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
+            post["is_liked"] = post_id in likes
+
+        # postsをJSONレスポンスに変換
+        posts_data = list(posts)  # QuerySetをリストに変換
+        for post in posts_data:
+            for key, value in post.items():
+                post[key] = convert_uuid_to_str(value)  # UUIDを文字列に変換
+
+        print(f'posts_data:{posts_data}')
+
+        return JsonResponse({'posts':posts_data})
 
 # UUID型を文字列に変換する関数
 def convert_uuid_to_str(obj):
