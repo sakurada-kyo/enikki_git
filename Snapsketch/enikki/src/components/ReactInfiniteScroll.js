@@ -7,7 +7,6 @@ const ReactInfiniteScroll = (props) => {
   const [hasMore,setHasMore] = useState(true)
   const selectedGroup = props.selectedGroup;
   const [clickedPage,setClickedPage] = useState('')
-  // const currentGroup = props.currentGroup; 
 
   useEffect(() => {
     fetchPosts()
@@ -20,14 +19,15 @@ const ReactInfiniteScroll = (props) => {
   }, [selectedGroup]);
 
   const handleLike = (event) => {
-    const likeCntElm = event.target.closest('.like-count');
-    likeCntElm.innerHTML = likeCnt;
+    const articleElem = event.target.closest('.content');
+    setClickedPage(articleElem.getAttribute("data-page"));
+    fetchLike(clickedPage);
   }
 
   //いいね
-  const fetchLike = async() => {
+  const fetchLike = async(page) => {
     const formData = new FormData();
-    formData.append('page', groupname);
+    formData.append('page', page);
     const url = '/enikki/fetch_posts/';
     const options = {
       method: "POST",
@@ -44,6 +44,11 @@ const ReactInfiniteScroll = (props) => {
         // レスポンスをJSON形式に変換
         const responseData = await res.json();
 
+        // レスポンスデータからpostsを取得
+        const parsePostList = responseData.posts;
+
+        // postsにセット
+        setPosts(parsePostList);
 
     } catch(e){
         console.log(e);
@@ -140,7 +145,7 @@ const ReactInfiniteScroll = (props) => {
                   <img className="user_icon" src={`/media/${post.post__user__user_icon_path}`} alt="ユーザーアイコン" />
                   <p className="user_name">{ post.post__user__username }</p>
                   <div className="like">
-                    <button type="button" className="ajax-like" onClick={fetchLike}>
+                    <button type="button" className="ajax-like" onClick={handleLike}>
                       {post.is_liked ? (
                         // すでにいいねしている時
                         <i className="fas fa-heart text-danger"></i>
