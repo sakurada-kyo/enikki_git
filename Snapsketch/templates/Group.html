@@ -13,10 +13,10 @@
 <div class="grp">
   <img src="/media/{{ group.group.group_icon_path }}" />
   <p class="group-name">{{ group.group.groupname }}</p>
-  <button class="add" data-group-name="{{ group.group.groupname }}">メンバーを追加する</button>
-
-  <button class="del" data-group-name="{{ group.group.groupname }}">メンバーを削除する</button>
-
+  <div class="sum">
+    <button class="add" data-group-name="{{ group.group.groupname }}">メンバーを追加する</button>
+    <button class="del" data-group-name="{{ group.group.groupname }}">メンバーを削除する</button>
+  </div>
 </div>
 {% endfor %}
 {% endif %}
