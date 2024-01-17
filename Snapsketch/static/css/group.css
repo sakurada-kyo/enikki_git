@@ -23,7 +23,7 @@
     text-align: center;
     height: 300px;
     width: 100%;
-    max-width: 700px;
+    max-width: 600px;
     background: white;
     margin: 15% auto;
     padding: 10px;
@@ -57,4 +57,23 @@ img{
     height: 100px;
 }
 
-.grp
+.grp{
+    width: 90%;
+    margin: auto;
+    padding: 10px;
+    height: 120px;
+    background-color: #fff;
+}
+
+.grp img{
+    float: left;
+}
+
+.grp p{
+    margin-left: 30px;
+    float: left;
+}
+
+#sum{
+    float: right;
+}
