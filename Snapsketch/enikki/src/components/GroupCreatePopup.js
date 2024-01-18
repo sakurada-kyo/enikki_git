@@ -23,7 +23,7 @@ const GroupCreatePopup = (props) => {
 
     //親のグループリスト追加関数
     const handleAddGroup = (data) => {
-        props.handleAddGroup(data)
+        props.handleAddGroup(data);
     }
 
     // グループ作成
@@ -31,7 +31,7 @@ const GroupCreatePopup = (props) => {
         const formData = new FormData();
         formData.append('groupIcon', groupIcon);
         formData.append('groupname', groupname);
-        
+
         const url = '/enikki/timeline/creategroup/';
         const options = {
             method: 'POST',
@@ -80,3 +80,6 @@ const GroupCreatePopup = (props) => {
 };
 
 export default GroupCreatePopup;
+
+// 実行順序（ポップアップ　→　タイムライン）
+// xボタンクリック時の処理
