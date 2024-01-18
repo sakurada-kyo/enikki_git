@@ -12,11 +12,11 @@
 {% for group in groups %}
 <div class="grp">
   <img src="/media/{{ group.group.group_icon_path }}" />
-  <p class="group-name">{{ group.group.groupname }}</p>
   <div class="sum">
     <button class="add" data-group-name="{{ group.group.groupname }}">メンバーを追加する</button>
     <button class="del" data-group-name="{{ group.group.groupname }}">メンバーを削除する</button>
   </div>
+  <p class="group-name">{{ group.group.groupname }}</p>
 </div>
 {% endfor %}
 {% endif %}
@@ -37,7 +37,7 @@
     <!-- <input id="delete" type="submit" name="action" value="削除"> -->
     {% else %}
     <!-- 友達がいない場合の表示 -->
-    <p>フレンドはいません。</p>
+    <p>現在フレンドはいません。</p>
     <!-- 追加ボタンを無効化 -->
     <input id="invite" type="submit" value="追加" disabled>
     {% endif %}

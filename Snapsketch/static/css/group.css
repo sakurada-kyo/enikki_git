@@ -60,6 +60,8 @@ img{
 .grp{
     width: 75%;
     margin: auto;
+    margin-top: 20px;
+    margin-bottom: 15px;
     padding: 10px;
     height: 120px;
     background-color: #fff;
@@ -72,18 +74,21 @@ img{
 .grp p{
     margin-top:20px;
     font-size: 24px;
-    margin-left: 30px;
-    float: left;
 }
 
 .sum{
     float: right;
     flex-flow: column;
     width: 20%;
+    margin-right: 20px;
 }
 
 .add , .del{
-    width: 180px;
+    font-size: 14px;
+    width: 150px;
     margin-top: 15px;
-    margin-right: 50px;
+}
+
+h2{
+    margin-top: 20px;
 }
