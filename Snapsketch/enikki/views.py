@@ -1131,29 +1131,30 @@ def fetch_group_create(request):
         req_groupname = request.POST.get('groupname')
         req_group_icon = request.FILES.get('groupIcon')
 
-        # DBへ保存
-        group = GroupMaster.objects.create(
-            groupname=req_groupname, group_icon_path=req_group_icon
-        )
-        UserGroupTable.objects.create(user=user, group=group)
+        if req_groupname and req_group_icon:
+        
+            # DBへ保存
+            group = GroupMaster.objects.create(
+                groupname=req_groupname, group_icon_path=req_group_icon
+            )
+            UserGroupTable.objects.create(user=user, group=group)
 
-        # 追加グループ取得
-        ##################同じグループ名の時の処理##################
-        group = GroupMaster.objects.filter(groupname=req_groupname)
-        ##################同じグループ名の時の処理##################
-        group_list = [convert_group_to_dict(g) for g in group]
+            # 追加グループ取得
+            ##################同じグループ名の時の処理##################
+            group = GroupMaster.objects.filter(groupname=req_groupname)
+            ##################同じグループ名の時の処理##################
 
-        # グループリストセッション
-        if "groupList" not in request.session:
-            groupListSession = list()
-            groupListSession.append(req_groupname)
-            request.session["groupList"] = groupListSession
+            # グループリストセッション
+            if "groupList" not in request.session:
+                groupListSession = list()
+                groupListSession.append(req_groupname)
+                request.session["groupList"] = groupListSession
 
-        # 現在グループセッション
-        if "currentGroup" not in request.session:
-            request.session["currentGroup"] = groupListSession[0]
+            # 現在グループセッション
+            if "currentGroup" not in request.session:
+                request.session["currentGroup"] = groupListSession[0]
 
-        return JsonResponse({'data':group_list})
+            return JsonResponse({'msg':'グループ追加成功'})
 
 # いいね機能
 def fetch_like(request):

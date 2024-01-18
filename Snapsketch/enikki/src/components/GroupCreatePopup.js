@@ -5,7 +5,7 @@ const GroupCreatePopup = (props) => {
     const [groupname, setGroupName] = useState('');
 
     //ポップアップ非表示
-    const handleClickPopupWrapper = () => {
+    const unShowPopupWrapper = () => {
         props.unShowPopup();
     }
 
@@ -21,9 +21,14 @@ const GroupCreatePopup = (props) => {
         setGroupName(text);
     };
 
+    const parentShowGroupNavAndInfiniteScroll = () => {
+        // GroupNavとReactInfiniteScrollをレンダリング
+        props.showGroupNavAndInfiniteScroll();
+    }
+
     //親のグループリスト追加関数
-    const handleAddGroup = (data) => {
-        props.handleAddGroup(data);
+    const handleGroupList = () => {
+        props.handleGroupList();
     }
 
     // グループ作成
@@ -48,10 +53,17 @@ const GroupCreatePopup = (props) => {
             // レスポンスをJSON形式に変換
             const responseData = await res.json();
 
-            const addGroup = responseData.data;
+            // メッセージ取得
+            const msg = responseData.msg;
 
-            // groupListに追加
-            handleAddGroup(addGroup);
+            // groupList取得(GroupNavコンポーネントのsetGroupList)
+            handleGroupList();
+
+            // ポップアップ閉じる
+            unShowPopupWrapper();
+
+            // GroupNavとReactInfiniteScrollをレンダリング
+            parentShowGroupNavAndInfiniteScroll();
 
         } catch (e) {
             console.log('エラーが発生しました')
@@ -61,7 +73,7 @@ const GroupCreatePopup = (props) => {
     return (
         <div id="popup-wrapper">
             <div id="popup-inside">
-                <div id="close" onClick={handleClickPopupWrapper}>x</div>
+                <div id="close" onClick={unShowPopupWrapper}>x</div>
                 <div id="group-wrapper">
                     <h1>グループ作成</h1>
                     <div id='groupname'>
