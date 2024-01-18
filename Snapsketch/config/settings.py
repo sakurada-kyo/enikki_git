@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "enikki.apps.EnikkiConfig",
     "login_app.apps.LoginAppConfig",
     "bootstrap4",
-    'rest_framework',
+    # 'rest_framework',
 ]
 
 MIDDLEWARE = [

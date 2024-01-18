@@ -58,16 +58,19 @@ img{
 }
 
 .grp{
+    border: solid 2px #000;
     width: 75%;
     margin: auto;
     margin-top: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 35px;
     padding: 10px;
     height: 120px;
     background-color: #fff;
 }
 
 .grp img{
+    border: solid 2px #000;
+    border-radius: 60px;
     float: left;
 }
 
