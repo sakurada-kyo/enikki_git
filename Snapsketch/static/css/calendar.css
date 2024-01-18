@@ -44,6 +44,8 @@
 }
 
 .btn {
+    height: 800px;
+    background-color: #fff;
     display: flex;
     justify-content: space-between;
 }
@@ -151,7 +153,7 @@
 }
 
 #scroll button{
-    background-color:transparent;
+    background-color:#ffffff;
     border:none;
     cursor: pointer;
     outline:none;
@@ -188,7 +190,7 @@
 }
 
 .diary{
-    background-color: red;
+    background-color: #fff;
     /* height: 200px; */
     height: 40px;
     width: 100%;
