@@ -5,15 +5,12 @@ import GroupCreatePopup from './GroupCreatePopup';
 
 const Timeline = () => {
   const [selectedGroup, setSelectedGroup] = useState('');
-  const [newFlg,setNewFlg] = useState(true);
   const [showGroupNavAndInfiniteScroll, setShowGroupNavAndInfiniteScroll] = useState(false);
 
   // 新規会員ならグループ作成ポップアップ
   const handleGroupClick = (groupname) => {
     setSelectedGroup(groupname); // グループがクリックされたときの処理
   };
-
-  
 
   // GroupNavとReactInfiniteScrollを表示する処理
   const handleShowGroupNavAndInfiniteScroll = () => {
@@ -22,14 +19,15 @@ const Timeline = () => {
 
   return (
     <>
-      <GroupCreatePopup handleAddGroup={handleGroupClick} showGroupNavAndInfiniteScroll={handleShowGroupNavAndInfiniteScroll} />
+      <GroupCreatePopup showGroupNavAndInfiniteScroll={handleShowGroupNavAndInfiniteScroll} />
       {showGroupNavAndInfiniteScroll && (
         <div>
-          <GroupNav />
-          <ReactInfiniteScroll />
+          <GroupNav onGroupClick={handleGroupClick} />
+          <ReactInfiniteScroll selectedGroup={selectedGroup} />
         </div>
       )}
     </>
   );
 };
+
 export default Timeline;
