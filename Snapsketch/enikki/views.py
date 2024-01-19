@@ -879,9 +879,9 @@ def ajax_groupmembers_list(request):
    if request.method == "POST":
         selected_users = request.POST.getlist("selected_users[]")
         group_name = request.POST.get("group_name")
-        
+
         print("Selected Users:", selected_users)
-        print("Group Name:", group_name)  
+        print("Group Name:", group_name)
 
         if selected_users and group_name:
             print("Received POST request")
@@ -916,12 +916,12 @@ def ajax_groupmembers_list(request):
         # selected_users または group_name が不足している場合
         response_data = {"error": "無効なリクエスト"}
         return JsonResponse(response_data, status=400)
-   
+
 def ajax_deletemembers_list(request):
     if request.method == "POST":
         selected_users = request.POST.getlist("selected_users[]")
         group_name = request.POST.get("group_name")
-        
+
         print("Selected Users:", selected_users)
         print("Group Name:", group_name)
 
@@ -1132,7 +1132,7 @@ def fetch_group_create(request):
         req_group_icon = request.FILES.get('groupIcon')
 
         if req_groupname and req_group_icon:
-        
+
             # DBへ保存
             group = GroupMaster.objects.create(
                 groupname=req_groupname, group_icon_path=req_group_icon
@@ -1143,6 +1143,7 @@ def fetch_group_create(request):
             ##################同じグループ名の時の処理##################
             group = GroupMaster.objects.filter(groupname=req_groupname)
             ##################同じグループ名の時の処理##################
+            group_list = [convert_group_to_dict(g) for g in group]
 
             # グループリストセッション
             if "groupList" not in request.session:
@@ -1154,7 +1155,7 @@ def fetch_group_create(request):
             if "currentGroup" not in request.session:
                 request.session["currentGroup"] = groupListSession[0]
 
-            return JsonResponse({'msg':'グループ追加成功'})
+            return JsonResponse({'data':group_list})
 
 # いいね機能
 def fetch_like(request):
@@ -1164,67 +1165,76 @@ def fetch_like(request):
         page_str = request.POST.get("page")
         user_id = request.user.user_id
 
+        print(f'page_str:{page_str}')
+
         if page_str:
             page = int(page_str)
 
-        if page:
-            # GroupPostTableから投稿を特定
-            postId = GroupPostTable.objects.filter(group__groupname=group, page=page).values_list(
-                "post", flat=True
-            )
-
-            # likeテーブルから対象記事IDとユーザーIDが同じ行を持ってくる
-            like = LikeTable.objects.filter(user__user_id=user_id, post__post_id=postId)
-
-            # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか)
-            if like.exists():
-                like.delete()
-            else:
-                like.create(user_id=user_id, post=postId)
-
-            # 対応するPostMasterのlike_countを更新する
-            PostMaster.objects.filter(post_id__in=postId).update(like_count=F("like_count") + 1)
-
-            # 投稿取得
-            posts = (
-                GroupPostTable.objects
-                .filter(group__groupname = group)
-                .select_related('post')
-                .values(
-                    'post__post_id',
-                    'post__sketch_path',
-                    'post__diary',
-                    'post__user__username',
-                    'post__user__user_icon_path',
-                    'post__like_count',
-                    'post__comment_count'
+            if page:
+                # GroupPostTableから投稿を特定
+                postId = GroupPostTable.objects.filter(group__groupname=group, page=page).values_list(
+                    "post", flat=True
                 )
-                .order_by('post__updated_at')
-            )
 
-            # いいね情報取得用のpost_id
-            post_ids = posts.values_list("post__post_id", flat=True)
+                postId_list = list(postId)
+                
+                # UUIDの文字列をUUIDオブジェクトに変換
+                postId_list = [uuid.UUID(str(post_id)) for post_id in postId_list]
 
-            # いいね情報を取得
-            likes = LikeTable.objects.filter(
-                user__user_id=user_id, post__post_id__in=post_ids
-            ).values_list("post__post_id", flat=True)
+                # likeテーブルから対象記事IDとユーザーIDが同じ行を持ってくる
+                like = LikeTable.objects.filter(user__user_id=user_id, post__post_id=postId_list)
 
-            # ポストにいいね情報を追加
-            for post in posts:
-                post_id = post["post__post_id"]
-                # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
-                post["is_liked"] = post_id in likes
+                # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか)
+                if like.exists():
+                    like.delete()
+                else:
+                    like.create(user_id=user_id, post=postId_list[0])
 
-            # postsをJSONレスポンスに変換
-            posts_data = list(posts)  # QuerySetをリストに変換
-            for post in posts_data:
-                for key, value in post.items():
-                    post[key] = convert_uuid_to_str(value)  # UUIDを文字列に変換
+                # 対応するPostMasterのlike_countを更新する
+                PostMaster.objects.filter(post_id__in=postId_list).update(like_count=F("like_count") + 1)
 
-            print(f'posts_data:{posts_data}')
+                # 投稿取得
+                posts = (
+                    GroupPostTable.objects
+                    .filter(group__groupname = group)
+                    .select_related('post')
+                    .values(
+                        'post__post_id',
+                        'post__sketch_path',
+                        'post__diary',
+                        'post__user__username',
+                        'post__user__user_icon_path',
+                        'post__like_count',
+                        'post__comment_count'
+                    )
+                    .order_by('post__updated_at')
+                )
 
-            return JsonResponse({'posts':posts_data})
+                # いいね情報取得用のpost_id
+                post_ids = posts.values_list("post__post_id", flat=True)
+
+                # いいね情報を取得
+                likes = LikeTable.objects.filter(
+                    user__user_id=user_id, post__post_id__in=post_ids
+                ).values_list("post__post_id", flat=True)
+
+                # ポストにいいね情報を追加
+                for post in posts:
+                    post_id = post["post__post_id"]
+                    # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
+                    post["is_liked"] = post_id in likes
+
+                # postsをJSONレスポンスに変換
+                posts_data = list(posts)  # QuerySetをリストに変換
+                for post in posts_data:
+                    for key, value in post.items():
+                        post[key] = convert_uuid_to_str(value)  # UUIDを文字列に変換
+
+                print(f'posts_data:{posts_data}')
+
+                return JsonResponse({'posts':posts_data})
+    else:
+        return JsonResponse(status=500)
 
 # UUID型を文字列に変換する関数
 def convert_uuid_to_str(obj):

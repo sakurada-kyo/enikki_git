@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import GroupCreatePopup from './GroupCreatePopup'; 
+import GroupCreatePopup from './GroupCreatePopup';
 
 const GroupNav = (props) => {
     const [groupList, setGroupList] = useState([]);
@@ -10,14 +10,15 @@ const GroupNav = (props) => {
         fetchGroupList(); // 初回のグループリストのデータ取得
       }, []);
 
-    // グループ追加
-    const handleGroupList = () => {
-        fetchGroupList();
-    }
-
+    // グループ投稿変更
     const handleGroupClick = (groupname) => {
         props.onGroupClick(groupname); // グループがクリックされたときにonGroupClickを呼び出す
-    };
+    }
+
+    // グループ追加
+    const handleAddGroup = (data) => {
+        setGroupList(prevGroupList => [...prevGroupList,...data])
+    }
 
     //ポップアップ表示
     const showPopup = () => {
@@ -79,7 +80,7 @@ const GroupNav = (props) => {
 
                 </div>
             ))}
-            {showComponent && <GroupCreatePopup unShowPopup={unShowPopup} handleGroupList={handleGroupList} />}
+            {showComponent && <GroupCreatePopup unShowPopup={unShowPopup} parentAddGroup={handleAddGroup} />}
             <i className="fa-solid fa-plus" onClick={showPopup} />
         </div>
     );

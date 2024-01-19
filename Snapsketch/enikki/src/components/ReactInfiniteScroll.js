@@ -6,29 +6,35 @@ const ReactInfiniteScroll = (props) => {
   const [page,setPage] = useState(1)
   const [hasMore,setHasMore] = useState(true)
   const selectedGroup = props.selectedGroup;
-  const [clickedPage,setClickedPage] = useState('')
+  var clickedPage = '';
+  // const [clickedPage,setClickedPage] = useState('')
 
+  // 最初に投稿取得
   useEffect(() => {
     fetchPosts()
   }, []);
 
+  // グループ変更時に投稿取得
   useEffect(() => {
     if (selectedGroup) {
       fetchPosts(selectedGroup); // グループリストが変更されたときの処理
     }
   }, [selectedGroup]);
 
+  // いいねボタン押下した投稿取得
   const handleLike = (event) => {
     const articleElem = event.target.closest('.content');
-    setClickedPage(articleElem.getAttribute("data-page"));
+    clickedPage = articleElem.getAttribute("data-page");
+    console.log(`clickedPage:${clickedPage}`)
     fetchLike(clickedPage);
   }
 
-  //いいね
+  //いいね機能
   const fetchLike = async(page) => {
+    console.log(`page:${page}`);
     const formData = new FormData();
     formData.append('page', page);
-    const url = '/enikki/fetch_posts/';
+    const url = '/enikki/timeline/fetch_like/';
     const options = {
       method: "POST",
       headers: {
@@ -50,13 +56,16 @@ const ReactInfiniteScroll = (props) => {
         // postsにセット
         setPosts(parsePostList);
 
+        // pageセット
+        setPage(parsePostList.length);
+
     } catch(e){
         console.log(e);
     }
   }
 
   const fetchPosts = async(groupname) => {
-    const url = '/enikki/fetch_posts/';
+    const url = '/enikki/timeline/fetch_posts/';
     const options = {
       method: "POST",
       headers: {

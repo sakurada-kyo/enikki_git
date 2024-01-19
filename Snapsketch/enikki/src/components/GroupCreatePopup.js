@@ -21,14 +21,9 @@ const GroupCreatePopup = (props) => {
         setGroupName(text);
     };
 
-    const parentShowGroupNavAndInfiniteScroll = () => {
-        // GroupNavとReactInfiniteScrollをレンダリング
-        props.showGroupNavAndInfiniteScroll();
-    }
-
-    //親のグループリスト追加関数
-    const handleGroupList = () => {
-        props.handleGroupList();
+    // 親のグループ追加関数
+    const parentAddGroup = (data) => {
+        props.parentAddGroup(data);
     }
 
     // グループ作成
@@ -54,16 +49,12 @@ const GroupCreatePopup = (props) => {
             const responseData = await res.json();
 
             // メッセージ取得
-            const msg = responseData.msg;
+            const addGroup = responseData.data;
 
-            // groupList取得(GroupNavコンポーネントのsetGroupList)
-            handleGroupList();
+            parentAddGroup(addGroup);
 
             // ポップアップ閉じる
             unShowPopupWrapper();
-
-            // GroupNavとReactInfiniteScrollをレンダリング
-            parentShowGroupNavAndInfiniteScroll();
 
         } catch (e) {
             console.log('エラーが発生しました')
