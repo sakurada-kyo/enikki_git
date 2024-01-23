@@ -2,17 +2,23 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 const ReactInfiniteScroll = (props) => {
-  const [posts,setPosts] = useState([])
-  const [page,setPage] = useState(1)
-  const [hasMore,setHasMore] = useState(true)
+  const [posts,setPosts] = useState([]);
+  const [page,setPage] = useState(1);
+  const [hasMore,setHasMore] = useState(true);
   const selectedGroup = props.selectedGroup;
-  var clickedPage = '';
-  // const [clickedPage,setClickedPage] = useState('')
+  // let handleClickedPage = '';
+  // let [clickedPage, setClickedPage] = useState(null);
 
   // 最初に投稿取得
   useEffect(() => {
     fetchPosts()
   }, []);
+
+  // useEffect(() => {
+  //   console.log(clickedPage);
+  //   fetchLike(clickedPage);
+  //   setClickedPage('');
+  // },[])
 
   // グループ変更時に投稿取得
   useEffect(() => {
@@ -22,18 +28,21 @@ const ReactInfiniteScroll = (props) => {
   }, [selectedGroup]);
 
   // いいねボタン押下した投稿取得
-  const handleLike = (event) => {
-    const articleElem = event.target.closest('.content');
-    clickedPage = articleElem.getAttribute("data-page");
-    console.log(`clickedPage:${clickedPage}`)
-    fetchLike(clickedPage);
-  }
+  // const handleLike = (event) => {
+  //   const articleElem = event.target.closest('.content');
+  //   handleClickedPage = articleElem.getAttribute('data-page');
+  //   console.log(`clickedPage:${clickedPage}`);
+  //   setClickedPage(handleClickedPage);
+  //   fetchLike();
+  // }
 
   //いいね機能
-  const fetchLike = async(page) => {
-    console.log(`page:${page}`);
+  const fetchLike = async(event) => {
+    const articleElem = event.target.closest('.content');
+    const clickedPage = articleElem.getAttribute('data-page');
     const formData = new FormData();
-    formData.append('page', page);
+    formData.append('page', clickedPage);
+
     const url = '/enikki/timeline/fetch_like/';
     const options = {
       method: "POST",
@@ -154,7 +163,7 @@ const ReactInfiniteScroll = (props) => {
                   <img className="user_icon" src={`/media/${post.post__user__user_icon_path}`} alt="ユーザーアイコン" />
                   <p className="user_name">{ post.post__user__username }</p>
                   <div className="like">
-                    <button type="button" className="ajax-like" onClick={handleLike}>
+                    <button type="button" className="ajax-like" onClick={fetchLike}>
                       {post.is_liked ? (
                         // すでにいいねしている時
                         <i className="fas fa-heart text-danger"></i>

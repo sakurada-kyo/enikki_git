@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var deleteButton = document.getElementById('delete');
   var delButtons = document.querySelectorAll('.del'); // 複数の要素を選択するためにquerySelectorAllを使用
 
+  // 追加ポップアップ
   addButtons.forEach(function(button) {
     button.addEventListener('click', function() {
       var popUp = document.getElementById('members-popup');
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // 削除ポップアップ
   delButtons.forEach(function(button) {
     button.addEventListener('click', function() {
       var delpopUp = document.getElementById('delete-popup-content');
@@ -29,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var delpopUp = document.getElementById('delete-popup-content');
     delpopUp.style.display = 'none';
   });
-
 
   //　追加ボタンにクリックイベントリスナーを追加
   inviteButton.addEventListener('click', function() {

@@ -926,8 +926,6 @@ def ajax_deletemembers_list(request):
         print("Group Name:", group_name)
 
         if selected_users and group_name:
-            print("Received POST request")
-
             try:
                 # グループを識別するために GroupMaster モデルに 'name' フィールドがあると仮定
                 group = GroupMaster.objects.get(groupname=group_name)
@@ -957,22 +955,7 @@ def ajax_deletemembers_list(request):
 
         # selected_users または group_name が不足している場合
         response_data = {"error": "無効なリクエスト"}
-        return JsonResponse(response_data, status=400)   
-#     group = GroupMaster.objects.get(groupname=group_name)
-
-    #     deleted_users = []
-    #     for user in selected_users:
-    #         print("user_id"+user)
-    #         UserGroupTable.objects.filter(user=user, group=group).delete()
-
-    #         deleted_users.append(user)
-            
-    #     print('Deleted users:', deleted_users) 
-
-    #     response_data = {'deleted_users': deleted_users}
-    #     return JsonResponse(response_data)
-    # else:
-    #     return JsonResponse({'error': 'Invalid request'})
+        return JsonResponse(response_data, status=400)
 
 def index(request, *args, **kwargs):
     return render(request, "index.html")
@@ -1069,7 +1052,8 @@ def fetch_loadmore(request):
                     'post__user__username',
                     'post__user__user_icon_path',
                     'post__like_count',
-                    'post__comment_count'
+                    'post__comment_count',
+                    'page'
                 )
         )
 
@@ -1163,7 +1147,8 @@ def fetch_like(request):
     if request.method == "POST":
         group = request.session["currentGroup"]
         page_str = request.POST.get("page")
-        user_id = request.user.user_id
+        user = request.user
+        user_id = user.user_id
 
         print(f'page_str:{page_str}')
 
@@ -1172,26 +1157,36 @@ def fetch_like(request):
 
             if page:
                 # GroupPostTableから投稿を特定
-                postId = GroupPostTable.objects.filter(group__groupname=group, page=page).values_list(
-                    "post", flat=True
+                query_post_id = (
+                    GroupPostTable.objects
+                    .filter(group__groupname=group, page=page)
+                    .select_related('post')
+                    .values_list(
+                        "post__post_id", flat=True
+                    )
                 )
 
-                postId_list = list(postId)
-                
-                # UUIDの文字列をUUIDオブジェクトに変換
-                postId_list = [uuid.UUID(str(post_id)) for post_id in postId_list]
+                print(f'query_post_id[0]:{query_post_id[0]}')
+
+                # いいね対象の投稿ID
+                post_id = query_post_id[0]
+
+                # postインスタンス
+                post = PostMaster.objects.get(post_id=post_id)
 
                 # likeテーブルから対象記事IDとユーザーIDが同じ行を持ってくる
-                like = LikeTable.objects.filter(user__user_id=user_id, post__post_id=postId_list)
+                like = LikeTable.objects.filter(user__user_id=user_id, post__post_id=post_id)
 
-                # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか)
+                # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか
                 if like.exists():
                     like.delete()
+                    # 対応するPostMasterのlike_countを更新する
+                    PostMaster.objects.filter(post_id=post_id).update(like_count=F("like_count") - 1)
                 else:
-                    like.create(user_id=user_id, post=postId_list[0])
+                    like.create(user=user, post=post)
 
-                # 対応するPostMasterのlike_countを更新する
-                PostMaster.objects.filter(post_id__in=postId_list).update(like_count=F("like_count") + 1)
+                    # 対応するPostMasterのlike_countを更新する
+                    PostMaster.objects.filter(post_id=post_id).update(like_count=F("like_count") + 1)
 
                 # 投稿取得
                 posts = (
@@ -1205,7 +1200,8 @@ def fetch_like(request):
                         'post__user__username',
                         'post__user__user_icon_path',
                         'post__like_count',
-                        'post__comment_count'
+                        'post__comment_count',
+                        'page'
                     )
                     .order_by('post__updated_at')
                 )
