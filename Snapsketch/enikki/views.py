@@ -922,9 +922,6 @@ def ajax_deletemembers_list(request):
         selected_users = request.POST.getlist("selected_users[]")
         group_name = request.POST.get("group_name")
 
-        print("Selected Users:", selected_users)
-        print("Group Name:", group_name)
-
         if selected_users and group_name:
             try:
                 # グループを識別するために GroupMaster モデルに 'name' フィールドがあると仮定
@@ -934,9 +931,9 @@ def ajax_deletemembers_list(request):
                 for username in selected_users:
                     print("user_id"+username)
                     try:
-                        usermodel=get_user_model()
-                        user = usermodel.objects.get(username=username)
-                        # user_group, created = UserGroupTable.objects.get_or_create(user=user, group=group)
+                        usermodel=get_user_model() # ユーザーモデル取得
+                        user = usermodel.objects.get(username=username) 
+                        
                         # 必要に応じて user_group の追加処理
                         user_group = UserGroupTable.objects.get(user=user, group=group)
                         user_group.delete()
@@ -1235,15 +1232,15 @@ def fetch_like(request):
 
 def ajax_getmembers_list(request):
     if request.method == 'POST':
+        user_id = request.user.user_id
         group_name = request.POST.get('group_name')
-        print(f'group_name:{group_name}')
+
         try:
-            
-            groups = UserGroupTable.objects.filter(group__groupname=group_name).select_related("group")
-            print(f'groups:{groups}')
-            # context = {"groups": groups}
-            # members = groups.user
-            members = [{'username': entry.user.username} for entry in groups]
+            # グループ特定
+            groups = UserGroupTable.objects.filter(user__user_id=user_id,group__groupname=group_name).select_related("group")
+
+            # グループユーザーのユーザIDとユーザー名格納
+            members = [{'user_id':entry.user.user_id,'username': entry.user.username} for entry in groups]
 
             return JsonResponse({'members': members})
         except GroupMaster.DoesNotExist:

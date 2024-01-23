@@ -17,18 +17,20 @@ document.addEventListener('DOMContentLoaded', function() {
   // 削除ポップアップ
   delButtons.forEach(function(button) {
     button.addEventListener('click', function() {
+      
       var delpopUp = document.getElementById('delete-popup-content');
       delpopUp.style.display = 'block';
+
       // ボタンに関連するグループ名を取得
       var groupName = button.getAttribute('data-group-name');
 
       // メンバーを取得して表示
-      fetchMembers(groupName);
+      ajaxMembers(groupName);
 
     });
   });
   
-  function fetchMembers(groupName) {
+  function ajaxMembers(groupName) {
     var delpopUp = document.getElementById('delete-popup-content');
     delpopUp.style.display = 'block';
 
@@ -51,17 +53,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // メンバーをリストに追加
             data.members.forEach(function (member) {
-                var listItem = document.createElement('li');
+                var userWrap = document.createElement('div');
+                var nameListItem = document.createElement('li');
+                var idListItem = document.createElement('li');
                 var check = document.createElement('input');
 
-                listItem.textContent = member.username; // メンバーに 'username' プロパティがあると仮定
-                membersList.appendChild(listItem);
+                // ユーザーID
+                idListItem.textContent = `ユーザーID:${member.user_id}`;
+                // ユーザー名
+                nameListItem.textContent = `ユーザー名:${member.username}`;
+
+                // ユーザーラップ
+                userWrap.setAttribute('class','user-wrap');
+                userWrap.appendChild(nameListItem);
+                userWrap.appendChild(idListItem);
 
                 check.setAttribute('type','checkbox');
                 check.setAttribute('name','delCheck');
+
+                membersList.appendChild(userWrap);
                 membersList.appendChild(check);
-                
-            }); 
+
+            });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('メンバーの取得に失敗しました');
