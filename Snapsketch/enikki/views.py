@@ -916,9 +916,9 @@ def ajax_groupmembers_list(request):
         # selected_users または group_name が不足している場合
         response_data = {"error": "無効なリクエスト"}
         return JsonResponse(response_data, status=400)
-
+   
 def ajax_deletemembers_list(request):
-    if request.method == "POST":
+   if request.method == "POST":
         selected_users = request.POST.getlist("selected_users[]")
         group_name = request.POST.get("group_name")
 
@@ -955,7 +955,8 @@ def ajax_deletemembers_list(request):
 
         # selected_users または group_name が不足している場合
         response_data = {"error": "無効なリクエスト"}
-        return JsonResponse(response_data, status=400)
+        return JsonResponse(response_data, status=400)   
+#     group = GroupMaster.objects.get(groupname=group_name)
 
 def index(request, *args, **kwargs):
     return render(request, "index.html")
@@ -1231,6 +1232,25 @@ def fetch_like(request):
                 return JsonResponse({'posts':posts_data})
     else:
         return JsonResponse(status=500)
+
+def ajax_getmembers_list(request):
+    if request.method == 'POST':
+        group_name = request.POST.get('group_name')
+        print(f'group_name:{group_name}')
+        try:
+            
+            groups = UserGroupTable.objects.filter(group__groupname=group_name).select_related("group")
+            print(f'groups:{groups}')
+            # context = {"groups": groups}
+            # members = groups.user
+            members = [{'username': entry.user.username} for entry in groups]
+
+            return JsonResponse({'members': members})
+        except GroupMaster.DoesNotExist:
+            return JsonResponse({'error': 'グループが見つかりません'})
+
+
+    return JsonResponse({'error': '無効なリクエスト'})
 
 # UUID型を文字列に変換する関数
 def convert_uuid_to_str(obj):
