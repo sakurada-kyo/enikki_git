@@ -39,6 +39,7 @@ main #box{
     float: right;
     font-size: 30px;
     list-style: none;
+    height: 560px;
 }
 
 .side-list {

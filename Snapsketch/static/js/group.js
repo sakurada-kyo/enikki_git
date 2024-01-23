@@ -17,8 +17,59 @@ document.addEventListener('DOMContentLoaded', function() {
     button.addEventListener('click', function() {
       var delpopUp = document.getElementById('delete-popup-content');
       delpopUp.style.display = 'block';
+      // ボタンに関連するグループ名を取得
+      var groupName = button.getAttribute('data-group-name');
+
+      // メンバーを取得して表示
+      fetchMembers(groupName);
+
     });
   });
+  
+  function fetchMembers(groupName) {
+    var delpopUp = document.getElementById('delete-popup-content');
+    delpopUp.style.display = 'block';
+
+    $.ajax({
+        url: '/enikki/group/ajax_getmembers_list/',
+        type: 'POST',
+        data: {
+            'group_name': groupName,
+        },
+        dataType: 'json',
+        headers: { 'X-CSRFToken': csrftoken },
+        success: function (data) {
+            console.log('メンバーの取得に成功しました。');
+
+            console.log(`member:${JSON.stringify(data.members)}`)
+
+            // 以前のメンバーリストをクリア
+            var membersList = document.getElementById('members-list');
+            membersList.innerHTML = '';
+
+            // メンバーをリストに追加
+            data.members.forEach(function (member) {
+                var listItem = document.createElement('li');
+                var check = document.createElement('input');
+
+                listItem.textContent = member.username; // メンバーに 'username' プロパティがあると仮定
+                membersList.appendChild(listItem);
+
+                check.setAttribute('type','checkbox');
+                check.setAttribute('name','delCheck');
+                membersList.appendChild(check);
+                
+            }); 
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('メンバーの取得に失敗しました');
+            console.log("jqXHR          : " + jqXHR.status);
+            console.log("textStatus     : " + textStatus);
+            console.log("errorThrown    : " + errorThrown.message);
+        },
+    });
+}
+ 
 
   //ポップアップを閉じる
   closeButton.addEventListener('click', function() {
@@ -72,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // 削除ボタンにクリックイベントリスナーを追加
   deleteButton.addEventListener('click', function() {
     console.log('Delete button clicked');
-    var checkboxes = document.querySelectorAll('input[name="scales"]:checked');
+    var checkboxes = document.querySelectorAll('input[name="delCheck"]:checked');
     var selectedUsers = [];
 
     checkboxes.forEach(function(checkbox) {
