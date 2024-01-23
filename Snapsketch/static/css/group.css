@@ -23,7 +23,7 @@
     text-align: center;
     height: 300px;
     width: 100%;
-    max-width: 700px;
+    max-width: 600px;
     background: white;
     margin: 15% auto;
     padding: 10px;
@@ -50,4 +50,48 @@
         width: 90%; /* ウィンドウの90%までの幅に制限 */
         margin: 5% auto; /* 上下のマージンを調整 */
     }
+}
+
+img{
+    width: 100px;
+    height: 100px;
+}
+
+.grp{
+    border: solid 2px #000;
+    width: 75%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 35px;
+    padding: 10px;
+    height: 120px;
+    background-color: #fff;
+}
+
+.grp img{
+    border: solid 2px #000;
+    border-radius: 60px;
+    float: left;
+}
+
+.grp p{
+    margin-top:20px;
+    font-size: 24px;
+}
+
+.sum{
+    float: right;
+    flex-flow: column;
+    width: 20%;
+    margin-right: 20px;
+}
+
+.add , .del{
+    font-size: 14px;
+    width: 150px;
+    margin-top: 15px;
+}
+
+h2{
+    margin-top: 20px;
 }

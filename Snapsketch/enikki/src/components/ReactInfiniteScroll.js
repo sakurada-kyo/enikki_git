@@ -6,36 +6,41 @@ const ReactInfiniteScroll = (props) => {
   const [page,setPage] = useState(1)
   const [hasMore,setHasMore] = useState(true)
   const selectedGroup = props.selectedGroup;
-  const [clickedPage,setClickedPage] = useState('')
-  const [clickedLikeCnt,setClickedLikeCnt] = useState('')
-  // const currentGroup = props.currentGroup; 
+  var clickedPage = '';
+  // const [clickedPage,setClickedPage] = useState('')
 
+  // 最初に投稿取得
   useEffect(() => {
     fetchPosts()
   }, []);
 
+  // グループ変更時に投稿取得
   useEffect(() => {
     if (selectedGroup) {
       fetchPosts(selectedGroup); // グループリストが変更されたときの処理
     }
   }, [selectedGroup]);
 
-  //いいね
-  const fetchLike = async() => {
+  // いいねボタン押下した投稿取得
+  const handleLike = (event) => {
+    const articleElem = event.target.closest('.content');
+    clickedPage = articleElem.getAttribute("data-page");
+    console.log(`clickedPage:${clickedPage}`)
+    fetchLike(clickedPage);
+  }
+
+  //いいね機能
+  const fetchLike = async(page) => {
+    console.log(`page:${page}`);
     const formData = new FormData();
-    formData.append('groupIcon', groupIcon);
-    formData.append('groupname', groupname);
-    const url = '/enikki/fetch_posts/';
+    formData.append('page', page);
+    const url = '/enikki/timeline/fetch_like/';
     const options = {
       method: "POST",
       headers: {
         'X-CSRFToken': csrftoken
       },
-      body: JSON.stringify({
-        group: '', // 現在のグループ
-        page: page, // クリックした投稿のページ番号
-        likeCount: '' // 現在のいいね数
-      })
+      body: formData
     }
 
     try{
@@ -45,6 +50,14 @@ const ReactInfiniteScroll = (props) => {
         // レスポンスをJSON形式に変換
         const responseData = await res.json();
 
+        // レスポンスデータからpostsを取得
+        const parsePostList = responseData.posts;
+
+        // postsにセット
+        setPosts(parsePostList);
+
+        // pageセット
+        setPage(parsePostList.length);
 
     } catch(e){
         console.log(e);
@@ -52,7 +65,7 @@ const ReactInfiniteScroll = (props) => {
   }
 
   const fetchPosts = async(groupname) => {
-    const url = '/enikki/fetch_posts/';
+    const url = '/enikki/timeline/fetch_posts/';
     const options = {
       method: "POST",
       headers: {
@@ -62,7 +75,7 @@ const ReactInfiniteScroll = (props) => {
     }
 
     if(groupname){
-      options.body = JSON.stringify({ 
+      options.body = JSON.stringify({
         'group':groupname
       })
     }
@@ -76,7 +89,7 @@ const ReactInfiniteScroll = (props) => {
 
         // const parsePostList = JSON.parse(responseData.posts);
         const parsePostList = responseData.posts;
-        
+
         // postsにセット
         setPosts(parsePostList);
 
@@ -109,9 +122,9 @@ const ReactInfiniteScroll = (props) => {
 
         // レスポンスをJSON形式に変換
         const responseData = await res.json();
-        
+
         const loadDatas = responseData.posts;
-        
+
         // postsに追加
         setPosts(prevPosts => [...prevPosts, ...loadDatas]);
 
@@ -128,8 +141,6 @@ const ReactInfiniteScroll = (props) => {
     }
   }
 
-
-
     return(
       <div id='scroll'>
         <InfiniteScroll
@@ -143,7 +154,7 @@ const ReactInfiniteScroll = (props) => {
                   <img className="user_icon" src={`/media/${post.post__user__user_icon_path}`} alt="ユーザーアイコン" />
                   <p className="user_name">{ post.post__user__username }</p>
                   <div className="like">
-                    <button type="button" className="ajax-like">
+                    <button type="button" className="ajax-like" onClick={handleLike}>
                       {post.is_liked ? (
                         // すでにいいねしている時
                         <i className="fas fa-heart text-danger"></i>
@@ -170,7 +181,3 @@ const ReactInfiniteScroll = (props) => {
     )
 }
 export default ReactInfiniteScroll;
-
-// いいね機能
-// いいねボタンクリックハンドラ
-// レスポンス：いいね有無、いいね数をレンダリング

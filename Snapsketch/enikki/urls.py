@@ -6,7 +6,7 @@ app_name = "enikki"
 urlpatterns = [
     path("timeline/", views.TimelineView.as_view(), name="timeline"),
     path('timeline/ajax_timeline/', views.ajax_timeline, name='ajax_timeline'),
-    # path('timeline/ajax_like/', views.ajax_like, name='ajax_like'),
+    path('timeline/fetch_like/', views.fetch_like, name='fetch_like'),
     path('timeline/creategroup/', views.fetch_group_create, name='fetch_group_create'),
     path("comment/", views.CommentView.as_view(), name="comment"),
     path('canvas/', views.CanvasView.as_view(), name='canvas'),
@@ -24,7 +24,7 @@ urlpatterns = [
     path('group/ajax_getmembers_list/',views.ajax_getmembers_list,name='ajax_getmembers_list'),
     path('ajax_changeGroup/',views.ajax_changeGroup, name='changeGroup'),
     path('grouptest/', views.fetch_grouplist,name='grouptest'),
-    path('fetch_posts/', views.fetch_posts,name='fetch_posts'),
+    path('timeline/fetch_posts/', views.fetch_posts,name='fetch_posts'),
     path('fetch_loadmore/', views.fetch_loadmore,name='fetch_loadmore'),
     
     # path('frequest/',views.RequestView,name='friend_request') #view関数はまだわからないから適当

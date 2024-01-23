@@ -5,7 +5,7 @@ const GroupCreatePopup = (props) => {
     const [groupname, setGroupName] = useState('');
 
     //ポップアップ非表示
-    const handleClickPopupWrapper = () => {
+    const unShowPopupWrapper = () => {
         props.unShowPopup();
     }
 
@@ -21,9 +21,9 @@ const GroupCreatePopup = (props) => {
         setGroupName(text);
     };
 
-    //親のグループリスト追加関数
-    const handleAddGroup = (data) => {
-        props.handleAddGroup(data)
+    // 親のグループ追加関数
+    const parentAddGroup = (data) => {
+        props.parentAddGroup(data);
     }
 
     // グループ作成
@@ -31,7 +31,7 @@ const GroupCreatePopup = (props) => {
         const formData = new FormData();
         formData.append('groupIcon', groupIcon);
         formData.append('groupname', groupname);
-        
+
         const url = '/enikki/timeline/creategroup/';
         const options = {
             method: 'POST',
@@ -48,10 +48,13 @@ const GroupCreatePopup = (props) => {
             // レスポンスをJSON形式に変換
             const responseData = await res.json();
 
+            // メッセージ取得
             const addGroup = responseData.data;
 
-            // groupListに追加
-            handleAddGroup(addGroup);
+            parentAddGroup(addGroup);
+
+            // ポップアップ閉じる
+            unShowPopupWrapper();
 
         } catch (e) {
             console.log('エラーが発生しました')
@@ -61,7 +64,7 @@ const GroupCreatePopup = (props) => {
     return (
         <div id="popup-wrapper">
             <div id="popup-inside">
-                <div id="close" onClick={handleClickPopupWrapper}>x</div>
+                <div id="close" onClick={unShowPopupWrapper}>x</div>
                 <div id="group-wrapper">
                     <h1>グループ作成</h1>
                     <div id='groupname'>
@@ -80,3 +83,6 @@ const GroupCreatePopup = (props) => {
 };
 
 export default GroupCreatePopup;
+
+// 実行順序（ポップアップ　→　タイムライン）
+// xボタンクリック時の処理

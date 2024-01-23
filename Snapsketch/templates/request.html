@@ -1,50 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>base</title>
-  <link rel="stylesheet" href="{% static "css/request.css" %}">
-</head>
-<body>
-<header>
-        <div id = "logo">Snap Sketch</div>
-</header>
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/request.css' %}">
+{% endblock  %}
 
-<div class="wrapper">
-    <div id = "foot">
-        <p>マイページ</p><br>
-        <p>カレンダー</p><br>
-        <p>ガチャ</p>
+{% block content %}
+<div class="search">
+    <input type="text">
+    <input type="button" value="検索">
+</div>
+{% for follower in followers %}
+<form class="request-form">
+    <img src="{{ follower.followee__user_icon_path }}" width="110px" height="110px">
+    <div class="user-info">
+        <p>ユーザーID:<span class="user-id">{{ follower.followee__user_id }}</span>
+        <br>ユーザー名:<span class="username">{{ follower.followee__username }}</span>
+        <br>からフレンド申請があります。</p>
     </div>
-<main>
-    {% comment %} <!-ここから中身作成-> {% endcomment %}
-    <div id = "box">
-
-        <div class="search">
-            <input type="text">
-            <input type="button" value="検索">
-        </div>
-
-        <div class="request">
-            <div class="top">
-                <img src="../img/fruitoji.png" width="110px" height="110px">
-            </div>
-            <div class="who">
-                <p>*****************************<br>があなたをフォローしました。</p>
-            </div>
-
-            <div class="approve">
-                <button type = submit class="allow" type="button" name="1">承認</button>
-                <button type = submit class="delete" type="button" vname="2">削除</button>
-            </div>
-        </div>
+    <div class="approve">
+        <input type="submit" class="allow" name="1" value="承認">
+        <input type="submit" class="delete" name="2" value="拒否">
     </div>
-</main>
+</form>
+{% endfor %}
+{% endblock  %}
+
+{% block footer %}
 <footer>
     <div id = "kotei">
         <small>&copy;2023 SnapSketch</small>
     </div>
 </footer>
-</div>
-</body>
-</html>
+{% endblock %}
