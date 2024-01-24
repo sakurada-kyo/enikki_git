@@ -8,7 +8,7 @@ $(function(){
         // Ajaxリクエストを作成
         $.ajax({
             type: 'POST', // POSTリクエスト
-            url: $(this).attr('action'), // フォームのアクションURLを取得
+            url: '/enikki/usersearch/ajax_search/', // フォームのアクションURLを取得
             data: {
                 'searchId': searchId, // 検索テキストの値をデータとして送信
             },
@@ -53,9 +53,9 @@ function showUser(data) {
     formElem.appendChild(iconElem);
     formElem.appendChild(userElem);
     formElem.appendChild(btnElem);
-    
+
     fragment.appendChild(formElem);
-    
+
     return fragment;
 }
 

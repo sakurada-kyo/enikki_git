@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<form id="search-form" action="{% url 'パスの名前' %}" method="post">
+<form id="search-form">
     {% csrf_token %}
     <dl class="search2">
         <dt><input type="text" name="search" value="{{ query }}" placeholder="ユーザーIDを入力...." /></dt>

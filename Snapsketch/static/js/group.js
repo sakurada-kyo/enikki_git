@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var inviteButton = document.getElementById('invite');
   var closeButton = document.getElementById('close');
   var close1Button = document.getElementById('close1');
-  var deleteButton = document.getElementById('delete');
   var delButtons = document.querySelectorAll('.del'); // 複数の要素を選択するためにquerySelectorAllを使用
 
   // 追加ポップアップ
@@ -29,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
   });
-  
+
   function ajaxMembers(groupName) {
     var delpopUp = document.getElementById('delete-popup-content');
     delpopUp.style.display = 'block';
@@ -51,8 +50,11 @@ document.addEventListener('DOMContentLoaded', function() {
             var membersList = document.getElementById('members-list');
             membersList.innerHTML = '';
 
-            // メンバーをリストに追加
-            data.members.forEach(function (member) {
+            // グループメンバーがいるかどうか
+            if(data.members[0]){
+              console.log(`data.members:${JSON.stringify(data.members)}`)
+              // メンバーをリストに追加
+              data.members.forEach(function (member) {
                 var userWrap = document.createElement('div');
                 var nameListItem = document.createElement('li');
                 var idListItem = document.createElement('li');
@@ -60,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // ユーザーID
                 idListItem.textContent = `ユーザーID:${member.user_id}`;
+
                 // ユーザー名
                 nameListItem.textContent = `ユーザー名:${member.username}`;
 
@@ -68,13 +71,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 userWrap.appendChild(nameListItem);
                 userWrap.appendChild(idListItem);
 
+                // チェックボックス
                 check.setAttribute('type','checkbox');
                 check.setAttribute('name','delCheck');
 
+                // メンバー一覧に追加
                 membersList.appendChild(userWrap);
                 membersList.appendChild(check);
 
-            });
+              });
+
+              // 削除ボタン生成
+              const delBtn = document.createElement('input');
+              delBtn.setAttribute('id','delete')
+              delBtn.setAttribute('type','submit')
+              delBtn.setAttribute('name','action')
+              delBtn.setAttribute('value','削除')
+              membersList.appendChild(delBtn)
+
+              handleDeleteBtn()
+            }else{
+              // メンバーが取得できない場合
+              const pTag = document.createElement('p')
+              pTag.setAttribute('id','memberNot')
+              pTag.innerHTML = 'メンバーがいません'
+              membersList.appendChild(pTag)
+            }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('メンバーの取得に失敗しました');
@@ -84,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
     });
 }
- 
+
 
   //ポップアップを閉じる
   closeButton.addEventListener('click', function() {
@@ -133,7 +155,11 @@ document.addEventListener('DOMContentLoaded', function() {
       },
     });
   });
+});
 
+function handleDeleteBtn(){
+  // 削除ボタン取得
+  const deleteButton = document.getElementById('delete');
   // 削除ボタンにクリックイベントリスナーを追加
   deleteButton.addEventListener('click', function() {
     console.log('Delete button clicked');
@@ -170,6 +196,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       },
-    });    
+    });
   });
-});
+}

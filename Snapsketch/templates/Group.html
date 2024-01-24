@@ -32,7 +32,6 @@
     <input type="checkbox" id="scales" name="scales">
     <p>{{ friend.followee.username }}</p>
     {% endfor %}
-
     <input id="invite" type="submit" name="action" value="追加">
     {% else %}
     <!-- 友達がいない場合の表示 -->
@@ -50,9 +49,7 @@
     {% csrf_token %}
     <h2>グループメンバー一覧</h2>
     <ul id="members-list">
-      <input type="checkbox" id="scales" name="scales">
     </ul>
-    <input id="delete" type="submit" name="action" value="削除">
   </div>
 </div>
 {% endblock %}

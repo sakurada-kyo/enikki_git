@@ -659,7 +659,7 @@ class SearchView(TemplateView):
     template_name = "usersearch.html"
 
     def get(self, request, *args, **kwargs):
-        render(request, self.template_name)
+        return render(request, self.template_name)
 
 # ユーザー検索ajax
 def ajax_search(request):
@@ -1238,9 +1238,10 @@ def ajax_getmembers_list(request):
         try:
             # グループ特定
             groups = UserGroupTable.objects.filter(user__user_id=user_id,group__groupname=group_name).select_related("group")
-
-            # グループユーザーのユーザIDとユーザー名格納
-            members = [{'user_id':entry.user.user_id,'username': entry.user.username} for entry in groups]
+            members = {}
+            for entry in groups:
+                if entry.user.user_id != user_id:
+                    members = [{'user_id':entry.user.user_id,'username': entry.user.username}]
 
             return JsonResponse({'members': members})
         except GroupMaster.DoesNotExist:
