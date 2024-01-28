@@ -1,14 +1,17 @@
 from audioop import reverse
 import calendar
+from typing import Any
 from uuid import UUID
 from django.conf import settings
+from django.forms import ValidationError
+from django.http.response import HttpResponse as HttpResponse
 from django.views.generic import TemplateView
 import json
 import os
 from django.db.models import Q
 import tempfile
 from datetime import datetime
-from django.http import Http404, HttpResponse, HttpResponseServerError, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseServerError, JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from .models import PostMaster
 from django.utils.crypto import get_random_string
@@ -27,6 +30,31 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+# グループ作成画面表示
+def create_group(request):
+    if request.method == 'GET':
+        return render(request,template_name='groupCreate.html')
+    
+    if request.method == 'POST':
+        
+        # ログインユーザー取得
+        user = request.user
+        
+        # リクエストデータ取得
+        groupname = request.POST['groupname']
+        group_icon = request.FILES['groupIcon']
+        
+        # DBへ保存
+        group = GroupMaster.objects.create(groupname=groupname,group_icon_path=group_icon)
+        UserGroupTable.objects.create(user=user,group=group)
+        
+        # セッションへ保存
+        group_list = [groupname]
+        request.session['groupList'] = group_list
+        request.session['currentGroup'] = groupname
+        
+        return redirect('timeline')
 
 # # タイムライン画面表示
 class TimelineView(LoginRequiredMixin,TemplateView):
@@ -663,32 +691,58 @@ class SearchView(TemplateView):
 
 # ユーザー検索ajax
 def ajax_search(request):
+    print('ajax_search')
     if request.method == "POST":
+        # 検索対象のユーザーID取得
         search_id = request.POST.get('searchId')
+        
+        # ログインユーザーのID
+        user = request.user
+        
+        # 検索対象のユーザーIDがなかった場合
+        if not search_id:
+            return JsonResponse({'error':'IDを入力してください'})
+        
+        # ユーザーモデル定義
         user_model = get_user_model()
-        result = (
-            user_model.objects
-            .filter(user_id__exact = search_id)
-            .values(
-                'user_id',
-                'username',
-                'user_icon_path',
-            )
-        )
-
+        
+        try:
+            # 検索対象のユーザーインスタンス
+            searched_user = user_model.objects.get(user_id=search_id)
+            
+            # フォロー済みかどうか
+            is_followed = Follower.objects.filter(follower=searched_user,followee=user).exists()
+        except (ValidationError,user_model.DoesNotExist) as e:
+            print(e)
+            return JsonResponse({'error':'検索されたユーザー存在しません'})
+        
+        # レスポンスデータ
         context = {
-            'user_id':result[0].user_id,
-            'username':result[0].username,
-            'user_icon_path':result[0].user_icon_path
+            'user_id':searched_user.user_id,
+            'username':searched_user.username,
+            'user_icon_path':searched_user.user_icon_path.url,
+            'is_followed':is_followed
         }
-
+        
         return JsonResponse({'context':context})
 
 def ajax_follow(request):
     if request.method == "POST":
-        followed_id = request.POST.get('followId') # フォローするユーザID
-        user_id = request.user.user_id
-        Follower.objects.create(follower=followed_id, followee=user_id)
+        # フォロー対象のユーザーID
+        followed_id = request.POST.get('followId') 
+        
+        # ログイン中のユーザー
+        user = request.user
+        
+        # ユーザーモデル取得
+        user_model = get_user_model()
+        
+        # フォロー対象のユーザーインスタンス
+        followed_user = user_model.objects.get(user_id=followed_id)
+        
+        # DBへ保存
+        Follower.objects.create(follower=followed_user, followee=user)
+        
         return JsonResponse({'msg':'フォロー成功'})
 
 #友達申請処理
@@ -972,7 +1026,7 @@ def fetch_posts(request):
 
             if groupname:
                 request.session['currentGroup'] = groupname
-
+        
         # セッションから現在グループ名を取得
         groupname = request.session['currentGroup']
 

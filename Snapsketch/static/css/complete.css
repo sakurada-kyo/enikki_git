@@ -1,12 +1,3 @@
-/* #backBtn,#createBtn{
-    background-color: #165E83;
-    color: #fff;
-    margin-top: 50px;
-    font-size: 13px;
-    height: 29px;
-    width: 25%;
-} */
-
 body {
     background-color: #A5A0CF; /* 背景色 */
     color:#000000;
@@ -14,7 +5,8 @@ body {
 .container {
     margin-top: 100px;
 }
-.form-group {
+
+.wrap{
     max-width: 400px;
     margin: auto;
     background-color: #fff;
@@ -22,10 +14,12 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.form-group h2 {
+
+h2{
     margin-bottom: 20px;
     text-align: center;
 }
-.form-group button[type="submit"] {
-    width: 100%;
+
+.row{
+    text-align: center;
 }

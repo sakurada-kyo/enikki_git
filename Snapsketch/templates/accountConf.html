@@ -1,55 +1,51 @@
 {% load static %}
-
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <link rel="stylesheet" href="{% static 'css/accountConf.css' %}">
-  <link rel="icon" href="data:,">
-</head>
-<body>
-  <header>
-    <h1>アカウント作成</h1>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+    <link rel="stylesheet" href="{% static 'css/accountConf.css' %}" />
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <header>
+      <h1>アカウント作成</h1>
+    </header>
 
-  <main>
-      <div class ="wrapper">
-          <div id = "mid">
-            <form method="get" action="/enikki/timeline/" enctype="multipart/form-data">
-              {% csrf_token %}
-              {{ form.username.label_tag }}
-              {{ form.username.value }}
+    <main>
+      <div class="wrapper">
+        <div id="mid">
+          <form method="post" action="{% url 'account_conf' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.username.label_tag }}
+            {{ form.username.value }}
 
-              {{ form.email.label_tag }}
-              {{ form.email.value }}
+            {{ form.email.label_tag }}
+            {{ form.email.value }}
 
-              {{ form.password1.label_tag }}
-              ********  <!-- パスワードは非表示にするか、適当な表示を考える -->
+            {{ form.password1.label_tag }}
+            ******** <!-- パスワードは非表示にするか、適当な表示を考える -->
 
-              {{ form.password2.label_tag }}
-              ********  <!-- パスワードは非表示にするか、適当な表示を考える -->
+            {{ form.password2.label_tag }}
+            ******** <!-- パスワードは非表示にするか、適当な表示を考える -->
 
-              {{ form.user_icon_path.label_tag }}
-              <img src="{{ form.user_icon_path.value.url }}" alt="User Icon">
+            {{ form.user_icon_path.label_tag }}
+            <img src="{{ form.user_icon_path.value.url }}" alt="User Icon" />
 
-              {{ form.tel.label_tag }}
-              {{ form.tel.value }}
+            {{ form.tel.label_tag }}
+            {{ form.tel.value }}
 
-              {{ form.gender.label_tag }}
-              {{ form.gender.value }}
+            {{ form.gender.label_tag }}
+            {{ form.gender.value }}
 
-              {{ form.birthday.label_tag }}
-              {{ form.birthday.value }}
-              <input type="submit" onclick="history.back()" class="button" value="戻る">
-              <input type="submit" class="button2" value="作成する">
-            </form>
-    </div>
-    </div>
-  </main>
+            {{ form.birthday.label_tag }}
+            {{ form.birthday.value }}
+            <input type="submit" onclick="history.back()" class="button" value="戻る" />
+            <input type="submit" class="button2" value="作成する" />
+          </form>
+        </div>
+      </div>
+    </main>
 
-  <footer>
-  </footer>
-    <p><a href = "login.html"></a></p>
-    
+    <footer></footer>
   </body>
 </html>

@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "enikki.apps.EnikkiConfig",
     "login_app.apps.LoginAppConfig",
     "bootstrap4",
-    # 'rest_framework',
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -138,7 +138,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "login_app.CustomUser"
 
 # ログイン後のリダイレクト先を設定する場合
-LOGIN_REDIRECT_URL = "enikki:timeline"
+# LOGIN_REDIRECT_URL = "enikki:timeline"
 
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
