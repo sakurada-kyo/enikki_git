@@ -2,16 +2,17 @@
 $(function(){
     $('.allow').on('click', function(e) {
         e.preventDefault(); // フォームの通常の送信を防ぐ
-        
+
         // クリックされた要素の親要素から user-id を取得
         const followerId = $(this).closest('.request-form').find('.user-id').text();
         const removeElement = $(this).closest('.request-form').find('.delete');
+
         // Ajaxリクエストを作成
         $.ajax({
             type: 'POST', // POSTリクエスト
             url: '/enikki/request/allow', // フォームのアクションURLを取得
             data: {
-                'followerID': followerId, // 検索テキストの値をデータとして送信
+                'followerId': followerId, // 検索テキストの値をデータとして送信
             },
             success: function(response) {
                 $(this).remove();

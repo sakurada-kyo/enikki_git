@@ -657,51 +657,29 @@ def ajax_follow(request):
     if request.method == "POST":
         # フォロー対象のユーザーID
         followed_id = request.POST.get('followId') 
-        
+
         # ログイン中のユーザー
         user = request.user
-        
+
         # ユーザーモデル取得
         user_model = get_user_model()
-        
+
         # フォロー対象のユーザーインスタンス
         followed_user = user_model.objects.get(user_id=followed_id)
-        
+
         # DBへ保存
         Follower.objects.create(follower=followed_user, followee=user)
-        
+
         return JsonResponse({'msg':'フォロー成功'})
 
 #友達申請処理
-# def request_view(request):
-#     if request.method == 'GET':
-#         user_id = request.user.user_id
+def request_view(request):
+    if request.method == 'GET':
 
-#         followers = (
-#             Follower.objects
-#             .filter(follower__user_id=user_id)
-#             .exclude(followee__user_id=user_id)
-#             .select_related('followee')
-#             .values(
-#                 'followee__user_id',
-#                 'followee__username',
-#                 'followee__user_icon_path'
-#             )
-#         )
-
-#         context = {
-#             'followers':followers
-#         }
-
-#         return render(request,template_name='request.html',context)
-
-#友達申請処理
-class RequestView(TemplateView):
-    template_name = "request.html"
-
-    def get(self, request, *args, **kwargs):
+        # ログインユーザーID
         user_id = request.user.user_id
 
+        # フォローリクエスト対象のユーザー
         followers = (
             Follower.objects
             .filter(follower__user_id=user_id)
@@ -718,16 +696,22 @@ class RequestView(TemplateView):
             'followers':followers
         }
 
-        return render(request,self.template_name,context)
+        return render(request,'request.html',context)
 
 # フォローリクエスト許可機能
 def allow(request):
     print('allow')
     if request.method == 'POST':
-        followed_id = request.POST.get('followerID')
+        followed_id = request.POST.get('followerId')
         user_id = request.user.user_id
         Follower.objects.create(follower=followed_id, followee=user_id)
         return JsonResponse({'msg':'承認しました'})
+
+# フォローリクエスト拒否機能
+def deny(request):
+    print('deny')
+    if request.method == 'POST':
+        return JsonResponse({'msg':'拒否しました'})
 
 # マイページ機能
 class MypageView(LoginRequiredMixin,TemplateView):
@@ -741,12 +725,12 @@ class MypageView(LoginRequiredMixin,TemplateView):
             try:
                 User = get_user_model()
                 user = get_object_or_404(User, username=self.request.user.username)
+                context['user_id'] = user.user_id
                 context["username"] = user.username
                 context["email"] = user.email
                 context["password"] = user.password
                 context["user_icon"] = user.user_icon_path.url
-                # context['introduction'] = user.introduction
-                # context['icon_path'] = user.icon_path
+                
             except Http404:
                 context["error"] = "ユーザーが見つかりません"
             return render(request, self.template_name, context)
