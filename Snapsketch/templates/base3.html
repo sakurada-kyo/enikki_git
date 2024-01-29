@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/style3.css' %}">
+    {% comment %} <!-- Bootstrapのスタイルを追加 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> {% endcomment %}
+    <link rel="icon" href="data:,">
+    {% block css %}{% endblock %}
+    
+</head>
+<body>
+
+<div class="wrapper">
+    <header>
+            <div id = "logo">Snap Sketch</div>
+    </header>
+    <main>
+        <ul id="side">
+            {% block side %}
+            {% endblock %}
+        </ul>
+        <div id = "box">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+    {% block footer %}
+    {% endblock %}
+</div>
+
+<script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'js/app.js' %}"></script>
+<script src="https://kit.fontawesome.com/706c0011db.js" crossorigin="anonymous"></script>
+{% block js %}{% endblock %}
+</body>
+</html>
