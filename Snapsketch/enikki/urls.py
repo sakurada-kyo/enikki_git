@@ -17,6 +17,7 @@ urlpatterns = [
     path("calendar/", views.CalendarView.as_view(), name="calendar"),
     path("calendar/ajax_calendar/", views.ajax_calendar, name="ajax_calendar"),
     path('comment/ajax_comment/',views.ajax_comment, name='ajax_comment'),
+    path('comment/delete_comment/',views.delete_comment,name='delete_comment'),
     path('friend/', views.FriendView.as_view(), name='friend'),
     path('group/',views.GroupView.as_view(), name='group'),
     path('group/ajax_groupmembers_list/',views.ajax_groupmembers_list, name='ajax_groupmembers_list'),

@@ -318,6 +318,18 @@ def ajax_comment(request):
         else:
             return JsonResponse({"error": "コメントがありません"})
 
+def delete_comment(request):
+    comment_id = request.POST.get("comment_id")
+    print(comment_id)
+    if comment_id:
+        comment_uuid = [uuid.UUID(str(comment_id))]  # UUIDを文字列に変換
+
+        comment = CommentMaster.objects.get(pk=comment_uuid)
+        comment.delete()
+        return JsonResponse({"success": True})
+    else:
+        return JsonResponse({"error": "指定されたコメントが見つかりません"})
+
 
 
 # 一時ファイル保存
