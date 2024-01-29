@@ -11,6 +11,7 @@ $(function () {
             .done((data) => {
                 const fragment = add_comment(data);
                 $('.comment-area').append(fragment);
+                closePopup();
             })
             // Ajax通信が失敗したら発動
             .fail((jqXHR, textStatus, errorThrown) => {
@@ -54,6 +55,33 @@ $.ajaxSetup({
     }
 });
 
+$(document).on('click', '.delete-comment', function() {
+    var commentId = $(this).data('comment-id');
+
+    $.ajax({
+        url: '/enikki/comment/delete_comment/',
+        type: 'POST',
+        data: {
+            'comment_id': commentId
+        },
+        headers: { 'X-CSRFToken': csrftoken }
+    })
+    .done((data) => {
+        if (data.success) {
+            // コメント削除成功時の処理（例: コメントを画面から削除）
+            $(this).closest('.comment-content').remove();
+        } else {
+            alert('コメントの削除に失敗しました。');
+        }
+    })
+    .fail((jqXHR, textStatus, errorThrown) => {
+        alert('Ajax通信に失敗しました。');
+        console.log("jqXHR          : " + jqXHR.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+    });
+});
+
 function add_comment(data) {
     console.log(`username:${data.comment_data.username}`);
     var fragment = document.createDocumentFragment();
@@ -84,6 +112,14 @@ function add_comment(data) {
     commentContent.appendChild(commentSentence);
 
     fragment.appendChild(commentContent);
+
+    // 削除ボタンを追加
+    var deleteButton = document.createElement('button');
+    deleteButton.setAttribute('class', 'delete-comment');
+    deleteButton.setAttribute('data-comment-id', data.comment_data.id);
+    deleteButton.innerHTML = '削除';
+
+    commentContent.appendChild(deleteButton);
 
     return fragment;
 }

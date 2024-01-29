@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var listItem = document.createElement('li');
                 var check = document.createElement('input');
 
-                listItem.textContent = member.username; // メンバーに 'username' プロパティがあると仮定
+                listItem.textContent = member.username; 
                 membersList.appendChild(listItem);
 
                 check.setAttribute('type','checkbox');

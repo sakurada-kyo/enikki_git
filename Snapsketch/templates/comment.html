@@ -59,9 +59,11 @@
         {% endif %}
         {% for comment in comments %}
         <div class="comment-content">
-          <img class="user-icon" src="/media/{{ comment.user__user_icon_path }}" alt="コメント" />
-          <span class="comment-name">{{ comment.user__username }}</span><br/>
-          <span class="comment-sentence">{{ comment.comment }}</span>
+          <div class="comment-content2">
+            <img class="user-icon" src="/media/{{ comment.user__user_icon_path }}" alt="コメント" />
+            <span class="comment-name">{{ comment.user__username }}</span><br/>
+          </div>
+            <span class="comment-sentence">{{ comment.comment }}</span>
         </div>
         {% endfor %}
       </div>

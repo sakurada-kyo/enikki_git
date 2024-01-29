@@ -1,7 +1,6 @@
 {
   "name": "enikki",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -24,6 +23,7 @@
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "react-infinite-scroller": "^1.2.6",
-    "react-router-dom": "^6.21.2"
-  }
+    "react-router-dom": "^6.21.3"
+  },
+  "description": ""
 }
