@@ -1,45 +1,43 @@
 // 許可　→　フォロワーテーブルへ追加
-$(function(){
-    $('.allow').on('click', function(e) {
-        e.preventDefault(); // フォームの通常の送信を防ぐ
+$('.allow').on('click', function (e) {
+    e.preventDefault(); // フォームの通常の送信を防ぐ
 
-        // クリックされた要素の親要素から user-id を取得
-        const followerId = $(this).closest('.request-form').find('.user-id').text();
-        const removeElement = $(this).closest('.request-form').find('.delete');
+    // クリックされた要素の親要素から user-id を取得
+    const followerId = $(this).closest('.request-form').find('.user-id').text();
+    const removeElement = $(this).closest('.request-form').find('.delete');
 
-        // Ajaxリクエストを作成
-        $.ajax({
-            type: 'POST', // POSTリクエスト
-            url: '/enikki/request/allow', // フォームのアクションURLを取得
-            data: {
-                'followerId': followerId, // 検索テキストの値をデータとして送信
-            },
-            success: function(response) {
-                $(this).remove();
-                removeElement.remove();
-                const pElem = createElem('p','','','承認しました');
-                const approveElem = $(this).closest('.request-form').find('.approve');
-                $(approveElem).append($(pElem));
-            },
-            error: function(error) {
-                // エラー時の処理
-                console.error('Ajaxリクエストエラー:', error);
-            }
-        });
+    console.log(`followedId:${followerId}`)
+
+    // Ajaxリクエストを作成
+    $.ajax({
+        type: 'POST', // POSTリクエスト
+        url: '/enikki/request/allow', // フォームのアクションURLを取得
+        data: {
+            'followerId': followerId, // 検索テキストの値をデータとして送信
+        },
+        success: function (response) {
+            $(this).remove();
+            removeElement.remove();
+            const pElem = createElem('p', '', '', '承認しました');
+            const approveElem = $(this).closest('.request-form').find('.approve');
+            $(approveElem).append($(pElem));
+        },
+        error: function (error) {
+            // エラー時の処理
+            console.error('Ajaxリクエストエラー:', error);
+        }
     });
 });
 
 // リクエスト拒否　→　表示のみ
-$(function(){
-    $('.deny').on('click', function(e) {
-        e.preventDefault(); // フォームの通常の送信を防ぐ
-        const removeElement = $(this).closest('.request-form').find('.allow');
-        $(this).remove();
-        removeElement.remove();
-        const pElem = createElem('p','','','拒否しました');
-        const approveElem = $(this).closest('.request-form').find('.approve');
-        $(approveElem).append($(pElem));
-    });
+$('.deny').on('click', function (e) {
+    e.preventDefault(); // フォームの通常の送信を防ぐ
+    const removeElement = $(this).closest('.request-form').find('.allow');
+    $(this).remove();
+    removeElement.remove();
+    const pElem = createElem('p', '', '', '拒否しました');
+    const approveElem = $(this).closest('.request-form').find('.approve');
+    $(approveElem).append($(pElem));
 });
 
 function createElem(tagName, id = '', className = '', textContent = '') {
@@ -48,12 +46,12 @@ function createElem(tagName, id = '', className = '', textContent = '') {
         element.setAttribute('class', className);
     }
 
-    if(id){
-        element.setAttribute('id',id)
+    if (id) {
+        element.setAttribute('id', id)
     }
 
     if (textContent) {
         element.innerHTML = textContent;
     }
     return element;
-  };
+};

@@ -18,12 +18,18 @@
         <br>からフレンド申請があります。</p>
     </div>
     <div class="approve">
-        <input type="submit" class="allow" name="1" value="承認">
-        <input type="submit" class="delete" name="2" value="拒否">
+        <input type="button" class="allow" name="1" value="承認">
+        <input type="button" class="delete" name="2" value="拒否">
     </div>
 </form>
 {% endfor %}
 {% endblock  %}
+
+
+{% block js %}
+<script src="{% static 'js/request.js' %}"></script>
+{% endblock %}
+    
 
 {% block footer %}
 <footer>
