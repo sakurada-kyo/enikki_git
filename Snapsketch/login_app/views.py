@@ -12,6 +12,22 @@ from django.views import View
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 
+# セッションにグループ保存（ログイン時に使用）
+def set_session_group(request):
+    user = request.user
+
+    groupnames = (
+        UserGroupTable.objects
+        .filter(user=user)
+        .values_list('group__groupname',flat=True)
+        .order_by('group__created_at')
+    )
+    
+    group_list = [group for group in groupnames]
+
+    request.session['groupList'] = group_list
+    request.session['currentGroup'] = group_list[0]
+
 # ログイン
 def signin(request):
     if request.method == 'POST':
@@ -21,6 +37,7 @@ def signin(request):
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
             if user is not None:
+                set_session_group(request)
                 login(request, user)
                 return redirect('enikki:timeline')
     else:
@@ -34,26 +51,14 @@ def signup(request):
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             # フォームがバリデーションを通過したら確認画面を表示
-            form.save()
+            user = form.save()
+            login(request, user)
             return render(request, 'complete.html', {'form': form})
     else:
         form = CustomUserCreationForm()
 
     return render(request, 'signup.html', {'form': form})
 
-# アカウント確認
-def confirm_signup(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            # ユーザーが確認画面で「完了」ボタンを押したらデータをDBに保存
-            user = form.save()
-            # ユーザーをログインさせる
-            login(request, user)
-            return render('complete.html')  # 登録完了ページにリダイレクト
-    else:
-        return redirect('register')
-    
 # 登録完了
 def complete(request):
     return render(request,template_name='groupCreate.html')
