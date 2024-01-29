@@ -33,109 +33,36 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 # グループ作成画面表示
 def create_group(request):
+    print('create_group')
     if request.method == 'GET':
         return render(request,template_name='groupCreate.html')
-    
+
     if request.method == 'POST':
-        
+
         # ログインユーザー取得
         user = request.user
-        
+
         # リクエストデータ取得
         groupname = request.POST['groupname']
-        group_icon = request.FILES['groupIcon']
-        
+        group_icon = request.FILES['group-icon']
+
         # DBへ保存
         group = GroupMaster.objects.create(groupname=groupname,group_icon_path=group_icon)
         UserGroupTable.objects.create(user=user,group=group)
-        
+
         # セッションへ保存
         group_list = [groupname]
         request.session['groupList'] = group_list
         request.session['currentGroup'] = groupname
-        
-        return redirect('timeline')
+
+        return render(request,template_name='timeline.html')
 
 # # タイムライン画面表示
 class TimelineView(LoginRequiredMixin,TemplateView):
     template_name = "timeline.html"
-    print(f"TimelineView")
 
     def get(self, request, *args, **kwargs):
         print("GET")
-        # context = {}
-        # # ページ番号
-        # page = request.GET.get("page", 1)
-
-        # # セッションから全グループ取得
-        # if "groupList" in request.session:
-        #     groupList = request.session["groupList"]
-        #     try:
-        #         if groupList:
-        #             groups = (
-        #                 GroupMaster.objects.filter(groupname__in=groupList)
-        #                 .values("groupname", "group_icon_path")
-        #                 .order_by("created_at")
-        #             )
-        #             context["groupList"] = groups
-        #         else:
-        #             raise Http404
-        #     except Http404:
-        #         print("グループを取得できませんでした")
-        # else:
-        #     print("groupListがない")
-
-        # if "currentGroup" in request.session:
-        #     # セッションからグループ名取得
-        #     currentGroup = request.session["currentGroup"]
-        #     print(f"currentGroupTimelineView:{currentGroup}")
-        #     try:
-        #         user = request.user
-
-        #         # グループ内の投稿記事持ってくる
-        #         if currentGroup:
-        #             # グループ名を使って関連する投稿を取得
-        #             group_posts = GroupPostTable.objects.filter(
-        #                 group__groupname=currentGroup
-        #             )
-        #             post_ids = group_posts.values_list("post__post_id", flat=True)
-
-        #             posts = (
-        #                 PostMaster.objects.filter(post_id__in=post_ids)
-        #                 .values(
-        #                     "post_id",
-        #                     "sketch_path",
-        #                     "diary",
-        #                     "user__username",
-        #                     "user__user_icon_path",
-        #                     "like_count",
-        #                     "comment_count",
-        #                 )
-        #                 .order_by("updated_at")
-        #             )
-
-        #             # いいね情報を取得
-        #             likes = LikeTable.objects.filter(
-        #                 user=user, post__in=post_ids
-        #             ).values_list("post_id", flat=True)
-
-        #             # ポストにいいね情報を追加
-        #             for post in posts:
-        #                 post_id = post["post_id"]
-        #                 # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
-        #                 post["is_liked"] = post_id in likes
-
-        #             # GroupPostTable内のpage情報をpostsに追加
-        #             for post, group_post in zip(posts, group_posts):
-        #                 post["page"] = group_post.page
-        #             print(f"TimelineView:posts:{posts}")
-        #             context["posts"] = posts
-        #         else:
-        #             raise Http404
-        #     except Http404:
-        #         print("グループ内で投稿がありません")
-        # else:
-        #     print("currentGroupがない")
         return render(request, self.template_name)
 
 # ajaxタイムライン
@@ -440,7 +367,6 @@ class CanvasView(LoginRequiredMixin,TemplateView):
         # 画像ファイルの取得とバリデーション
         if "img" in request.FILES:
             reqFile = request.FILES["img"]
-            print(reqFile)
             reqFileName = reqFile.name
             reqFileBinary = reqFile.read()
 
@@ -465,8 +391,6 @@ class CanvasView(LoginRequiredMixin,TemplateView):
 
                 date = timezone.now().date()
 
-                print(f"user:{user},date:{date}")
-
                 try:
                     # 指定した日付とログインユーザーに基づいてレコードを抽出
                     post = PostMaster.objects.filter(
@@ -475,12 +399,11 @@ class CanvasView(LoginRequiredMixin,TemplateView):
                         created_at__month=date.month,
                         created_at__day=date.day,
                     ).first()
+                    
                     if post:
-                        print(f"更新:{user}")
                         post.sketch_path = image_content  # 日記を更新する場合
                         post.save()  # 変更を保存
                     else:
-                        print(f"作成:{user}")
                         post = PostMaster.objects.create(
                             sketch_path=image_content, user=user
                         )
@@ -496,17 +419,10 @@ class CanvasView(LoginRequiredMixin,TemplateView):
                 # 画像が正しく読み込めない場合のエラーハンドリング
                 print("IOエラーが発生しました。")
 
-        # もし画像ファイルがリクエストに含まれていない場合のエラーハンドリング
-        print("画像ファイルがありません。")
-
 
 # 絵日記作成画面
 class CreateView(LoginRequiredMixin,TemplateView):
     template_name = 'create.html'
-
-    @method_decorator(login_required)  # ここでログインが必要なことを示します
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         print("GET")
@@ -523,7 +439,6 @@ class CreateView(LoginRequiredMixin,TemplateView):
         date = timezone.now().date()
 
         try:
-            print(f"CreateView:POST:try")
             # ユーザーの投稿を取得または作成
             post, created = PostMaster.objects.get_or_create(
                 user=user,
@@ -742,28 +657,29 @@ def ajax_follow(request):
     if request.method == "POST":
         # フォロー対象のユーザーID
         followed_id = request.POST.get('followId') 
-        
+
         # ログイン中のユーザー
         user = request.user
-        
+
         # ユーザーモデル取得
         user_model = get_user_model()
-        
+
         # フォロー対象のユーザーインスタンス
         followed_user = user_model.objects.get(user_id=followed_id)
-        
+
         # DBへ保存
         Follower.objects.create(follower=followed_user, followee=user)
-        
+
         return JsonResponse({'msg':'フォロー成功'})
 
 #友達申請処理
-class RequestView(TemplateView):
-    template_name = "request.html"
+def request_view(request):
+    if request.method == 'GET':
 
-    def get(self, request, *args, **kwargs):
+        # ログインユーザーID
         user_id = request.user.user_id
 
+        # フォローリクエスト対象のユーザー
         followers = (
             Follower.objects
             .filter(follower__user_id=user_id)
@@ -780,16 +696,22 @@ class RequestView(TemplateView):
             'followers':followers
         }
 
-        return render(request,self.template_name,context)
+        return render(request,'request.html',context)
 
 # フォローリクエスト許可機能
 def allow(request):
     print('allow')
     if request.method == 'POST':
-        followed_id = request.POST.get('followerID')
+        followed_id = request.POST.get('followerId')
         user_id = request.user.user_id
         Follower.objects.create(follower=followed_id, followee=user_id)
         return JsonResponse({'msg':'承認しました'})
+
+# フォローリクエスト拒否機能
+def deny(request):
+    print('deny')
+    if request.method == 'POST':
+        return JsonResponse({'msg':'拒否しました'})
 
 # マイページ機能
 class MypageView(LoginRequiredMixin,TemplateView):
@@ -803,12 +725,12 @@ class MypageView(LoginRequiredMixin,TemplateView):
             try:
                 User = get_user_model()
                 user = get_object_or_404(User, username=self.request.user.username)
+                context['user_id'] = user.user_id
                 context["username"] = user.username
                 context["email"] = user.email
                 context["password"] = user.password
                 context["user_icon"] = user.user_icon_path.url
-                # context['introduction'] = user.introduction
-                # context['icon_path'] = user.icon_path
+                
             except Http404:
                 context["error"] = "ユーザーが見つかりません"
             return render(request, self.template_name, context)
@@ -1039,8 +961,15 @@ def fetch_posts(request):
             if groupname:
                 request.session['currentGroup'] = groupname
         
+        if 'currentGroup' in request.session:
+            print('currentあり')
+        else:
+            print('currentなし')
+        
         # セッションから現在グループ名を取得
         groupname = request.session['currentGroup']
+
+        
 
         # ログインユーザー取得
         user_id = request.user.user_id
