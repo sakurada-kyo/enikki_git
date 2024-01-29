@@ -15,16 +15,13 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, 
 # セッションにグループ保存（ログイン時に使用）
 def set_session_group(request):
     user = request.user
-
     groupnames = (
         UserGroupTable.objects
         .filter(user=user)
         .values_list('group__groupname',flat=True)
         .order_by('group__created_at')
     )
-    
     group_list = [group for group in groupnames]
-
     request.session['groupList'] = group_list
     request.session['currentGroup'] = group_list[0]
 
@@ -37,8 +34,8 @@ def signin(request):
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
             if user is not None:
+                login(request,user)
                 set_session_group(request)
-                login(request, user)
                 return redirect('enikki:timeline')
     else:
         form = AuthenticationForm()
