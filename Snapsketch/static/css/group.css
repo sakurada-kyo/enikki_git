@@ -61,8 +61,8 @@ img{
     border: solid 2px #000;
     width: 75%;
     margin: auto;
-    margin-top: 20px;
-    margin-bottom: 35px;
+    /* margin-top: 20px; */
+    /* margin-bottom: 35px; */
     padding: 10px;
     height: 120px;
     background-color: #fff;
@@ -72,10 +72,12 @@ img{
     border: solid 2px #000;
     border-radius: 60px;
     float: left;
+    margin-top: 10px;
+    margin-left: 30px;
 }
 
 .grp p{
-    margin-top:20px;
+    margin-top:45px;
     font-size: 24px;
 }
 
@@ -83,7 +85,8 @@ img{
     float: right;
     flex-flow: column;
     width: 20%;
-    margin-right: 20px;
+    margin-right: 30px;
+    margin-top: 10px;
 }
 
 .add , .del{
