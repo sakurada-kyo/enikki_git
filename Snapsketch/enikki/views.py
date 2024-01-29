@@ -1,14 +1,17 @@
 from audioop import reverse
 import calendar
+from typing import Any
 from uuid import UUID
 from django.conf import settings
+from django.forms import ValidationError
+from django.http.response import HttpResponse as HttpResponse
 from django.views.generic import TemplateView
 import json
 import os
 from django.db.models import Q
 import tempfile
 from datetime import datetime
-from django.http import Http404, HttpResponse, HttpResponseServerError, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseServerError, JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from .models import PostMaster
 from django.utils.crypto import get_random_string
@@ -27,6 +30,31 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+# グループ作成画面表示
+def create_group(request):
+    if request.method == 'GET':
+        return render(request,template_name='groupCreate.html')
+    
+    if request.method == 'POST':
+        
+        # ログインユーザー取得
+        user = request.user
+        
+        # リクエストデータ取得
+        groupname = request.POST['groupname']
+        group_icon = request.FILES['groupIcon']
+        
+        # DBへ保存
+        group = GroupMaster.objects.create(groupname=groupname,group_icon_path=group_icon)
+        UserGroupTable.objects.create(user=user,group=group)
+        
+        # セッションへ保存
+        group_list = [groupname]
+        request.session['groupList'] = group_list
+        request.session['currentGroup'] = groupname
+        
+        return redirect('timeline')
 
 # # タイムライン画面表示
 class TimelineView(LoginRequiredMixin,TemplateView):
@@ -671,36 +699,62 @@ class SearchView(TemplateView):
     template_name = "usersearch.html"
 
     def get(self, request, *args, **kwargs):
-        render(request, self.template_name)
+        return render(request, self.template_name)
 
 # ユーザー検索ajax
 def ajax_search(request):
+    print('ajax_search')
     if request.method == "POST":
+        # 検索対象のユーザーID取得
         search_id = request.POST.get('searchId')
+        
+        # ログインユーザーのID
+        user = request.user
+        
+        # 検索対象のユーザーIDがなかった場合
+        if not search_id:
+            return JsonResponse({'error':'IDを入力してください'})
+        
+        # ユーザーモデル定義
         user_model = get_user_model()
-        result = (
-            user_model.objects
-            .filter(user_id__exact = search_id)
-            .values(
-                'user_id',
-                'username',
-                'user_icon_path',
-            )
-        )
-
+        
+        try:
+            # 検索対象のユーザーインスタンス
+            searched_user = user_model.objects.get(user_id=search_id)
+            
+            # フォロー済みかどうか
+            is_followed = Follower.objects.filter(follower=searched_user,followee=user).exists()
+        except (ValidationError,user_model.DoesNotExist) as e:
+            print(e)
+            return JsonResponse({'error':'検索されたユーザー存在しません'})
+        
+        # レスポンスデータ
         context = {
-            'user_id':result[0].user_id,
-            'username':result[0].username,
-            'user_icon_path':result[0].user_icon_path
+            'user_id':searched_user.user_id,
+            'username':searched_user.username,
+            'user_icon_path':searched_user.user_icon_path.url,
+            'is_followed':is_followed
         }
-
+        
         return JsonResponse({'context':context})
 
 def ajax_follow(request):
     if request.method == "POST":
-        followed_id = request.POST.get('followId') # フォローするユーザID
-        user_id = request.user.user_id
-        Follower.objects.create(follower=followed_id, followee=user_id)
+        # フォロー対象のユーザーID
+        followed_id = request.POST.get('followId') 
+        
+        # ログイン中のユーザー
+        user = request.user
+        
+        # ユーザーモデル取得
+        user_model = get_user_model()
+        
+        # フォロー対象のユーザーインスタンス
+        followed_user = user_model.objects.get(user_id=followed_id)
+        
+        # DBへ保存
+        Follower.objects.create(follower=followed_user, followee=user)
+        
         return JsonResponse({'msg':'フォロー成功'})
 
 #友達申請処理
@@ -934,12 +988,7 @@ def ajax_deletemembers_list(request):
         selected_users = request.POST.getlist("selected_users[]")
         group_name = request.POST.get("group_name")
 
-        print("Selected Users:", selected_users)
-        print("Group Name:", group_name)
-
         if selected_users and group_name:
-            print("Received POST request")
-
             try:
                 # グループを識別するために GroupMaster モデルに 'name' フィールドがあると仮定
                 group = GroupMaster.objects.get(groupname=group_name)
@@ -948,9 +997,9 @@ def ajax_deletemembers_list(request):
                 for username in selected_users:
                     print("user_id"+username)
                     try:
-                        usermodel=get_user_model()
-                        user = usermodel.objects.get(username=username)
-                        # user_group, created = UserGroupTable.objects.get_or_create(user=user, group=group)
+                        usermodel=get_user_model() # ユーザーモデル取得
+                        user = usermodel.objects.get(username=username) 
+                        
                         # 必要に応じて user_group の追加処理
                         user_group = UserGroupTable.objects.get(user=user, group=group)
                         user_group.delete()
@@ -970,6 +1019,7 @@ def ajax_deletemembers_list(request):
         # selected_users または group_name が不足している場合
         response_data = {"error": "無効なリクエスト"}
         return JsonResponse(response_data, status=400)   
+#     group = GroupMaster.objects.get(groupname=group_name)
 
 def index(request, *args, **kwargs):
     return render(request, "index.html")
@@ -988,7 +1038,7 @@ def fetch_posts(request):
 
             if groupname:
                 request.session['currentGroup'] = groupname
-
+        
         # セッションから現在グループ名を取得
         groupname = request.session['currentGroup']
 
@@ -1066,7 +1116,8 @@ def fetch_loadmore(request):
                     'post__user__username',
                     'post__user__user_icon_path',
                     'post__like_count',
-                    'post__comment_count'
+                    'post__comment_count',
+                    'page'
                 )
         )
 
@@ -1160,7 +1211,8 @@ def fetch_like(request):
     if request.method == "POST":
         group = request.session["currentGroup"]
         page_str = request.POST.get("page")
-        user_id = request.user.user_id
+        user = request.user
+        user_id = user.user_id
 
         print(f'page_str:{page_str}')
 
@@ -1169,26 +1221,36 @@ def fetch_like(request):
 
             if page:
                 # GroupPostTableから投稿を特定
-                postId = GroupPostTable.objects.filter(group__groupname=group, page=page).values_list(
-                    "post", flat=True
+                query_post_id = (
+                    GroupPostTable.objects
+                    .filter(group__groupname=group, page=page)
+                    .select_related('post')
+                    .values_list(
+                        "post__post_id", flat=True
+                    )
                 )
 
-                postId_list = list(postId)
-                
-                # UUIDの文字列をUUIDオブジェクトに変換
-                postId_list = [uuid.UUID(str(post_id)) for post_id in postId_list]
+                print(f'query_post_id[0]:{query_post_id[0]}')
+
+                # いいね対象の投稿ID
+                post_id = query_post_id[0]
+
+                # postインスタンス
+                post = PostMaster.objects.get(post_id=post_id)
 
                 # likeテーブルから対象記事IDとユーザーIDが同じ行を持ってくる
-                like = LikeTable.objects.filter(user__user_id=user_id, post__post_id=postId_list)
+                like = LikeTable.objects.filter(user__user_id=user_id, post__post_id=post_id)
 
-                # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか)
+                # likeテーブルに対象記事に対してユーザーIDがあるか(すでにいいねしてるかどうか
                 if like.exists():
                     like.delete()
+                    # 対応するPostMasterのlike_countを更新する
+                    PostMaster.objects.filter(post_id=post_id).update(like_count=F("like_count") - 1)
                 else:
-                    like.create(user_id=user_id, post=postId_list[0])
+                    like.create(user=user, post=post)
 
-                # 対応するPostMasterのlike_countを更新する
-                PostMaster.objects.filter(post_id__in=postId_list).update(like_count=F("like_count") + 1)
+                    # 対応するPostMasterのlike_countを更新する
+                    PostMaster.objects.filter(post_id=post_id).update(like_count=F("like_count") + 1)
 
                 # 投稿取得
                 posts = (
@@ -1202,7 +1264,8 @@ def fetch_like(request):
                         'post__user__username',
                         'post__user__user_icon_path',
                         'post__like_count',
-                        'post__comment_count'
+                        'post__comment_count',
+                        'page'
                     )
                     .order_by('post__updated_at')
                 )
@@ -1235,15 +1298,16 @@ def fetch_like(request):
 
 def ajax_getmembers_list(request):
     if request.method == 'POST':
+        user_id = request.user.user_id
         group_name = request.POST.get('group_name')
-        print(f'group_name:{group_name}')
+
         try:
-            
-            groups = UserGroupTable.objects.filter(group__groupname=group_name).select_related("group")
-            print(f'groups:{groups}')
-            # context = {"groups": groups}
-            # members = groups.user
-            members = [{'username': entry.user.username} for entry in groups]
+            # グループ特定
+            groups = UserGroupTable.objects.filter(user__user_id=user_id,group__groupname=group_name).select_related("group")
+            members = {}
+            for entry in groups:
+                if entry.user.user_id != user_id:
+                    members = [{'user_id':entry.user.user_id,'username': entry.user.username}]
 
             return JsonResponse({'members': members})
         except GroupMaster.DoesNotExist:

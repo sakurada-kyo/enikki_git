@@ -1,26 +1,21 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <link rel="stylesheet" href="{% static "css\complete.css" %}">
-</head>
-<body>
-  <header>
-    <h1>Snap Sketch</h1>
-  </header>
-
-  <main>
-    <div id = "mid">
-      <h2>アカウントが登録されました</h2>
-        <a href="login.html">ログイン画面に戻る</a>
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css\complete.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrap">
+        <h2>新規登録完了</h2>
+        <div class="row justify-content-center">
+          <a href="{% url 'enikki:create_group' %}">グループ作成へ</a>
+        </div>
+      </div> 
     </div>
-
-  </main>
-
-  <footer>
-  </footer>
-    <p><a href = "login.html"></a></p>
 
   </body>
 </html>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import GroupNav from './GroupNav';
 import ReactInfiniteScroll from './ReactInfiniteScroll';
-import GroupCreatePopup from './GroupCreatePopup';
 
 const Timeline = () => {
   const [selectedGroup, setSelectedGroup] = useState('');

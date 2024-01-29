@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css\groupCreate.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-group">
+        <h2>グループ作成</h2>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_groupname" class="form-label">グループ名</label>
+                <input type="text" id="id_groupname" name="username" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="id_group-icon" class="form-label">グループアイコン</label>
+                <input type="file" id="id_group-icon" name="group-icon" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">作成</button>
+        </form>
+      </div> 
+    </div>
+
+  </body>
+</html>

@@ -1,64 +1,67 @@
 # views.py
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic.edit import CreateView
 from .forms import CustomUserCreationForm, CustomUserCreationForm
 from .models import CustomUser
 from enikki.models import *
 from django.urls import reverse_lazy
 from django.views import View
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views import generic
 
-class CustomLoginView(LoginView):
-    template_name = 'login.html'  # ログインフォームが表示されるテンプレートの指定
-    success_url = reverse_lazy('enikki:timeline')  # ログイン成功時のリダイレクト先
+# ログイン
+def signin(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('enikki:timeline')
+    else:
+        form = AuthenticationForm()
 
-    def form_valid(self, form):
-        # 親クラスの form_valid メソッドを実行してログインを完了させる
-        response = super().form_valid(form)
+    return render(request, 'login.html', {'form': form})
 
-        # ログインが成功したユーザー情報を取得する
-        user = self.request.user
-        print(user.user_id)
-
-        # ユーザーに紐づくグループ取得
-        groups = (
-                    UserGroupTable.objects.filter(user__username=user.username)
-                    .select_related("group")
-                    .values_list('group__groupname', flat=True)
-                    .order_by('group__created_at')
-                    )
-        if groups:
-            groups_list = list(groups)
-            self.request.session['groupList'] = groups_list
-            self.request.session['currentGroup'] = groups_list[0]
-
-        return response
-    
-class CustomUserCreateView(CreateView):
-    model = CustomUser
-    form_class = CustomUserCreationForm
-    template_name = 'signup.html'  # ユーザー作成フォームが表示されるテンプレートの指定
-    success_url = reverse_lazy('accountConf')  # 登録後にログインページにリダイレクト
-
-
-class SignUpConfirmationView(View):
-    template_name = 'accountConf.html'
-
-    def post(self, request, *args, **kwargs):
+# 新規登録
+def signup(request):
+    if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
+            # フォームがバリデーションを通過したら確認画面を表示
+            form.save()
+            return render(request, 'complete.html', {'form': form})
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'signup.html', {'form': form})
+
+# アカウント確認
+def confirm_signup(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            # ユーザーが確認画面で「完了」ボタンを押したらデータをDBに保存
             user = form.save()
+            # ユーザーをログインさせる
             login(request, user)
-            # フォームがバリデーションを通過した場合、確認画面にデータを渡して表示
-            return render(request, self.template_name, {'form': form})
-        else:
-            print(form.errors)
-            # フォームが無効な場合、新規登録画面に戻る
-            return redirect('signup')
+            return render('complete.html')  # 登録完了ページにリダイレクト
+    else:
+        return redirect('register')
+    
+# 登録完了
+def complete(request):
+    return render(request,template_name='groupCreate.html')
+
+# ログアウト
+def signout(request):
+    logout(request)
+    return render(request,template_name='logout.html')
 
 #######################################################################
 class PasswordReset(PasswordResetView):

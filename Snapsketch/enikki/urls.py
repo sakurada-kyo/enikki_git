@@ -27,6 +27,9 @@ urlpatterns = [
     path('grouptest/', views.fetch_grouplist,name='grouptest'),
     path('timeline/fetch_posts/', views.fetch_posts,name='fetch_posts'),
     path('fetch_loadmore/', views.fetch_loadmore,name='fetch_loadmore'),
+    path('usersearch/', views.SearchView.as_view(),name='usersearch'),
+    path('usersearch/ajax_search/', views.ajax_search,name='ajax_search'),
+    path('usersearch/ajax_follow/', views.ajax_follow,name='ajax_follow'),
+    path('create_group/', views.create_group,name='create_group'),
     
-    # path('frequest/',views.RequestView,name='friend_request') #view関数はまだわからないから適当
 ]
