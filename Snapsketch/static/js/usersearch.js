@@ -38,6 +38,8 @@ function showUser(data) {
     const icon = data.context.user_icon_path;
     const isFollowed = data.context.is_followed
 
+    console.log(`isFollowed:${isFollowed}`)
+
     const iconElem = createElem("img","","","");
     const idElem = createElem("p","user-id","",userId);
     const nameElem = createElem("p","username","",username);
@@ -51,11 +53,13 @@ function showUser(data) {
 
     btnElem.setAttribute("type","button");
     btnElem.setAttribute("value","フォロー");
+    btnElem.setAttribute("disabled","");
+
     // フォロー済みか否か
     if (isFollowed) {
-        btnElem.setAttribute("disabled",true);
+        btnElem.disabled = "disabled"
     } else {
-        btnElem.setAttribute("disabled",false);
+        btnElem.disabled = null
     }
 
     userElem.appendChild(idElem);
@@ -74,9 +78,9 @@ function showUser(data) {
 function handleFollowBtn() {
     $('#follow-button').on('click', function(e) {
         e.preventDefault(); // フォームの通常の送信を防ぐ
-    
+
         var followId = $('#user-id').text();
-    
+
         // Ajaxリクエストを作成
         $.ajax({
             type: 'POST', // POSTリクエスト

@@ -11,7 +11,7 @@
 </div>
 {% for follower in followers %}
 <form class="request-form">
-    <img src="{{ follower.followee__user_icon_path }}" width="110px" height="110px">
+    <img src="/media/{{ follower.followee__user_icon_path }}" width="110px" height="110px">
     <div class="user-info">
         <p>ユーザーID:<span class="user-id">{{ follower.followee__user_id }}</span>
         <br>ユーザー名:<span class="username">{{ follower.followee__username }}</span>

@@ -625,24 +625,24 @@ def ajax_search(request):
         
         # ログインユーザーのID
         user = request.user
-        
+
         # 検索対象のユーザーIDがなかった場合
         if not search_id:
             return JsonResponse({'error':'IDを入力してください'})
-        
+
         # ユーザーモデル定義
         user_model = get_user_model()
-        
+
         try:
             # 検索対象のユーザーインスタンス
             searched_user = user_model.objects.get(user_id=search_id)
-            
+
             # フォロー済みかどうか
             is_followed = Follower.objects.filter(follower=searched_user,followee=user).exists()
         except (ValidationError,user_model.DoesNotExist) as e:
             print(e)
             return JsonResponse({'error':'検索されたユーザー存在しません'})
-        
+
         # レスポンスデータ
         context = {
             'user_id':searched_user.user_id,
@@ -650,13 +650,13 @@ def ajax_search(request):
             'user_icon_path':searched_user.user_icon_path.url,
             'is_followed':is_followed
         }
-        
+
         return JsonResponse({'context':context})
 
 def ajax_follow(request):
     if request.method == "POST":
         # フォロー対象のユーザーID
-        followed_id = request.POST.get('followId') 
+        followed_id = request.POST.get('followId')
 
         # ログイン中のユーザー
         user = request.user
@@ -730,13 +730,11 @@ class MypageView(LoginRequiredMixin,TemplateView):
                 context["email"] = user.email
                 context["password"] = user.password
                 context["user_icon"] = user.user_icon_path.url
-                
             except Http404:
                 context["error"] = "ユーザーが見つかりません"
             return render(request, self.template_name, context)
         else:
             redirect("login_app:login")
-
 
 def mypage_icon(request):
     print("icon")
@@ -813,7 +811,7 @@ def ajax_mypage_detail(request):
         return JsonResponse({'success': True,'msg':msg})
     else:
         return JsonResponse({'error': 'エラーが発生しました'})
-    
+
 class GroupView(LoginRequiredMixin,TemplateView):
     template_name = 'Group.html'
     def get_mutual_members(self, user):
@@ -825,9 +823,8 @@ class GroupView(LoginRequiredMixin,TemplateView):
             return friends
         except Follower.DoesNotExist:
             raise Http404("You have no friends.")
-        
+
     def get_mutual_group(self, user):
-        
         try:
             # UserGroupTableのuserを取得
             user_group_users = UserGroupTable.objects.filter(user=user).values_list(
@@ -920,8 +917,8 @@ def ajax_deletemembers_list(request):
                     print("user_id"+username)
                     try:
                         usermodel=get_user_model() # ユーザーモデル取得
-                        user = usermodel.objects.get(username=username) 
-                        
+                        user = usermodel.objects.get(username=username)
+
                         # 必要に応じて user_group の追加処理
                         user_group = UserGroupTable.objects.get(user=user, group=group)
                         user_group.delete()
@@ -965,11 +962,9 @@ def fetch_posts(request):
             print('currentあり')
         else:
             print('currentなし')
-        
+
         # セッションから現在グループ名を取得
         groupname = request.session['currentGroup']
-
-        
 
         # ログインユーザー取得
         user_id = request.user.user_id
