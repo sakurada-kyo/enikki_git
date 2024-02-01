@@ -1,32 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-  <link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
+
 {% endblock %}
 {% block content %}
-  <div class="btn">
-    <div class="buttonId" id="buttonId">
-      <input type="button" class="button1" onclick="showPreviousMonth()" value="◀" />
-    </div>
-
-    <div class="calendar" id="calendar"></div>
-
-    <div class="buttonId" id="buttonId">
-      <input type="button" class="button2" onclick="showNextMonth()" value="▶" />
-    </div>
+  <div id="calendar"></div>
+  <div id="popup-wrapper">
+    <div id="popup-inside"></div>
   </div>
-  {% comment %} <div id="popup-wrapper">
-    <div id="popup-inside">
-    </div>
-  </div> {% endcomment %}
 {% endblock %}
 
 {% block js %}
-  <script>
-    var datesFromDjango = JSON.parse('{{ dates|escapejs }}')
-  </script>
   <script src="{% static 'frontend/page2.js' %}"></script>
-  <script src="{% static 'js/calendar.js' %}"></script>
 {% endblock %}
 
 {% block side %}

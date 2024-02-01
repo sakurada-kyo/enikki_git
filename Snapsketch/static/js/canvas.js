@@ -33,18 +33,6 @@ function colorChange(colorCode){
   drawColor = colorCode;
 }
 
- //消しゴムツール
- function kesigomu(){
-  drawColor = "#ffffff";
- }
-
-// canvasを画像で保存
-// $("#download").click(function(){
-//   var canvas = document.getElementById('canvas');
-//   var base64 = canvas.toDataURL("image/jpeg");
-//   document.getElementById("download").href = base64;
-// });
-
 function setBgColor(){
   // canvasの背景色を設定(指定がない場合にjpeg保存すると背景が黒になる)
   ctx.fillStyle = bgColor;
@@ -55,10 +43,14 @@ function colorChange(colorCode){
   drawColor = colorCode;
 }
 
+$('#eraser').on('click',eraser)
+$('#clear').on('click',clearCanvas)
+
  //消しゴムツール
- function eraser(){
+function eraser(){
   drawColor = "#ffffff";
- }
+  console.log(drawColor)
+}
 
 //絵を全て消すボタンの動作
 function clearCanvas() {

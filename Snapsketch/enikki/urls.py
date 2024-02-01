@@ -32,5 +32,8 @@ urlpatterns = [
     path('usersearch/ajax_follow/', views.ajax_follow,name='ajax_follow'),
     path('create_group/', views.create_group,name='create_group'),
     path('request/', views.request_view,name='request'),
+    path('request/allow/', views.allow,name='allow'),
+    path('request/deny/', views.deny,name='deny'),
+    path('calendar_test/', views.calendar_test,name='calendar_test'),
 
 ]

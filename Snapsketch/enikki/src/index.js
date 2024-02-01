@@ -1,7 +1,11 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
+import React from 'react'
+import { createRoot } from 'react-dom/client'
 import Timeline from './components/Timeline'
 
-const container = document.getElementById('timeline');
-const root = createRoot(container);
-root.render(<Timeline />);
+
+const timelineElem = document.getElementById('timeline');
+const timelineRoot = createRoot(timelineElem);
+timelineRoot.render(<Timeline />);
+
+
+

@@ -6,7 +6,6 @@ function generateCalendar(year, month) {
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfMonth = new Date(year, month, 1).getDay();
-    console.log("月" + daysInMonth, "日" + firstDayOfMonth);
 
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
@@ -30,6 +29,7 @@ function generateCalendar(year, month) {
         daysContainer.appendChild(dayElement);
     });
 
+    console.log(`firstDayOfMonth:${firstDayOfMonth}`)
     for (let i = 0; i < firstDayOfMonth; i++) {
         const emptyDay = document.createElement("div");
         emptyDay.classList.add("day");
@@ -57,14 +57,20 @@ function generateCalendar(year, month) {
 
     calendar.appendChild(daysContainer);
 
-    var dayTags = document.querySelectorAll("[data-post]");
-    dayTags.forEach((element) => {
-      element.addEventListener('click', () => {
-        console.log('data-post:click');
-        $('#popup-wrapper').fadeIn();
-        ajax_open(element);
-      });
-    });
+    $('[data-post="true"]').on('click', function (e) {
+      const clickedDate = $(this).attr('data-date')
+      renderPopup(clickedDate)
+    })
+
+    // var dayTags = document.querySelectorAll("[data-post]");
+    // dayTags.forEach((element) => {
+    //   element.addEventListener('click', () => {
+
+    //     $('#popup-wrapper').fadeIn();
+    //     ajax_open(element);
+    //   });
+    // });
+
     $('#close , #popup-wrapper').click(function(){
       $('#popup-wrapper').fadeOut();
       // 特定のIDを持つ要素内の全ての子要素を削除
@@ -109,38 +115,6 @@ function padZero(num) {
 
 //----------------------ポップアップ表示フェード----------------------
 
-//-----------------------CSRFトークン-----------------------
-  function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = jQuery.trim(cookies[i]);
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
-
-  var csrftoken = getCookie('csrftoken');
-
-  function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-  }
-
-  $.ajaxSetup({
-    beforeSend: function (xhr, settings) {
-      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      }
-    }
-  });
-//-----------------------CSRFトークン-----------------------
 
 //-----------------------ajax処理-----------------------
 function ajax_open(element) {
@@ -157,7 +131,7 @@ function ajax_open(element) {
       headers: { 'X-CSRFToken': csrftoken }
   })
       .done(function (data) {
-        
+
       if ('error' in data) {
           console.log(data.error);
       } else {
@@ -167,10 +141,10 @@ function ajax_open(element) {
       }
       })
       .fail((jqXHR, textStatus, errorThrown) => {
-      alert('Ajax通信に失敗しました。');
-      console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-      console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-      console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
+        alert('Ajax通信に失敗しました。');
+        console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+        console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+        console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
       });
 }
 //-----------------------ajax処理-----------------------
@@ -235,7 +209,7 @@ function showPosts(posts){
         content.setAttribute('data-page', postPage);
 
         fragment.appendChild(content); // fragmentの追加する
-        
+
     });
 
     return fragment;

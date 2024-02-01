@@ -490,6 +490,9 @@ class CreateView(LoginRequiredMixin,TemplateView):
         return redirect("enikki:timeline")
 
 
+def calendar_test(request):
+    return render(request,'calendar_test.html')
+
 # カレンダー画面
 class CalendarView(LoginRequiredMixin,TemplateView):
 
@@ -702,15 +705,42 @@ def request_view(request):
 def allow(request):
     print('allow')
     if request.method == 'POST':
+        # 承認対象のユーザーID
         followed_id = request.POST.get('followerId')
-        user_id = request.user.user_id
-        Follower.objects.create(follower=followed_id, followee=user_id)
+
+        # ユーザーモデル
+        user_model = get_user_model()
+
+        # ログインユーザーインスタンス
+        user = request.user
+
+        # 承認対象のユーザーインスタンス
+        followed_user = user_model.objects.get(user_id=followed_id)
+
+        # Followerテーブルに保存
+        Follower.objects.create(follower=followed_user, followee=user)
+
         return JsonResponse({'msg':'承認しました'})
 
 # フォローリクエスト拒否機能
 def deny(request):
     print('deny')
     if request.method == 'POST':
+        # フォロワー拒否対象ID
+        follower_id = request.POST.get('followerId')
+
+        # ユーザーモデル
+        user_model = get_user_model()
+
+        # ログインユーザーID
+        user = request.user
+
+        # フォロワー拒否対象ユーザーインスタンス
+        follower_instance = user_model.objects.get(user_id=follower_id)
+
+        # 対象インスタンス削除
+        Follower.objects.filter(follower=user,followee=follower_instance).delete()
+
         return JsonResponse({'msg':'拒否しました'})
 
 # マイページ機能
