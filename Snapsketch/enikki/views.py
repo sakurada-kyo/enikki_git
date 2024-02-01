@@ -491,7 +491,30 @@ class CreateView(LoginRequiredMixin,TemplateView):
 
 
 def calendar_test(request):
-    return render(request,'calendar_test.html')
+    print('calendar_test')
+    if request.method == 'POST':
+        # セッションから現在のグループ取得
+        currentGroup = request.session["currentGroup"]
+
+        # ログインユーザー取得
+        user = request.user
+
+        # DBから投稿した日付を取得
+        dates_query = (
+            GroupPostTable.objects.filter(
+                post__user=user, group__groupname=currentGroup
+            )
+            .select_related("post", "group")
+            .values_list("post__created_at", flat=True)
+            .distinct()
+        )
+
+        # 日付を文字列に変換
+        formatted_dates = [date.strftime("%Y-%m-%d") for date in dates_query]
+
+        dates = json.dumps(formatted_dates)
+
+        return JsonResponse({'dates':dates})
 
 # カレンダー画面
 class CalendarView(LoginRequiredMixin,TemplateView):

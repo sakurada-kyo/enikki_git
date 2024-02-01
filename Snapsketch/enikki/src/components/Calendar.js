@@ -9,18 +9,17 @@ import CalendarPopup from './CalendarPopup'
 const Calendar = () => {
     const dates = []
     const [showComponent, setShowComponent] = useState(false);
-    const clickedDate = ''
+    var clickedDate = ''
 
     // ポップアップ表示
     const handleDateClick = (info) => {
-        console.log('クリック')
         clickedDate = info.dateStr
         setShowComponent(true)
     }
 
     // 投稿した日付
     const fetchCalendar = async () => {
-        const url = '/enikki/timeline/fetch_calendar/';
+        const url = '/enikki/calendar_test/';
         const options = {
             method: "POST",
             headers: {
@@ -38,6 +37,7 @@ const Calendar = () => {
             // レスポンスデータからdatesを取得
             dates = responseData.dates;
 
+            console.log(`dates:${dates}`)
 
         } catch (e) {
             console.log(e);

@@ -35,5 +35,4 @@ urlpatterns = [
     path('request/allow/', views.allow,name='allow'),
     path('request/deny/', views.deny,name='deny'),
     path('calendar_test/', views.calendar_test,name='calendar_test'),
-
 ]

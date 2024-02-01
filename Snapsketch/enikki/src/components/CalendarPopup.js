@@ -51,7 +51,7 @@ const CalendarPopup = (props) => {
     const fetchPosts = async (date) => {
         const formData = new FormData()
         formData.append('date', date)
-        const url = '/enikki/calendar/fetch_posts/';
+        const url = '/enikki/calendar/ajax_calendar/';
         const options = {
             method: "POST",
             headers: {
