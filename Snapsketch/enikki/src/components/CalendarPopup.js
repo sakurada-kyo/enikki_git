@@ -80,7 +80,7 @@ const CalendarPopup = (props) => {
     }
 
     // 投稿レンダリング
-    const ContentsRenderer = ({ index, key, style}) => {
+    const ContentsRenderer = () => {
 
         return (
             <>
