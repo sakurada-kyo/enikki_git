@@ -49,13 +49,13 @@ const CalendarPopup = (props) => {
 
     // クリックした投稿取得
     const fetchPosts = async (date) => {
+        console.log(`date:${date}`)
         const formData = new FormData()
         formData.append('date', date)
-        const url = '/enikki/calendar/ajax_calendar/';
+        const url = '/enikki/fetch_calendar_posts/';
         const options = {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
                 'X-CSRFToken': csrftoken
             },
             body: formData

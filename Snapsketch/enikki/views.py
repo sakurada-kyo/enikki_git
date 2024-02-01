@@ -490,9 +490,12 @@ class CreateView(LoginRequiredMixin,TemplateView):
         return redirect("enikki:timeline")
 
 
-def calendar_test(request):
-    print('calendar_test')
-    if request.method == 'POST':
+def view_calendar_test(request):
+    return render(request,'calendar_test.html')
+
+def fetch_calendar_test(request):
+    print('fetch_calendar_test')
+    if request.method == "POST":        
         # セッションから現在のグループ取得
         currentGroup = request.session["currentGroup"]
 
@@ -508,13 +511,69 @@ def calendar_test(request):
             .values_list("post__created_at", flat=True)
             .distinct()
         )
-
+        
         # 日付を文字列に変換
         formatted_dates = [date.strftime("%Y-%m-%d") for date in dates_query]
 
         dates = json.dumps(formatted_dates)
+        
+        print(f'dates:{dates}')
 
         return JsonResponse({'dates':dates})
+
+def fetch_calendar_posts(request):
+    if request.method == "POST":
+        print("fetch_calendar_posts")
+        user = request.user  # ログインユーザー
+        currentGroup = request.session["currentGroup"]  # 現在グループ取得
+        dateStr = request.POST.get("date")  # 日付取得
+        print(f'dateStr:{dateStr}')
+        # 日付文字列を適切な型に変換（例：YYYY-MM-DDの文字列をdatetimeオブジェクトに変換）
+        date = datetime.strptime(dateStr, "%Y-%m-%d").date()
+
+        # 日付からグループ内の投稿取得
+        groupposts = (
+            GroupPostTable.objects.filter(group__groupname=currentGroup)
+            .filter(post__created_at=date)
+            .select_related("post", "group")
+            .values(
+                "post__post_id",
+                "post__sketch_path",
+                "post__diary",
+                "post__user__username",
+                "post__user__user_icon_path",
+                "post__like_count",
+                "post__comment_count",
+                "page",
+            )
+            .distinct()
+        )
+
+        # いいね情報を取得
+        post_ids = [post["post__post_id"] for post in groupposts]
+        likes = LikeTable.objects.filter(
+            user=user, post__post_id__in=post_ids
+        ).values_list("post__post_id", flat=True)
+
+        # ポストにいいね情報を追加
+        for post in groupposts:
+            post_id = post["post__post_id"]
+            # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
+            post["is_liked"] = post_id in likes
+            
+        groupposts_list = list(groupposts)
+        
+        # UUIDを文字列に変換
+        for post in groupposts_list:
+            for key, value in post.items():
+                post[key] = convert_uuid_to_str(value)  # UUIDを文字列に変換
+
+        print(f"groupposts:{groupposts}")
+
+        # リクエストが POST でない場合のデフォルトのレスポンス
+        return JsonResponse(
+            {"posts": groupposts_list, "currentGroup": currentGroup}
+        )
 
 # カレンダー画面
 class CalendarView(LoginRequiredMixin,TemplateView):

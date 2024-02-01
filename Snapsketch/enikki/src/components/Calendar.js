@@ -7,22 +7,30 @@ import CalendarPopup from './CalendarPopup'
 // import './App.css';
 
 const Calendar = () => {
-    const dates = []
     const [showComponent, setShowComponent] = useState(false);
-    var clickedDate = ''
+    const [clickedDate, setClickedDate] = useState('')
+    let dates = []
+    
+
+
+    // 最初に投稿日取得
+    useEffect(() => {
+        fetchCalendar()
+    }, [])
 
     // ポップアップ表示
     const handleDateClick = (info) => {
-        clickedDate = info.dateStr
+        setClickedDate(info.dateStr)
         setShowComponent(true)
     }
 
     // 投稿した日付
     const fetchCalendar = async () => {
-        const url = '/enikki/calendar_test/';
+        const url = '/enikki/fetch_calendar_test/';
         const options = {
-            method: "POST",
+            method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken
             }
         }
@@ -62,3 +70,6 @@ const Calendar = () => {
 }
 
 export default Calendar;
+
+//投稿日に背景色つける
+//マウスオーバーで薄くする
