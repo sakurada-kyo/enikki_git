@@ -181,7 +181,7 @@ const ReactInfiniteScroll = (props) => {
               </div>
               <section className="draw_diary">
                   <img className="draw" src={`/media/${ post.post__sketch_path }`} alt="絵日記の絵" />
-                  <p className="diary">{ post.post__diary }</p>
+                  <div className="diary">{ post.post__diary }</div>
               </section>
             </article>
           ))}

@@ -82,6 +82,9 @@ table {
 
 .content {
     margin-top: 10px;
+    margin: 2em auto;
+	padding:2em;/*内側余白*/
+	border:double 7px #CCCFD6;/*線の種類・太さ・色*/
 }
 
 .user_icon{
@@ -158,4 +161,5 @@ button {
     background-color: #e0e0e0;
     height: 200px;
     width: 100%;
+    writing-mode: tb-rl;
 }

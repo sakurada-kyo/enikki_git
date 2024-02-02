@@ -1,12 +1,13 @@
 body {
     font-family: 'Montserrat Subrayada', sans-serif;
     margin: 0;
-    background-color: #fafdff;
+    background-color: #fffaf0;
 }
 /* 
 .wrapper{
     background-color: #bbb;
 } */
+
 /*ここからヘッダー*/
 header{
     margin: auto;
@@ -79,7 +80,6 @@ main #box{
     background: #fff;
       width: 45%;
     }
-  
   
   .openbtn4 span:nth-of-type(1) {
     top:13px; 
@@ -173,7 +173,7 @@ footer{
     text-align: center;
   }
 
-footer  small{
+footer small{
     color: #ffffff;
 }
 
