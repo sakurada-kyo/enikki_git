@@ -612,6 +612,7 @@ def ajax_calendar(request):
         currentGroup = request.session["currentGroup"]  # 現在グループ取得
         dateStr = request.POST.get("date")  # 日付取得
 
+        
         # 日付文字列を適切な型に変換（例：YYYY-MM-DDの文字列をdatetimeオブジェクトに変換）
         date = datetime.strptime(dateStr, "%Y-%m-%d").date()
 

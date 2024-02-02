@@ -34,7 +34,4 @@ urlpatterns = [
     path('request/', views.request_view,name='request'),
     path('request/allow/', views.allow,name='allow'),
     path('request/deny/', views.deny,name='deny'),
-    path('view_calendar_test/', views.view_calendar_test,name='view_calendar_test'),
-    path('fetch_calendar_test/', views.fetch_calendar_test,name='fetch_calendar_test'),
-    path('fetch_calendar_posts/', views.fetch_calendar_posts,name='fetch_calendar_posts'),
 ]

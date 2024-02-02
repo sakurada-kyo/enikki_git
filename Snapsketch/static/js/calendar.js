@@ -57,19 +57,14 @@ function generateCalendar(year, month) {
 
     calendar.appendChild(daysContainer);
 
-    $('[data-post="true"]').on('click', function (e) {
-      const clickedDate = $(this).attr('data-date')
-      renderPopup(clickedDate)
-    })
+    var dayTags = document.querySelectorAll("[data-post]");
+    dayTags.forEach((element) => {
+      element.addEventListener('click', () => {
 
-    // var dayTags = document.querySelectorAll("[data-post]");
-    // dayTags.forEach((element) => {
-    //   element.addEventListener('click', () => {
-
-    //     $('#popup-wrapper').fadeIn();
-    //     ajax_open(element);
-    //   });
-    // });
+        $('#popup-wrapper').fadeIn();
+        ajax_open(element);
+      });
+    });
 
     $('#close , #popup-wrapper').click(function(){
       $('#popup-wrapper').fadeOut();
@@ -119,6 +114,7 @@ function padZero(num) {
 //-----------------------ajax処理-----------------------
 function ajax_open(element) {
   date = $(element).attr('data-date');
+  console.log(`date:${date}`)
   var formData = new FormData($('#calendar-form').get(0));
   formData.append('date',date);
   $.ajax({

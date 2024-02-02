@@ -15,17 +15,16 @@
       <input type="button" class="button2" onclick="showNextMonth()" value="▶" />
     </div>
   </div>
-  {% comment %} <div id="popup-wrapper">
+  <div id="popup-wrapper">
     <div id="popup-inside">
     </div>
-  </div> {% endcomment %}
+  </div>
 {% endblock %}
 
 {% block js %}
   <script>
     var datesFromDjango = JSON.parse('{{ dates|escapejs }}')
   </script>
-  <script src="{% static 'frontend/page2.js' %}"></script>
   <script src="{% static 'js/calendar.js' %}"></script>
 {% endblock %}
 

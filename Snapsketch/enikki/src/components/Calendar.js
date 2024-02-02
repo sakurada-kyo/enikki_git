@@ -4,14 +4,12 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import jaLocale from '@fullcalendar/core/locales/ja'
 import interactionPlugin from "@fullcalendar/interaction"
 import CalendarPopup from './CalendarPopup'
-// import './App.css';
+
 
 const Calendar = () => {
     const [showComponent, setShowComponent] = useState(false);
     const [clickedDate, setClickedDate] = useState('')
     let dates = []
-    
-
 
     // 最初に投稿日取得
     useEffect(() => {
@@ -20,8 +18,9 @@ const Calendar = () => {
 
     // ポップアップ表示
     const handleDateClick = (info) => {
-        setClickedDate(info.dateStr)
-        setShowComponent(true)
+        console.log(`handleDateClick:${info.dateStr}`)
+        setClickedDate(info.dateStr);
+        setShowComponent(true);
     }
 
     // 投稿した日付
@@ -63,7 +62,7 @@ const Calendar = () => {
                 dayCellClassNames='date' //マウスオーバーで色変える
             />
             {showComponent && <div id='popup-wrapper'>
-                <CalendarPopup date={clickedDate}/>
+            <CalendarPopup date={clickedDate} />
             </div>}
         </>
     );
