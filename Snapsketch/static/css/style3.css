@@ -1,30 +1,32 @@
-
-
 body {
-    font-family: "serif";
+    font-family: 'Montserrat Subrayada', sans-serif;
     margin: 0;
+    background-color: #fafdff;
 }
-
+/* 
 .wrapper{
     background-color: #bbb;
-}
+} */
 /*ここからヘッダー*/
 header{
     margin: auto;
-    background-color: #bbb;
+    /* background-color: #bbb; */
     height: 120px;
+    margin-right: 50%;
 }
 
-header #logo{
-    font-size: 50px;
-    color: #ffffff;
-    padding: 30px;
+header .logo{
+    margin-top: -20px;
+    margin-left: 20px;
+    width: 35%;
 }
+
+
 /*ここまでがヘッダー*/
 /*ここからメイン*/
 main{
     text-align: center;
-    background-color: #bbb;
+    /* background-color: #bbb; */
 }
 
 main #box{
@@ -33,23 +35,128 @@ main #box{
 }
 
 #side{
-    /* margin-top: 150px; */
-    margin-top: 10%;
-    /* margin-right: 150px; */
-    margin-right: 10%;
     float: right;
     font-size: 30px;
     list-style: none;
-    /* height: 560px; */
+    margin-top: -130px;
 }
 
 .side-list {
     text-decoration: none;
-    color: #fff8f8;
+    color: rgba(255,255,255);
     /* width: 5%; */
  }  
 
+ .navbar {
+    position:  absolute;        /* 要素の配置方法を指定 */
+    background-color: rgba(0,0,0,0.3);     /* 背景色指定 */
+    /* opacity: 0.4; */
+    right:  50px;                /* 右からの位置指定 */
+    top: 50px;
+ }
 
+ .openbtn4{
+    position: relative;/*ボタン内側の基点となるためrelativeを指定*/
+    background:#000000;
+    cursor: pointer;
+      width: 50px;
+      height:50px;
+    border-radius: 5px;
+  }
+  
+.openbtn4.active {
+  margin-left: 330px;
+}
+
+  /*ボタン内側*/
+  .openbtn4 span{
+      display: inline-block;
+      transition: all .4s;/*アニメーションの設定*/
+      position: absolute;
+      left: 14px;
+      height: 2px;
+      border-radius: 5px;
+    background: #fff;
+      width: 45%;
+    }
+  
+  
+  .openbtn4 span:nth-of-type(1) {
+    top:13px; 
+  }
+  
+  .openbtn4 span:nth-of-type(2) {
+    top:19px;
+  }
+  
+  .openbtn4 span:nth-of-type(3) {
+    top:25px;
+  }
+  
+  .openbtn4 span:nth-of-type(3)::after {
+    content:"Menu";/*3つ目の要素のafterにMenu表示を指定*/
+    position: absolute;
+    top:5px;
+    left:-2px;
+    color: #fff;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+  }
+  
+  /*activeクラスが付与されると線が回転して×になり、Menu⇒Closeに変更*/
+  
+  .openbtn4.active span:nth-of-type(1) {
+      top: 14px;
+      left: 18px;
+      transform: translateY(6px) rotate(-45deg);
+      width: 30%;
+  }
+  
+  .openbtn4.active span:nth-of-type(2) {
+    opacity: 0;
+  }
+  
+  .openbtn4.active span:nth-of-type(3){
+      top: 26px;
+      left: 18px;
+      transform: translateY(-6px) rotate(45deg);
+      width: 30%;
+  }
+  
+  .openbtn4.active span:nth-of-type(3)::after {
+    content:"Close";/*3つ目の要素のafterにClose表示を指定*/
+      transform: translateY(0) rotate(-45deg);
+    top:5px;
+    left:4px;
+  }
+
+  .hamburger-menu {
+    display: none;
+    flex-direction: column;
+    position: relative; 
+    /* background: #D54884; */
+    cursor: pointer;
+  }
+
+  /*========= レイアウトのためのCSS ===============*/
+  
+  a{
+    color: #333;
+    text-decoration: none;
+    font-family: math;
+    font-size: 40px;
+    font-weight: 100;
+    /* font-family: 'Montserrat Subrayada', sans-serif; */
+  }
+  
+  .lead{
+    margin:20px 0 0 0;
+  }
+  
+  .btn-block{
+    width:200px;  
+    padding: 30px;
+  }
 
 .wrapper{
     box-sizing: border-box;
