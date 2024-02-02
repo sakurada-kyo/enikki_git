@@ -35,6 +35,7 @@ def signin(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request,user)
+                print(f'user_id:{request.user.user_id}')
                 set_session_group(request)
                 return redirect('enikki:timeline')
     else:

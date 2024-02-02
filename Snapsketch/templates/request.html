@@ -10,7 +10,7 @@
     <input type="button" value="検索">
 </div>
 {% for follower in followers %}
-<form class="request-form">
+<div class="request-form">
     <img src="/media/{{ follower.followee__user_icon_path }}" width="110px" height="110px">
     <div class="user-info">
         <p>ユーザーID:<span class="user-id">{{ follower.followee__user_id }}</span>
@@ -21,16 +21,14 @@
         <input type="button" class="allow" name="1" value="承認">
         <input type="button" class="delete" name="2" value="拒否">
     </div>
-</form>
+</div>
 {% endfor %}
 {% endblock  %}
-
 
 {% block js %}
 <script src="{% static 'js/request.js' %}"></script>
 {% endblock %}
     
-
 {% block footer %}
 <footer>
     <div id = "kotei">

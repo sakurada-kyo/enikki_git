@@ -490,6 +490,91 @@ class CreateView(LoginRequiredMixin,TemplateView):
         return redirect("enikki:timeline")
 
 
+def view_calendar_test(request):
+    return render(request,'calendar_test.html')
+
+def fetch_calendar_test(request):
+    print('fetch_calendar_test')
+    if request.method == "POST":        
+        # セッションから現在のグループ取得
+        currentGroup = request.session["currentGroup"]
+
+        # ログインユーザー取得
+        user = request.user
+
+        # DBから投稿した日付を取得
+        dates_query = (
+            GroupPostTable.objects.filter(
+                post__user=user, group__groupname=currentGroup
+            )
+            .select_related("post", "group")
+            .values_list("post__created_at", flat=True)
+            .distinct()
+        )
+        
+        # 日付を文字列に変換
+        formatted_dates = [date.strftime("%Y-%m-%d") for date in dates_query]
+
+        dates = json.dumps(formatted_dates)
+        
+        print(f'dates:{dates}')
+
+        return JsonResponse({'dates':dates})
+
+def fetch_calendar_posts(request):
+    if request.method == "POST":
+        print("fetch_calendar_posts")
+        user = request.user  # ログインユーザー
+        currentGroup = request.session["currentGroup"]  # 現在グループ取得
+        dateStr = request.POST.get("date")  # 日付取得
+        print(f'dateStr:{dateStr}')
+        # 日付文字列を適切な型に変換（例：YYYY-MM-DDの文字列をdatetimeオブジェクトに変換）
+        date = datetime.strptime(dateStr, "%Y-%m-%d").date()
+
+        # 日付からグループ内の投稿取得
+        groupposts = (
+            GroupPostTable.objects.filter(group__groupname=currentGroup)
+            .filter(post__created_at=date)
+            .select_related("post", "group")
+            .values(
+                "post__post_id",
+                "post__sketch_path",
+                "post__diary",
+                "post__user__username",
+                "post__user__user_icon_path",
+                "post__like_count",
+                "post__comment_count",
+                "page",
+            )
+            .distinct()
+        )
+
+        # いいね情報を取得
+        post_ids = [post["post__post_id"] for post in groupposts]
+        likes = LikeTable.objects.filter(
+            user=user, post__post_id__in=post_ids
+        ).values_list("post__post_id", flat=True)
+
+        # ポストにいいね情報を追加
+        for post in groupposts:
+            post_id = post["post__post_id"]
+            # ユーザーがその投稿にいいねしているかどうかを確認し、いいねの状態を追加
+            post["is_liked"] = post_id in likes
+            
+        groupposts_list = list(groupposts)
+        
+        # UUIDを文字列に変換
+        for post in groupposts_list:
+            for key, value in post.items():
+                post[key] = convert_uuid_to_str(value)  # UUIDを文字列に変換
+
+        print(f"groupposts:{groupposts}")
+
+        # リクエストが POST でない場合のデフォルトのレスポンス
+        return JsonResponse(
+            {"posts": groupposts_list, "currentGroup": currentGroup}
+        )
+
 # カレンダー画面
 class CalendarView(LoginRequiredMixin,TemplateView):
 
@@ -702,15 +787,42 @@ def request_view(request):
 def allow(request):
     print('allow')
     if request.method == 'POST':
+        # 承認対象のユーザーID
         followed_id = request.POST.get('followerId')
-        user_id = request.user.user_id
-        Follower.objects.create(follower=followed_id, followee=user_id)
+
+        # ユーザーモデル
+        user_model = get_user_model()
+
+        # ログインユーザーインスタンス
+        user = request.user
+
+        # 承認対象のユーザーインスタンス
+        followed_user = user_model.objects.get(user_id=followed_id)
+
+        # Followerテーブルに保存
+        Follower.objects.create(follower=followed_user, followee=user)
+
         return JsonResponse({'msg':'承認しました'})
 
 # フォローリクエスト拒否機能
 def deny(request):
     print('deny')
     if request.method == 'POST':
+        # フォロワー拒否対象ID
+        follower_id = request.POST.get('followerId')
+
+        # ユーザーモデル
+        user_model = get_user_model()
+
+        # ログインユーザーID
+        user = request.user
+
+        # フォロワー拒否対象ユーザーインスタンス
+        follower_instance = user_model.objects.get(user_id=follower_id)
+
+        # 対象インスタンス削除
+        Follower.objects.filter(follower=user,followee=follower_instance).delete()
+
         return JsonResponse({'msg':'拒否しました'})
 
 # マイページ機能

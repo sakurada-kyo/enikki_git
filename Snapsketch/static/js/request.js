@@ -1,26 +1,22 @@
 // 許可　→　フォロワーテーブルへ追加
 $('.allow').on('click', function (e) {
-    e.preventDefault(); // フォームの通常の送信を防ぐ
+    console.log('allow')
 
     // クリックされた要素の親要素から user-id を取得
-    const followerId = $(this).closest('.request-form').find('.user-id').text();
-    const removeElement = $(this).closest('.request-form').find('.delete');
-
-    console.log(`followedId:${followerId}`)
+    const followerId = $(this).closest('.request-form').find('.user-id').text()
+    const approveElem = $(this).closest('.request-form').find('.approve')
 
     // Ajaxリクエストを作成
     $.ajax({
         type: 'POST', // POSTリクエスト
-        url: '/enikki/request/allow', // フォームのアクションURLを取得
+        url: '/enikki/request/allow/', // フォームのアクションURLを取得
         data: {
             'followerId': followerId, // 検索テキストの値をデータとして送信
         },
         success: function (response) {
-            $(this).remove();
-            removeElement.remove();
-            const pElem = createElem('p', '', '', '承認しました');
-            const approveElem = $(this).closest('.request-form').find('.approve');
-            $(approveElem).append($(pElem));
+            $(approveElem).html('')
+            const pElem = $('<p>').text('承認しました')
+            $(approveElem).append(pElem)
         },
         error: function (error) {
             // エラー時の処理
@@ -29,17 +25,36 @@ $('.allow').on('click', function (e) {
     });
 });
 
-// リクエスト拒否　→　表示のみ
-$('.deny').on('click', function (e) {
-    e.preventDefault(); // フォームの通常の送信を防ぐ
-    const removeElement = $(this).closest('.request-form').find('.allow');
-    $(this).remove();
-    removeElement.remove();
-    const pElem = createElem('p', '', '', '拒否しました');
-    const approveElem = $(this).closest('.request-form').find('.approve');
-    $(approveElem).append($(pElem));
+// リクエスト拒否
+$('.delete').on('click', function (e) {
+    console.log('deny')
+
+    const followerId = $(this).closest('.request-form').find('.user-id').text()
+    const approveElem = $(this).closest('.request-form').find('.approve')
+    const pElem = $('<p>').text('拒否しました')
+
+    // Ajaxリクエストを作成
+    $.ajax({
+        type: 'POST', // POSTリクエスト
+        url: '/enikki/request/deny/', // フォームのアクションURLを取得
+        data: {
+            'followerId': followerId, // 検索テキストの値をデータとして送信
+        },
+        headers:{
+            'X-CSRF-Token':csrftoken
+        },
+        success: function (response) {
+            $(approveElem).html('')
+            $(approveElem).append(pElem)
+        },
+        error: function (error) {
+            // エラー時の処理
+            console.error('Ajaxリクエストエラー:', error);
+        }
+    });
 });
 
+// タグ生成
 function createElem(tagName, id = '', className = '', textContent = '') {
     var element = document.createElement(tagName);
     if (className) {

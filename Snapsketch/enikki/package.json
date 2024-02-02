@@ -22,8 +22,15 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@fullcalendar/core": "^6.1.10",
+    "@fullcalendar/daygrid": "^6.1.10",
+    "@fullcalendar/interaction": "^6.1.10",
+    "@fullcalendar/list": "^6.1.10",
+    "@fullcalendar/react": "^6.1.10",
+    "@fullcalendar/timegrid": "^6.1.10",
     "react-infinite-scroller": "^1.2.6",
-    "react-router-dom": "^6.21.3"
+    "react-router-dom": "^6.21.3",
+    "react-virtualized": "^9.22.5"
   },
   "description": ""
 }
