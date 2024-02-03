@@ -3,7 +3,6 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    {% comment %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/style3.css' %}">
     <link rel="icon" href="data:,">
     {% block css %}{% endblock %}
@@ -12,9 +11,7 @@
 <body>
 
 <div class="wrapper">
-    <header>
-            <div id = "logo">Snap Sketch</div>
-    </header>
+    <img class="logo" src="{% static 'images/logo.png' %}" alt="Snap Sketch" />
     <main>
         <ul id="side">
             {% block side %}
