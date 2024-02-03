@@ -97,6 +97,7 @@ p {
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
     box-shadow: 0 0 10px rgba(0, 0, 0, .5);
     transition-duration: .4s;
+    
 }
 
 .content:hover {
@@ -127,6 +128,11 @@ p {
     font-size: 35px;
 }
 
+.fas{
+    color:#ED1A3D;
+}
+
+
 .like-count {
     color: #000;
     font-size: 30px;
@@ -144,7 +150,6 @@ button {
     background: none;
 }
 
-/* コメントのスタイル */
 .comment {
     color: #000;
     float: right;
@@ -157,6 +162,11 @@ button {
     font-size: 35px;
     color: #000;
     text-decoration: none;
+}
+
+.fa-comment:hover,.fa-heart:hover{
+    opacity: 0.5;
+    transition: 0.7s;
 }
 
 .comment-count {
@@ -186,3 +196,4 @@ button {
     writing-mode: vertical-rl;
     text-orientation: upright;
 }
+

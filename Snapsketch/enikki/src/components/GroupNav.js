@@ -68,7 +68,6 @@ const GroupNav = (props) => {
         <div id='group-nav'>
             {groupList.map((group) => (
                 <div key={group.group__group_id} data-group={group.group__groupname} className='group-icon' onClick={() => handleGroupClick(group.group__groupname)}>
-                    {console.log(`currentGroup:${currentGroup} : groupname:${group.group__groupname}`)}
                     {currentGroup == group.group__groupname ? (
                         <img
                             className='group-image'
@@ -76,6 +75,7 @@ const GroupNav = (props) => {
                             style={{
                                 border: 'solid 2px #000000',
                                 borderRadius:'30%',
+                                opacity:'0.5',
                                 transition: '0.9s'
                             }}
                         />

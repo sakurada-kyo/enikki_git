@@ -2,24 +2,6 @@ body {
     font-family: 'Montserrat Subrayada', sans-serif;
     margin: 0;
 }
-/* 
-.wrapper{
-    background-color: #bbb;
-} */
-
-/*ここからヘッダー*/
-header{
-    margin: auto;
-    /* background-color: #bbb; */
-    height: 120px;
-    margin-right: 50%;
-}
-
-header .logo{
-    margin-top: -20px;
-    margin-left: 20px;
-    width: 35%;
-}
 
 
 /*ここまでがヘッダー*/
@@ -29,9 +11,10 @@ main{
     /* background-color: #bbb; */
 }
 
-main #box{
+#box{
     margin: auto;
     width: 60%;
+    animation: fadein 4s;
 }
 
 #side{
@@ -175,3 +158,7 @@ footer small{
     color: #ffffff;
 }
 
+@keyframes fadein {
+  0% {opacity: 0}
+  100% {opacity: 1}
+}
