@@ -14,6 +14,7 @@ p {
     margin: 0;
 }
 
+
 /* ポップアップ用のスタイル */
 #popup-wrapper {
     background-color: rgba(0, 0, 0, 0.5);
@@ -47,9 +48,6 @@ p {
     cursor: pointer;
 }
 
-table {
-    margin: auto;
-}
 
 /* グループナビゲーションのスタイル */
 #group-nav {
@@ -68,10 +66,7 @@ table {
 /* コンテンツのスタイル */
 #timeline {
     width: 100%;
-    /* float: left; */
-    margin-top: 10px;
     margin-bottom: 10px;
-    background-color: aqua;
 }
 
 #scroll {
@@ -83,15 +78,25 @@ table {
 .content {
     margin-top: 10px;
     margin: 2em auto;
-	padding:2em;/*内側余白*/
-	border:double 7px #CCCFD6;/*線の種類・太さ・色*/
+    padding: 2em;
+    /*内側余白*/
+    border: double 7px #CCCFD6;
+    /*線の種類・太さ・色*/
+    height: 900px;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    transition-duration: .4s;
 }
 
-.user_icon{
-    float:left;
+.content:hover {
+    transform: scale(1.05);
 }
 
-.user_name {
+.user-icon {
+    float: left;
+}
+
+.user-name {
     color: #000;
     font-size: 25px;
     padding-top: 17px;
@@ -120,6 +125,12 @@ button {
     cursor: pointer;
     outline: none;
     padding: 0px;
+    appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  outline: none;
+  background: none;
 }
 
 /* コメントのスタイル */
@@ -161,5 +172,6 @@ button {
     background-color: #e0e0e0;
     height: 200px;
     width: 100%;
-    writing-mode: tb-rl;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
 }

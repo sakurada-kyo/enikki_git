@@ -14,12 +14,6 @@ const ReactInfiniteScroll = (props) => {
     fetchPosts()
   }, []);
 
-  // useEffect(() => {
-  //   console.log(clickedPage);
-  //   fetchLike(clickedPage);
-  //   setClickedPage('');
-  // },[])
-
   // グループ変更時に投稿取得
   useEffect(() => {
     if (selectedGroup) {
@@ -27,14 +21,7 @@ const ReactInfiniteScroll = (props) => {
     }
   }, [selectedGroup]);
 
-  // いいねボタン押下した投稿取得
-  // const handleLike = (event) => {
-  //   const articleElem = event.target.closest('.content');
-  //   handleClickedPage = articleElem.getAttribute('data-page');
-  //   console.log(`clickedPage:${clickedPage}`);
-  //   setClickedPage(handleClickedPage);
-  //   fetchLike();
-  // }
+ 
 
   //いいね機能
   const fetchLike = async(event) => {
@@ -160,8 +147,8 @@ const ReactInfiniteScroll = (props) => {
           {posts.map((post) => (
             <article key={post.post__post_id} className="content" data-page={ post.page }>
               <div className="content_header">
-                  <img className="user_icon" src={`/media/${post.post__user__user_icon_path}`} alt="ユーザーアイコン" />
-                  <p className="user_name">{ post.post__user__username }</p>
+                  <img className="user-icon" src={`/media/${post.post__user__user_icon_path}`} alt="ユーザーアイコン" />
+                  <p className="user-name">{ post.post__user__username }</p>
                   <div className="like">
                     <button type="button" className="ajax-like" onClick={fetchLike}>
                       {post.is_liked ? (
@@ -181,7 +168,7 @@ const ReactInfiniteScroll = (props) => {
               </div>
               <section className="draw_diary">
                   <img className="draw" src={`/media/${ post.post__sketch_path }`} alt="絵日記の絵" />
-                  <div className="diary">{ post.post__diary }</div>
+                  <p className="diary">{ post.post__diary }</p>
               </section>
             </article>
           ))}

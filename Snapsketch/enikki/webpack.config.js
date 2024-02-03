@@ -4,7 +4,6 @@ const webpack = require("webpack");
 module.exports = {
     entry: {
         page1: './src/index.js',
-        page2: './src/index2.js',
     },
     output: {
         path: path.resolve(__dirname, "./static/frontend"),
