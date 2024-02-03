@@ -49,19 +49,30 @@ p {
 }
 
 
-/* グループナビゲーションのスタイル */
 #group-nav {
     width: 5%;
     float: left;
     margin-top: 70px;
 }
 
-/* Bootstrapでのアイコンスタイル */
 .group-icon {
     margin-bottom: 5px;
+    transition: 0.5s;
 }
 
+.group-icon:hover {
+    opacity: 0.5;
+}
 
+.fa-plus{
+    width: 60px;
+    height: 60px;
+}
+
+.fa-plus:hover{
+    opacity: 0.5;
+    transition: 0.7s;
+}
 
 /* コンテンツのスタイル */
 #timeline {
@@ -126,11 +137,11 @@ button {
     outline: none;
     padding: 0px;
     appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  border: none;
-  outline: none;
-  background: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    outline: none;
+    background: none;
 }
 
 /* コメントのスタイル */
