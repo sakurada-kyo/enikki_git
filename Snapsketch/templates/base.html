@@ -3,7 +3,6 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    {% comment %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/style3.css' %}">
     <link rel="icon" href="data:,">
     {% block css %}{% endblock %}
@@ -11,20 +10,26 @@
 </head>
 <body>
 
-<div class="wrapper">
+<div class="container">
     <header>
-            <div id = "logo">Snap Sketch</div>
+        <img class="logo" src="{% static 'images/logo.png' %}" alt="Snap Sketch" />
     </header>
-    <main>
-        <ul id="side">
-            {% block side %}
-            {% endblock %}
-        </ul>
-        <div id = "box">
-            {% block content %}
-            {% endblock %}
-        </div>
-    </main>
+    <div id = "box">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <ul id="side">
+        {% block side %}
+        <li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
+        <li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
+        <li><a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a></li>
+        <li><a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a></li>
+        <li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
+        <li><a href="{% url 'enikki:group' %}" class="side-list">フォローリクエスト</a></li>
+        <li><a href="{% url 'enikki:usersearch' %}" class="side-list">ユーザー検索</a></li>
+        {% endblock %}
+    </ul>
+    
     {% block footer %}
     {% endblock %}
 </div>

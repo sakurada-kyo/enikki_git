@@ -1,38 +1,20 @@
 body {
     font-family: 'Montserrat Subrayada', sans-serif;
     margin: 0;
-    background-color: #fffaf0;
-}
-/* 
-.wrapper{
-    background-color: #bbb;
-} */
-
-/*ここからヘッダー*/
-header{
-    margin: auto;
-    /* background-color: #bbb; */
-    height: 120px;
-    margin-right: 50%;
 }
 
-header .logo{
-    margin-top: -20px;
-    margin-left: 20px;
-    width: 35%;
+.container{
+  width: 1200px;
+  margin:0px auto;
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
 }
-
-
 /*ここまでがヘッダー*/
-/*ここからメイン*/
-main{
-    text-align: center;
-    /* background-color: #bbb; */
-}
 
-main #box{
-    margin: auto;
-    width: 60%;
+
+
+#box{
+    animation: fadein 4s;
 }
 
 #side{
@@ -44,8 +26,6 @@ main #box{
 
 .side-list {
     text-decoration: none;
-    color: rgba(255,255,255);
-    /* width: 5%; */
  }  
 
  .navbar {
@@ -177,3 +157,7 @@ footer small{
     color: #ffffff;
 }
 
+@keyframes fadein {
+  0% {opacity: 0}
+  100% {opacity: 1}
+}

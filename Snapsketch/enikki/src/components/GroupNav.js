@@ -10,9 +10,12 @@ const GroupNav = (props) => {
         fetchGroupList(); // 初回のグループリストのデータ取得
       }, []);
 
+   
+
     // グループ投稿変更
     const handleGroupClick = (groupname) => {
         props.onGroupClick(groupname); // グループがクリックされたときにonGroupClickを呼び出す
+        setCurrentGroup(groupname)
     }
 
     // グループ追加
@@ -65,27 +68,34 @@ const GroupNav = (props) => {
         <div id='group-nav'>
             {groupList.map((group) => (
                 <div key={group.group__group_id} data-group={group.group__groupname} className='group-icon' onClick={() => handleGroupClick(group.group__groupname)}>
-                    {currentGroup == group.groupname ? (
+                    {currentGroup == group.group__groupname ? (
                         <img
                             className='group-image'
                             src={`/media/${group.group__group_icon_path}`}
+                            style={{
+                                border: 'solid 2px #000000',
+                                borderRadius:'30%',
+                                opacity:'0.5',
+                                transition: '0.9s'
+                            }}
                         />
                     ):(
                         <img
                             className='group-image'
                             src={`/media/${group.group__group_icon_path}`}
-                            style={{border: "solid 5px #000000"}}
+                            style={{border: "solid 2px #000000"}}
                         />
                     )}
 
                 </div>
             ))}
+            
             {showComponent && <GroupCreatePopup unShowPopup={unShowPopup} parentAddGroup={handleAddGroup} />}
-            <i className="fa-solid fa-plus" onClick={showPopup} />
-        </div>
+                <i 
+                    className="fa-solid fa-plus fa-3x" 
+                    onClick={showPopup}
+                />
+            </div>
     );
 };
 export default GroupNav;
-
-//グループ作成機能
-//グループ選択時、フォーカス機能
