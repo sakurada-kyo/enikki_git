@@ -3,7 +3,10 @@ body {
     margin: 0;
 }
 
-
+.wrapper{
+  width: 1200px;
+  margin:0px auto;
+}
 /*ここまでがヘッダー*/
 /*ここからメイン*/
 main{
@@ -12,7 +15,6 @@ main{
 }
 
 #box{
-    margin: auto;
     width: 60%;
     animation: fadein 4s;
 }
@@ -26,7 +28,6 @@ main{
 
 .side-list {
     text-decoration: none;
-    /* width: 5%; */
  }  
 
  .navbar {
