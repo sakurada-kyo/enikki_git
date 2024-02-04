@@ -163,3 +163,9 @@ button {
     width: 100%;
     writing-mode: tb-rl;
 }
+
+
+.hamburger-menu li {
+    margin: 30px 50px;
+}
+

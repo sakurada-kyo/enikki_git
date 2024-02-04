@@ -2,6 +2,10 @@
 {% load static %}
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC:300 rel="stylesheet"> -->
+
 {% endblock %}
 {% block content %}
   <div class="btn">
@@ -26,25 +30,37 @@
     var datesFromDjango = JSON.parse('{{ dates|escapejs }}')
   </script>
   <script src="{% static 'js/calendar.js' %}"></script>
+  <script src="{% static 'js/base3.js' %}"></script>
 {% endblock %}
 
 {% block side %}
+  <!-- ナビゲーションバー -->
+<div class="navbar" style="display: block;">
+  <!-- ハンバーガーメニューボタン -->
+  <div class="openbtn4">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
   <!-- サイドバーの内容をそのまま残す -->
+  <div class="hamburger-menu">
   <li>
-    <a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a>
+    <a href="{% url 'enikki:mypage' %}" class="side-list">mypage</a>
   </li>
   <li>
-    <a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a>
+    <a href="{% url 'enikki:timeline' %}" class="side-list">timeline</a>
   </li>
   <li>
-    <a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a>
+    <a href="{% url 'enikki:create' %}" class="side-list">create</a>
   </li>
   <li>
-    <a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a>
+    <a href="{% url 'enikki:friend' %}" class="side-list">friends</a>
   </li>
   <li>
-    <a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a>
+    <a href="{% url 'enikki:group' %}" class="side-list">groups</a>
   </li>
+  </div>
 {% endblock %}
 
 {% block footer %}

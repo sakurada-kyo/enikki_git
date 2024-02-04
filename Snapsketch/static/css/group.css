@@ -58,26 +58,26 @@ img{
 }
 
 .grp{
-    border: solid 2px #000;
+    border: solid 2px #CCCFD6;
     width: 75%;
     margin: auto;
     /* margin-top: 20px; */
-    /* margin-bottom: 35px; */
+    margin-bottom: 35px;
     padding: 10px;
     height: 120px;
     background-color: #fff;
 }
 
 .grp img{
-    border: solid 2px #000;
+    /* border: solid 2px #000; */
     border-radius: 60px;
     float: left;
-    margin-top: 10px;
+    /* margin-top: 10px; */
     margin-left: 30px;
 }
 
 .grp p{
-    margin-top:45px;
+    margin-top:30px;
     font-size: 24px;
 }
 
@@ -92,9 +92,14 @@ img{
 .add , .del{
     font-size: 14px;
     width: 150px;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 h2{
     margin-top: 20px;
 }
+
+.hamburger-menu li {
+    margin: 30px 50px;
+}
+

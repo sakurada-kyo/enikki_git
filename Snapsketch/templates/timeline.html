@@ -12,13 +12,26 @@
 {% endblock %}
 
 {% block side %}
-<li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
-<li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
-<li><a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a></li>
-<li><a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a></li>
-<li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
+<!-- ナビゲーションバー -->
+<div class="navbar" style="display: block;">
+    <!-- ハンバーガーメニューボタン -->
+    <div class="openbtn4">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  
+    <!-- サイドバーの内容をそのまま残す -->
+    <div class="hamburger-menu">
+<li><a href="{% url 'enikki:mypage' %}" class="side-list">mypage</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">calendar</a></li>
+<li><a href="{% url 'enikki:create' %}" class="side-list">create</a></li>
+<li><a href="{% url 'enikki:friend' %}" class="side-list">friends</a></li>
+<li><a href="{% url 'enikki:group' %}" class="side-list">groups</a></li>
+</div>
 {% endblock %}
 
 {% block js %}
 <script src="{% static 'frontend/page1.js' %}"></script>
+<script src="{% static 'js/base3.js' %}"></script>
 {% endblock %}
