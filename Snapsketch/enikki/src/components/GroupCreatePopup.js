@@ -12,6 +12,8 @@ const GroupCreatePopup = (props) => {
     // 画像セット
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        const filenameElem = document.getElementById('filename')
+        filenameElem.innerHTML = file.name
         setGroupIcon(file);
     };
 
@@ -67,15 +69,24 @@ const GroupCreatePopup = (props) => {
                 <div id="close" onClick={unShowPopupWrapper}>x</div>
                 <div id="group-wrapper">
                     <h1>グループ作成</h1>
+                    <hr/>
                     <div id='groupname'>
-                        <p>グループ名:</p>
-                        <input type="text" onChange={handleTextChange} />
+                        <input 
+                            className='groupname-text' 
+                            type="text" 
+                            onChange={handleTextChange}
+                            placeholder='グループ名'
+                         />
                     </div>
                     <div id='group-image'>
-                        <p>アイコン:</p>
-                        <input type="file" onChange={handleFileChange} />
+                        <label htmlFor='groupImg'>
+                            <span id='selectFile'>ファイル選択</span>
+                            <input id='groupImg' type="file" onChange={handleFileChange} />
+                            <p id='filename'></p>
+                        </label>
+                        
                     </div>
-                    <button className='createBtn' onClick={fetchGroupCreate}>作成</button>
+                    <button id='createBtn' onClick={fetchGroupCreate}>作成</button>
                 </div>
             </div>
         </div>
