@@ -1,10 +1,13 @@
-body {
-    /* font-family: "MS Mincho"; */
+/* body {
+    font-family: "MS Mincho";
     margin: 0;
     background-color: #222222;
     color: #ffffff;
-}
+} */
 
+#box {
+	width: 100%;
+}
 
 dl.search2{
 	position:relative;
@@ -42,4 +45,14 @@ dl.search2 dd button span{
 	height:30px;
 	background:url('../images/search_ic.png') no-repeat scroll 0 0;
     margin-right: 15px;
+}
+
+.search2 dd {
+	margin-top: 8px;
+	margin-right: 15px;
+}
+
+.hamburger-menu li {
+    margin: 30px 50px;
+	text-align: center;
 }

@@ -1,3 +1,7 @@
+#box {
+	padding-top: 20%;
+}
+
 /* ポップアップ用のスタイル */
 #members-popup {
     background-color: rgba(0, 0, 0, 0.5);
@@ -57,23 +61,23 @@ img{
     height: 100px;
 }
 
-.grp{
+
+.grp {
+    /* display: flex; */
     border: solid 2px #CCCFD6;
-    width: 75%;
-    margin: auto;
-    /* margin-top: 20px; */
-    margin-bottom: 35px;
-    padding: 10px;
-    height: 120px;
-    background-color: #fff;
+    width: 80%;
+    height: 110px;
+    text-align: center;
+    margin: 30px auto; /* コンテナを垂直方向に中央揃え */
+    padding: 0 30px; /* 両側に余白を追加 */
 }
 
 .grp img{
     /* border: solid 2px #000; */
     border-radius: 60px;
     float: left;
-    /* margin-top: 10px; */
-    margin-left: 30px;
+    margin-top: 4px;
+    /* margin-left: 30px; */
 }
 
 .grp p{
@@ -101,5 +105,36 @@ h2{
 
 .hamburger-menu li {
     margin: 30px 50px;
+    text-align: center  ;
 }
 
+.create{
+	position: fixed;
+	bottom: 10%;
+	right: 20%;
+}
+
+a.btn--orange {
+	color: #fff;
+	background-color: #DFC7D5;
+	font-size: 27px;
+	margin: 0 10px 20px 0;
+  }
+  
+  a.btn--orange:hover {
+	color: #fff;
+	background: #DFC7D5;
+  }
+  
+  a.btn--shadow {
+	-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  a.btn--circle {
+	border-radius: 50%;
+	line-height: 100px;
+	width: 100px;
+	height: 100px;
+	padding: 0;
+  }

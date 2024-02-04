@@ -1,3 +1,7 @@
+#box {
+	padding-top: 20%;
+}
+
 #register h2 {
     font-size: 30px;
 }
@@ -102,5 +106,36 @@
 
 .hamburger-menu li {
     margin: 30px 50px;
+	text-align: center;
 }
 
+.create{
+	position: fixed;
+	bottom: 10%;
+	right: 20%;
+}
+
+a.btn--orange {
+	color: #fff;
+	background-color: #DFC7D5;
+	font-size: 27px;
+	margin: 0 10px 20px 0;
+  }
+  
+  a.btn--orange:hover {
+	color: #fff;
+	background: #DFC7D5;
+  }
+  
+  a.btn--shadow {
+	-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  a.btn--circle {
+	border-radius: 50%;
+	line-height: 100px;
+	width: 100px;
+	height: 100px;
+	padding: 0;
+  }

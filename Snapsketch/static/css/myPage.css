@@ -1,26 +1,16 @@
-.wrapper{
-    min-height: 100vh;
-    position: relative;
-    padding-bottom: 120px;
-    box-sizing: border-box;
-}
 
-main #box {
-    margin-left: 15%;
-}
 .myPageLeft {
-    text-align: left;
+    /* text-align: left; */
     display:flex;
 }
 
 .profile {
-    margin-top: 150px;
-    margin-left: 10%;
+    margin-top: -5%;
+    margin-left: 20%;
     display:flex;
     justify-content:space-between;
     flex-shrink:0;
     border: double 7px #CCCFD6;
-    
 }
 
 .avatar img {
@@ -44,6 +34,7 @@ button {
 	display: block;
 	margin: auto;
 	padding: 13px 22px;
+	text-align: center;
 	position: relative;
 	border-radius: 5px;
 	border: 1px solid #27acd9;
@@ -59,7 +50,7 @@ button {
 }
 .change:hover {
 	color: #fff;
-	background: #070707;
+	background: #27acd9;
 	-webkit-transition: all 0.2s ease-out;
 	-moz-transition: all 0.2s ease-out;
 	transition: all 0.2s ease-out;
@@ -106,7 +97,7 @@ button {
 }
 .detailChange1:hover {
 	color: #fff;
-	background: #070707;
+	background: #27acd9;
 	-webkit-transition: all 0.2s ease-out;
 	-moz-transition: all 0.2s ease-out;
 	transition: all 0.2s ease-out;
@@ -163,4 +154,38 @@ table.table {
 
 .hamburger-menu li {
     margin: 30px 50px;
+	text-align: center;
 }
+
+.create{
+	position: fixed;
+	bottom: 10%;
+	right: 20%;
+}
+
+a.btn--orange {
+	color: #fff;
+	background-color: #DFC7D5;
+	font-size: 27px;
+	margin: 0 10px 20px 0;
+  }
+  
+  a.btn--orange:hover {
+	color: #fff;
+	background: #DFC7D5;
+  }
+  
+  a.btn--shadow {
+	-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  a.btn--circle {
+	display: inline-block;
+	border-radius: 50%;
+	line-height: 100px;
+	width: 100px;
+	height: 100px;
+	padding: 0;
+	text-align: center;
+  }
