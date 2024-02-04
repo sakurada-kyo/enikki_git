@@ -3,19 +3,17 @@ body {
     margin: 0;
 }
 
-.wrapper{
+.container{
   width: 1200px;
   margin:0px auto;
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
 }
 /*ここまでがヘッダー*/
-/*ここからメイン*/
-main{
-    text-align: center;
-    /* background-color: #bbb; */
-}
+
+
 
 #box{
-    width: 60%;
     animation: fadein 4s;
 }
 
