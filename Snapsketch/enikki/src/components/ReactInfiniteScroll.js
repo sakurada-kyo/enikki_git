@@ -174,6 +174,7 @@ const ReactInfiniteScroll = (props) => {
               </section>
             </article>
           ))}
+          
         </InfiniteScroll>
       </div>
     )

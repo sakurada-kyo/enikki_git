@@ -15,7 +15,6 @@ p {
 }
 
 
-/* ポップアップ用のスタイル */
 #popup-wrapper {
     background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
@@ -95,7 +94,6 @@ input[type="file"]{
     display: none;
 }
 
-/* Bootstrapでのボタンスタイル */
 #createBtn {
     border: 1px solid #27acd9;
     border-radius: 6px;
@@ -133,7 +131,7 @@ input[type="file"]{
 #group-nav {
     width: 5%;
     float: left;
-    margin-top: 70px;
+    margin-top: 100px;
 }
 
 .group-icon {
@@ -154,30 +152,30 @@ input[type="file"]{
     transition: 0.7s;
 }
 
-/* コンテンツのスタイル */
 #timeline {
     width: 100%;
     margin-bottom: 10px;
 }
 
 #scroll {
+    border-right: 1px solid;
     width: 80%;
     float: left;
     margin-left: 110px;
+    border-left: 1px solid;
 }
 
 .content {
-    margin-bottom: 20px;
     padding: 2em;
     /*内側余白*/
-    border: double 7px #CCCFD6;
+    border: solid 1px;
     /*線の種類・太さ・色*/
     height: 770px;
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    /* -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5); */
     transition-duration: .4s;
+    background-color: #f0f8ff;
 }
-
 
 .user-icon {
     float: left;
@@ -191,13 +189,11 @@ input[type="file"]{
     float: left;
 }
 
-/* いいねボタンのスタイル */
 .like {
     float: right;
     margin-top: 10px;
     margin-right: 10px;
 }
-
 
 .fa-heart {
     font-size: 35px;
@@ -261,11 +257,11 @@ input[type="file"]{
     height: 500px;
     margin-top: 5px;
     width: 100%;
+    border: 1px solid #CCCFD6;
 }
 
 /* 日記のテキストのスタイル */
 .diary {
-    background-color: #e0e0e0;
     height: 200px;
     width: 100%;
     writing-mode: vertical-rl;
