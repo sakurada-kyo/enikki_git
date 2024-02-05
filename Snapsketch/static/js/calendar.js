@@ -4,6 +4,11 @@ var currentDate = new Date();
 currentYear = currentDate.getFullYear();
 currentMonth = currentDate.getMonth();
 generateCalendar(currentYear, currentMonth);
+var leftBtn = document.getElementById('leftBtnId')
+var rightBtn = document.getElementById('rightBtnId')
+leftBtn.addEventListener('click',showPreviousMonth)
+rightBtn.addEventListener('click',showNextMonth)
+
 
 function createLeftRightBtn(){
   let fragment = document.createDocumentFragment()
