@@ -30,11 +30,15 @@
     <div id="close">x</div>
     {% csrf_token %}
     <h2>フレンド一覧</h2>
+    <hr width="400">
+
     {% if friends %}
     <!-- 友達がいる場合の表示 -->
     {% for friend in friends %}
+    <div class="friend">
     <input type="checkbox" id="scales" name="scales">
     <p>{{ friend.followee.username }}</p>
+  </div>
     {% endfor %}
     <input id="invite" type="submit" name="action" value="追加">
     {% else %}
@@ -52,6 +56,7 @@
     <div id="close1">×</div>
     {% csrf_token %}
     <h2>グループメンバー一覧</h2>
+    <hr width="400">
     <ul id="members-list">
     </ul>
   </div>

@@ -1,6 +1,6 @@
-#box {
+/* #box {
 	padding-top: 20%;
-}
+} */
 
 /* ポップアップ用のスタイル */
 #members-popup {
@@ -23,27 +23,31 @@
     display: none; 
 }
 
+#scales {
+    margin-right: 15%;
+}
+
 #popup-inside {
     text-align: center;
-    height: 300px;
     width: 100%;
     max-width: 600px;
-    background: white;
+    background: #dcdcdc;
     margin: 15% auto;
     padding: 10px;
     position: relative;
+    border-radius: 20px;
 }
 
 #close {
     position: absolute;
-    top: 0;
-    right: 5px;
+    top: 5px;
+    right: 20px;
     cursor: pointer;
 }
 #close1 {
     position: absolute;
-    top: 0;
-    right: 5px;
+    top: 5px;
+    right: 20px;
     cursor: pointer;
 }
 
@@ -61,15 +65,14 @@ img{
     height: 100px;
 }
 
-
 .grp {
     /* display: flex; */
     border: solid 2px #CCCFD6;
-    width: 80%;
+    /* width: 80%; */
     height: 110px;
     text-align: center;
     margin: 30px auto; /* コンテナを垂直方向に中央揃え */
-    padding: 0 30px; /* 両側に余白を追加 */
+    padding: 0 100px 0 20px; /* 両側に余白を追加 */
 }
 
 .grp img{
@@ -138,3 +141,207 @@ a.btn--orange {
 	height: 100px;
 	padding: 0;
   }
+  
+
+.friend {
+    display: flex;
+    margin-left: 40%;
+}
+
+.friend p {
+    margin: 18px;
+    padding-bottom: 5px;
+}
+
+  .add {
+	display: block;
+	margin: auto;
+	/* padding: 13px 22px; */
+	text-align: center;
+	position: relative;
+	border-radius: 5px;
+	border: 1px solid #27acd9;
+	font-weight: bold;
+	letter-spacing: 1px;
+	background: transparent;
+	color: #27acd9;
+	overflow: hidden;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+    width: 150px;
+    margin: 22% 0%;;
+}
+.add:hover {
+	color: #fff;
+	background: #27acd9;
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
+}
+.add:hover::before {
+	-webkit-animation: sh02 0.5s 0s linear;
+	-moz-animation: sh02 0.5s 0s linear;
+	animation: light 0.5s 0s linear;
+}
+.add::before {
+	content: '';
+	display: block;
+	width: 0px;
+	height: 86%;
+	position: absolute;
+	top: 7%;
+	left: 0%;
+	opacity: 0;
+	background: #000000;
+	box-shadow: 0 0 50px 30px #0a0a0a;
+	-webkit-transform: skewX(-20deg);
+	-moz-transform: skewX(-20deg);
+	-ms-transform: skewX(-20deg);
+	-o-transform: skewX(-20deg);
+	transform: skewX(-20deg);
+}
+
+.del {
+	display: block;
+	margin: auto;
+	/* padding: 13px 22px; */
+	text-align: center;
+	position: relative;
+	border-radius: 5px;
+	border: 1px solid #27acd9;
+	font-weight: bold;
+	letter-spacing: 1px;
+	background: transparent;
+	color: #27acd9;
+	overflow: hidden;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+    width: 150px;
+}
+.del:hover {
+	color: #fff;
+	background: #27acd9;
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
+}
+.del:hover::before {
+	-webkit-animation: sh02 0.5s 0s linear;
+	-moz-animation: sh02 0.5s 0s linear;
+	animation: light 0.5s 0s linear;
+}
+.del::before {
+	content: '';
+	display: block;
+	width: 0px;
+	height: 86%;
+	position: absolute;
+	top: 7%;
+	left: 0%;
+	opacity: 0;
+	background: #000000;
+	box-shadow: 0 0 50px 30px #0a0a0a;
+	-webkit-transform: skewX(-20deg);
+	-moz-transform: skewX(-20deg);
+	-ms-transform: skewX(-20deg);
+	-o-transform: skewX(-20deg);
+	transform: skewX(-20deg);
+}
+
+#invite {
+	display: block;
+	margin: auto;
+	padding: 5px;
+	text-align: center;
+	position: relative;
+	border-radius: 5px;
+	border: 1px solid #27acd9;
+	font-weight: bold;
+	letter-spacing: 2px;
+	background: transparent;
+	color: #27acd9;
+	overflow: hidden;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+    width: 100px;
+}
+#invite:hover {
+	color: #fff;
+	background: #27acd9;
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
+}
+#invite:hover::before {
+	-webkit-animation: sh02 0.5s 0s linear;
+	-moz-animation: sh02 0.5s 0s linear;
+	animation: light 0.5s 0s linear;
+}
+#invite::before {
+	content: '';
+	display: block;
+	width: 0px;
+	height: 86%;
+	position: absolute;
+	top: 7%;
+	left: 0%;
+	opacity: 0;
+	background: #000000;
+	box-shadow: 0 0 50px 30px #0a0a0a;
+	-webkit-transform: skewX(-20deg);
+	-moz-transform: skewX(-20deg);
+	-ms-transform: skewX(-20deg);
+	-o-transform: skewX(-20deg);
+	transform: skewX(-20deg);
+}
+
+#delete {
+	display: block;
+	margin: auto;
+	padding: 5px;
+	text-align: center;
+	position: relative;
+	border-radius: 5px;
+	border: 1px solid #27acd9;
+	font-weight: bold;
+	letter-spacing: 2px;
+	background: transparent;
+	color: #27acd9;
+	overflow: hidden;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+    width: 100px;
+}
+#delete:hover {
+	color: #fff;
+	background: #27acd9;
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
+}
+#delete:hover::before {
+	-webkit-animation: sh02 0.5s 0s linear;
+	-moz-animation: sh02 0.5s 0s linear;
+	animation: light 0.5s 0s linear;
+}
+#delete::before {
+	content: '';
+	display: block;
+	width: 0px;
+	height: 86%;
+	position: absolute;
+	top: 7%;
+	left: 0%;
+	opacity: 0;
+	background: #000000;
+	box-shadow: 0 0 50px 30px #0a0a0a;
+	-webkit-transform: skewX(-20deg);
+	-moz-transform: skewX(-20deg);
+	-ms-transform: skewX(-20deg);
+	-o-transform: skewX(-20deg);
+	transform: skewX(-20deg);
+}
