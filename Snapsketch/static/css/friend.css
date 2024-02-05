@@ -1,6 +1,4 @@
-#box {
-	padding-top: 20%;
-}
+
 
 #register h2 {
     font-size: 30px;
@@ -41,6 +39,7 @@
     margin: auto;
     margin-right: 10px;
 }
+
 .delete {
 	display: block;
 	margin: auto;

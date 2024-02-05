@@ -15,7 +15,6 @@ dl.search2{
 	border:1px solid #aaa;
 	border-radius:6px;
     margin-top: 60px;
-    /* width: 850px; */
 }
 dl.search2 dt{
 	padding:3px;
@@ -26,6 +25,7 @@ dl.search2 dt input{
 	line-height:30px;
 	background:none;
     margin-right: 30px;
+	border: none;
 }
 dl.search2 dd{
 	position:absolute;
