@@ -162,8 +162,10 @@ const ReactInfiniteScroll = (props) => {
                     <span className="like-count">{ post.post__like_count }</span>
                   </div>
                   <div className="comment">
-                      <a className="fa-regular fa-comment" href={`/enikki/comment/?page=${ post.page }`} />
-                      <span className="comment-count">{ post.post__comment_count }</span>
+                    <a href={`/enikki/comment/?page=${ post.page }`}>
+                      <i className="fa-regular fa-comment"  />
+                    </a>
+                     <span className="comment-count">{ post.post__comment_count }</span>
                   </div>
               </div>
               <section className="draw_diary">
