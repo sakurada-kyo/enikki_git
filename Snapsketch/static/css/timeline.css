@@ -164,8 +164,7 @@ input[type="file"]{
 }
 
 .content {
-    margin-top: 10px;
-    margin: 2em auto;
+    margin-bottom: 20px;
     padding: 2em;
     /*内側余白*/
     border: double 7px #CCCFD6;
@@ -174,12 +173,8 @@ input[type="file"]{
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
     box-shadow: 0 0 10px rgba(0, 0, 0, .5);
     transition-duration: .4s;
-    
 }
 
-.content:hover {
-    transform: scale(1.05);
-}
 
 .user-icon {
     float: left;

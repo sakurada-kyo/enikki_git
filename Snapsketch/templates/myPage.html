@@ -1,30 +1,22 @@
-{% extends 'base3.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/myPage.css' %}" />
-  <!-- Bootstrapのスタイルを追加 -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC:300 rel="stylesheet">
 {% endblock %}
 
 {% block content %}
   <div class="myPageLeft">
     <div class="profile">
       <div class="profilePhoto">
-
         <div class="avatar">
           <img class="user_icon" src="{{ user_icon }}" alt="アバター表示" wight="130" height="193" />
         </div>
-
         <div class="avatarChange">
           <input type="file" id="iconInput" name ="iconInput"style="display: none;" accept="image/*">
           <label for="iconInput" class="change">アイコン変更</label>
         </div>
       </div>
-
-
       <div class="address">
         <div class="detail">
           <table class="table">
