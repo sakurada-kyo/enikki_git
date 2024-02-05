@@ -1,10 +1,10 @@
-body {
+/* body {
     font-family: "MS Mincho";
     margin: 0;
     background-color: #222222;
-}
+} */
 /*ここからヘッダー*/
-header{
+/* header{
     background-color: #555555;
     height: 120px;
 }
@@ -13,10 +13,10 @@ header #logo{
     font-size: 50px;
     color: #ffffff;
     padding: 30px;
-}
+} */
 /*ここまでがヘッダー*/
 /*ここからメイン*/
-main{
+/* main{
     text-align: center;
     height: 940px;
 }
@@ -26,8 +26,8 @@ main #box{
     margin-top: 100px;
     width: 50%;
     height: 180px;
-    /*background-color: #222626;*/
-}
+    background-color: #222626;
+} */
 
 .search {
     margin-bottom: 30px;
@@ -66,24 +66,21 @@ main #box{
     width:200px;
 }
 
- #foot{
+ /* #foot{
     margin-top:50px;
     margin-right: 150px;
     float: right;
     font-size: 25px;
     color: #ffffff;
-}
-.wrapper{
+} */
+/* .wrapper{
     min-height: 100vh;
-    position: relative;/*←相対位置*/
-    padding-bottom: 120px;/*←footerの高さ*/
+    position: relative;←相対位置
+    padding-bottom: 120px;←footerの高さ
     box-sizing: border-box;
     min-width: 1000px;
     overflow: hidden;
-}
-
-
-
+} */
 /*ここまでがメイン*/
 /*ここからフッター*/
 footer{

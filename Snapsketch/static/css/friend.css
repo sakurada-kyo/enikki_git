@@ -1,10 +1,14 @@
+#box {
+	padding-top: 20%;
+}
+
 #register h2 {
     font-size: 30px;
 }
 
 .account-form {
     display: flex;
-    background-color: rgba(217, 217, 217, 1);
+    border: solid 2px #CCCFD6;
     width: 60%;
     height: 85px;
     text-align: center;
@@ -30,13 +34,61 @@
     color: black;
     margin: auto 0;
     font-size: 25px;
-    padding-left: 30px; /* 余白を調整 */
+    padding-left: 17%; /* 余白を調整 */
 }
 
 .delete {
     margin: auto;
     margin-right: 10px;
 }
+.delete {
+	display: block;
+	margin: auto;
+    margin-right: 10px;
+	/* padding: 13px 22px; */
+	position: relative;
+	border-radius: 5px;
+	border: 1px solid #27acd9;
+	font-weight: bold;
+	letter-spacing: 2px;
+	background: transparent;
+	color: #27acd9;
+	overflow: hidden;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+    /* width: 65%; */
+}
+.delete:hover {
+	color: #fff;
+	background: #27acd9;
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
+}
+.delete:hover::before {
+	-webkit-animation: sh02 0.5s 0s linear;
+	-moz-animation: sh02 0.5s 0s linear;
+	animation: light 0.5s 0s linear;
+}
+.delete::before {
+	content: '';
+	display: block;
+	width: 0px;
+	height: 86%;
+	position: absolute;
+	top: 7%;
+	left: 0%;
+	opacity: 0;
+	background: #000000;
+	box-shadow: 0 0 50px 30px #0a0a0a;
+	-webkit-transform: skewX(-20deg);
+	-moz-transform: skewX(-20deg);
+	-ms-transform: skewX(-20deg);
+	-o-transform: skewX(-20deg);
+	transform: skewX(-20deg);
+}
+
 
 @media screen and (max-width: 768px) {
     /* 小さい画面に対するスタイルの調整 */
@@ -51,4 +103,39 @@
     }
 }
 
-/* 他の画面サイズに対する必要に応じて、追加のメディアクエリを追加してください */
+
+.hamburger-menu li {
+    margin: 30px 50px;
+	text-align: center;
+}
+
+.create{
+	position: fixed;
+	bottom: 10%;
+	right: 20%;
+}
+
+a.btn--orange {
+	color: #fff;
+	background-color: #DFC7D5;
+	font-size: 27px;
+	margin: 0 10px 20px 0;
+  }
+  
+  a.btn--orange:hover {
+	color: #fff;
+	background: #DFC7D5;
+  }
+  
+  a.btn--shadow {
+	-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  a.btn--circle {
+	border-radius: 50%;
+	line-height: 100px;
+	width: 100px;
+	height: 100px;
+	padding: 0;
+  }

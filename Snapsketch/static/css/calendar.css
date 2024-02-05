@@ -209,3 +209,7 @@
     height: 40px;
     width: 100%;
 }
+
+.hamburger-menu li {
+    margin: 30px 50px;
+}
