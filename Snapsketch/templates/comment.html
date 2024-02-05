@@ -41,11 +41,12 @@
       <div class="popup_area">
         <div class="popup-wrapper">
           <input id="open" type="checkbox"/>
-          <label for="open" class="open-btn">コメントをする</label>
+          <label for="open" class="open-btn">コメントを書く</label>
           <label for="open" class="overlay"></label>
           <div class="popup-content">
             <div class="reply">
               <h2>コメント返信</h2>
+              <hr width="400">
             </div>
             <textarea name="comment" id="comment"></textarea>
             <input type="submit" id="toukou" value="返信"/>
@@ -60,7 +61,7 @@
         {% for comment in comments %}
         <div class="comment-content">
           <div class="comment-content2">
-            <img class="user-icon" src="/media/{{ comment.user__user_icon_path }}" alt="コメント" />
+            <img class="user-icon" src="/media/{{ comment.user__user_icon_path }}" alt="アイコン" />
             <span class="comment-name">{{ comment.user__username }}</span><br/>
           </div>
             <span class="comment-sentence">{{ comment.comment }}</span>
@@ -71,15 +72,29 @@
 {% endblock %}
 
 {% block side %}
-<li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
-<li><a href="{% url 'enikki:timeline' %}" class="side-list">タイムライン</a></li>
-<li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
-<li><a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a></li>
-<li><a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a></li>
-<li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
+<!-- ナビゲーションバー -->
+<div class="navbar" style="display: block;">
+  <!-- ハンバーガーメニューボタン -->
+  <div class="openbtn4">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- サイドバーの内容をそのまま残す -->
+  <div class="hamburger-menu">
+<li><a href="{% url 'enikki:mypage' %}" class="side-list">mypage</a></li>
+<li><a href="{% url 'enikki:timeline' %}" class="side-list">timeline</a></li>
+<li><a href="{% url 'enikki:calendar' %}" class="side-list">calendar</a></li>
+<li><a href="{% url 'enikki:create' %}" class="side-list">create</a></li>
+<li><a href="{% url 'enikki:friend' %}" class="side-list">friends</a></li>
+<li><a href="{% url 'enikki:group' %}" class="side-list">groups</a></li>
+</div>
+</div>
 {% endblock  %}
 
 {% block js %}
   <script src="{% static 'js\jquery-3.7.1.min.js' %}"></script>
   <script src="{% static 'js\comment.js' %}"></script>
+  <script src="{% static 'js/base3.js' %}"></script>
 {% endblock %}

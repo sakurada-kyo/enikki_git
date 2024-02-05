@@ -1,3 +1,6 @@
+#box {
+	margin-top: 0;
+}
 
 .myPageLeft {
     /* text-align: left; */
@@ -159,7 +162,7 @@ table.table {
 	text-align: center;
 }
 
-.create{
+/* .create{
 	position: fixed;
 	bottom: 10%;
 	right: 20%;
@@ -190,4 +193,4 @@ a.btn--orange {
 	height: 100px;
 	padding: 0;
 	text-align: center;
-  }
+  } */
