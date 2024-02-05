@@ -3,24 +3,20 @@
 
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/myPage.css' %}" />
-  {% endblock %}
+{% endblock %}
 
 {% block content %}
   <div class="myPageLeft">
     <div class="profile">
       <div class="profilePhoto">
-
         <div class="avatar">
           <img class="user_icon" src="{{ user_icon }}" alt="アバター表示" wight="130" height="193" />
         </div>
-
         <div class="avatarChange">
           <input type="file" id="iconInput" name ="iconInput"style="display: none;" accept="image/*">
           <label for="iconInput" class="change">アイコン変更</label>
         </div>
       </div>
-
-
       <div class="address">
         <div class="detail">
           <table class="table">

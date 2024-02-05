@@ -1,5 +1,39 @@
 //----------------------カレンダー生成----------------------
 var currentYear, currentMonth;
+var currentDate = new Date();
+currentYear = currentDate.getFullYear();
+currentMonth = currentDate.getMonth();
+generateCalendar(currentYear, currentMonth);
+
+function createLeftRightBtn(){
+  let fragment = document.createDocumentFragment()
+  const leftButtonDivElem = document.createElement('div')
+  const rightButtonDivElem = document.createElement('div')
+  const leftButtonInputElem = document.createElement('input')
+  const rightButtonInputElem = document.createElement('input')
+  
+  leftButtonInputElem.setAttribute('type','button')
+  leftButtonInputElem.setAttribute('class','button1')
+  leftButtonInputElem.setAttribute('value','◀')
+
+  leftButtonDivElem.setAttribute('class','buttonId')
+  leftButtonDivElem.setAttribute('id','leftBtnId')
+  leftButtonDivElem.appendChild(leftButtonInputElem)
+
+  rightButtonInputElem.setAttribute('value','▶')
+  rightButtonInputElem.setAttribute('type','button')
+  rightButtonInputElem.setAttribute('class','button2')
+
+  rightButtonDivElem.setAttribute('class','buttonId')
+  rightButtonDivElem.setAttribute('id','rightBtnId')
+  rightButtonDivElem.appendChild(rightButtonInputElem)
+
+  fragment.appendChild(leftButtonDivElem)
+  fragment.appendChild(rightButtonDivElem)
+
+  return fragment
+}
+
 function generateCalendar(year, month) {
     const calendar = document.getElementById("calendar");
     calendar.innerHTML = "";
@@ -12,9 +46,11 @@ function generateCalendar(year, month) {
         "July", "August", "September", "October", "November", "December"
     ];
 
-    const header = document.createElement("div");
+    const leftRightBtn = createLeftRightBtn()
+    const header = document.createElement("div"); // calendar-headerのタグ
     header.classList.add("calendar-header");
     header.innerHTML = `<span class="current-month">${monthNames[month]} ${year}</span>`;
+    header.appendChild(leftRightBtn)
     calendar.appendChild(header);
 
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -93,10 +129,6 @@ function showNextMonth() {
   generateCalendar(currentYear, currentMonth);
 }
 
-var currentDate = new Date();
-currentYear = currentDate.getFullYear();
-currentMonth = currentDate.getMonth();
-generateCalendar(currentYear, currentMonth);
 //----------------------カレンダー生成----------------------
 
 //-----------------------1桁→2桁の処理関数-----------------------

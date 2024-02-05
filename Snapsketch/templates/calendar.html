@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% load static %}
+
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
   <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -7,17 +9,10 @@
   <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC:300 rel="stylesheet"> -->
 
 {% endblock %}
+
 {% block content %}
   <div class="btn">
-    <div class="buttonId" id="buttonId">
-      <input type="button" class="button1" onclick="showPreviousMonth()" value="◀" />
-    </div>
-
     <div class="calendar" id="calendar"></div>
-
-    <div class="buttonId" id="buttonId">
-      <input type="button" class="button2" onclick="showNextMonth()" value="▶" />
-    </div>
   </div>
   <div id="popup-wrapper">
     <div id="popup-inside">
