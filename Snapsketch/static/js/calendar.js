@@ -52,18 +52,18 @@ function generateCalendar(year, month) {
         "July", "August", "September", "October", "November", "December"
     ];
 
-    const leftRightBtn = createLeftRightBtn()
+    // const leftRightBtn = createLeftRightBtn()
     const header = document.createElement("div"); // calendar-headerのタグ
     header.classList.add("calendar-header");
     header.innerHTML = `<span class="current-month">${monthNames[month]} ${year}</span>`;
-    header.appendChild(leftRightBtn)
+    // header.appendChild(leftRightBtn)
     calendar.appendChild(header);
 
     //ボタンハンドラ
-    const leftBtn = document.getElementById('leftBtnId')
-    const rightBtn = document.getElementById('rightBtnId')
-    leftBtn.addEventListener('click',showPreviousMonth)
-    rightBtn.addEventListener('click',showNextMonth)
+    // const leftBtn = document.getElementById('leftBtnId')
+    // const rightBtn = document.getElementById('rightBtnId')
+    // leftBtn.addEventListener('click',showPreviousMonth)
+    // rightBtn.addEventListener('click',showNextMonth)
 
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const daysContainer = document.createElement("div");
