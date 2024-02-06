@@ -32,6 +32,7 @@
     border: 1px solid #ccc;
     cursor: pointer;
     margin: 3px;
+    border-radius: 5px;
 }
 
 .day:hover {
@@ -87,6 +88,14 @@
     padding: 10px;
     position: relative;
 }
+.Sat {
+    background-color: rgb(32, 100, 227);
+}
+
+.Sun {
+    background-color: rgb(248, 24, 24);
+}
+
 
 .draw_diary {
     height: 550px;

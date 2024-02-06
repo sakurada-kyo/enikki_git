@@ -66,6 +66,7 @@ function generateCalendar(year, month) {
         const dayElement = document.createElement("div");
         if(day == "Sat"){
           dayElement.classList.add("Sat")
+          // day.style.color = "red";
         }
         if(day == "Sun"){
           dayElement.classList.add("Sun")
