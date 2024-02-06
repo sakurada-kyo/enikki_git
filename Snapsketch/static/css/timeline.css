@@ -167,12 +167,8 @@ input[type="file"]{
 
 .content {
     padding: 2em;
-    /*内側余白*/
     border: solid 1px;
-    /*線の種類・太さ・色*/
     height: 770px;
-    /* -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-    box-shadow: 0 0 10px rgba(0, 0, 0, .5); */
     transition-duration: .4s;
     background-color: #f0f8ff;
 }
@@ -267,4 +263,8 @@ input[type="file"]{
     writing-mode: vertical-rl;
     text-orientation: upright;
     font-size: 25px;
+    background-image: url(/static/images/diary_line_less.jpg);
+    border:1px solid #CCCFD6;
+    overflow-wrap: break-word;
+    line-height: 1.76;
 }
