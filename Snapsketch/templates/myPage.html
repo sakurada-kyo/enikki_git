@@ -23,7 +23,7 @@
             <tr>
               <th>ユーザID：</th>
               <td>
-                <input type="text" class="editField e1" size="37" value="{{ user_id }}" disabled>
+                <input type="text" class="editField" size="37" value="{{ user_id }}" disabled>
               </td>
             </tr>
             <tr>
@@ -58,7 +58,6 @@
   <!-- <div class="create">
   <a href="{% url 'enikki:create' %}" class="btn btn--orange btn--circle btn--circle-a btn--shadow">create</a>
 </div> -->
-
 {% endblock %}
 
 {% block footer %}
@@ -71,4 +70,5 @@
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'js/myPage.js' %}"></script>
 {% endblock %}
