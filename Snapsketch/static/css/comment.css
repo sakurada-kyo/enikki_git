@@ -91,8 +91,15 @@ img{
 }
 
 .content{
-    background-color: #dcdcdc;
+    background-color: #f0f8ff;
     margin-top:10px;
+    margin-bottom: 20px;
+    padding: 2em;
+    /*内側余白*/
+    border: solid 1px #CCCFD6;
+    /*線の種類・太さ・色*/
+    height: 836px;
+    width: 640px;
 }
 
 .user_icon{
@@ -100,9 +107,8 @@ img{
 }
 
 .user_name{
-    color:#ffffff;
+    color:#000000;
     font-size:25px;
-    /* padding-top:17px; */
     padding-left:5px;
     float: left;
     margin-top: 10px;
@@ -118,16 +124,12 @@ img{
     color:#e54747;
 }
 
-.far{
-    color:#ffffff;
-}
 
 .fa-heart{
     font-size: 35px;
 }
 
 .like-count{
-    color:#ffffff;
     font-size: 30px;
 }
 
@@ -143,17 +145,6 @@ button{
     margin-left: 10%;
 }
 
-.content {
-    margin-bottom: 20px;
-    padding: 2em;
-    /*内側余白*/
-    border: solid 1px #CCCFD6;
-    /*線の種類・太さ・色*/
-    height: 770px;
-    /* -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
-    transition-duration: .4s; */
-}
 
 
 .comment{
@@ -166,18 +157,15 @@ button{
 
 .fa-comment{
     font-size: 35px;
-    color:#ffffff;
     text-decoration: none;
 }
 
 .comment-count{
-    color: #ffffff;
     font-size: 30px;
 }
 
 .draw_diary{
     clear: both;
-    
     width: 100%;
 }
 
@@ -190,11 +178,15 @@ button{
 }
 
 .diary{
-    background-color: white;
     height: 200px;
-    width: 100%;
-    margin-top: 0;
-    border: solid 1px white;
+    width: 576px;
+    margin: 0px;
+    border: solid 1px #000000;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    background-image: url(/static/images/diary_line_less.jpg);
+    overflow-wrap: break-word;
+    line-height: 1.76;
 }
 /* グループ作成*/
 #popup-inside{
