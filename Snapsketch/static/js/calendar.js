@@ -72,7 +72,7 @@ function generateCalendar(year, month) {
           dayElement.classList.add("Sun")
         }
         var num = 1;
-        dayElement.classList.add("dayOfWeek");
+        dayElement.classList.add("dayOfWeek1");
         dayElement.textContent = day;
         daysContainer.appendChild(dayElement);
     });
@@ -96,8 +96,9 @@ function generateCalendar(year, month) {
         const date = `${datePartial}${padI}`
         // datesに含まれているか確認
         if (datesFromDjango.includes(date)) {
-          dayElement.style.backgroundColor = 'red';
+          // dayElement.style.backgroundColor = '#ff0000';
           dayElement.setAttribute("data-post","true");
+          dayElement.classList.add("new");
         }
         dayElement.setAttribute("data-date", date);
         daysContainer.appendChild(dayElement);

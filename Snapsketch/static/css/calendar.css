@@ -26,13 +26,28 @@
 }
 
 .day,
-.dayOfWeek {
+.dayOfWeek,
+.dayOfWeek1 {
     padding: 15px;
     text-align: center;
     border: 1px solid #ccc;
     cursor: pointer;
     margin: 3px;
     border-radius: 5px;
+}
+
+.dayOfWeek1{
+    background-color: #ccc;
+    color: white;
+    /* text-align: center; */
+    
+}
+.Sat {
+    background-color: rgb(32, 100, 227);
+}
+
+.Sun {
+    background-color: rgb(248, 24, 24);
 }
 
 .day:hover {
@@ -68,6 +83,7 @@
     margin-left: 70px;
 }
 
+
 #popup-wrapper {
     background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
@@ -79,23 +95,30 @@
 }
 
 #popup-inside {
-    text-align: center;
-    height: 300px;
-    width: 100%;
-    max-width: 700px;
-    background: white;
-    margin: 15% auto;
+    font-size: 20px;
+    position: fixed;
+    /* top: 25%; */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* width: 80%; */
+    /* max-width: 400px; */
+    /* height: auto; */
+    background-color: aliceblue;
+    z-index: 9999;
+    transition: .1s;
     padding: 10px;
-    position: relative;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+ /* Firefox 対応 */
+ scrollbar-width: none;
+    height: 50%;
+    margin-top: 28%;
+    border-radius: 5%;
+    width: 620px;
 }
-.Sat {
-    background-color: rgb(32, 100, 227);
+#close {
+    float: right;
 }
-
-.Sun {
-    background-color: rgb(248, 24, 24);
-}
-
 
 .draw_diary {
     height: 550px;
@@ -200,11 +223,24 @@
     margin-top: 5px;
     width: 100%;
 }
+.new {
+    background:repeating-linear-gradient(
+    45deg,
+    #fffe00,
+    #fffe00 8px,
+    #fff 0,
+    #fff 18px   
+    );
+}
 
 .diary{
-    background-color: red;
+    background-image: url(/static/images/diary_line_less.jpg);
+    writing-mode: vertical-rl;
+    text-orientation: upright;
     height: 200px;
     width: 100%;
+    margin: 0;
+    line-height: 1.9;
 }
 
 .button1 {
