@@ -173,8 +173,8 @@ button{
     border-radius: 0%;
     height: 500px;
     margin-top: 5px;
-    width: 100%;
-    border: solid 1px white;
+    width: 97.8%;
+    border: 1px solid #CCCFD6;
 }
 
 .diary{
@@ -186,7 +186,7 @@ button{
     text-orientation: upright;
     background-image: url(/static/images/diary_line_less.jpg);
     overflow-wrap: break-word;
-    line-height: 1.76;
+    line-height: 2.9;
 }
 /* グループ作成*/
 #popup-inside{
@@ -306,6 +306,9 @@ input#open{display: none;}
     padding: 20px;
     margin: 0;
 
+}
+.content {
+    width: 590px;
 }
 .comment-content{
     background-color: #fff;
