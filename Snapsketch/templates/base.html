@@ -1,42 +1,74 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/style3.css' %}">
-    <link rel="icon" href="data:,">
-    {% block css %}{% endblock %}
-    
-</head>
-<body>
-
-<div class="container">
-    <header>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="{% static 'css/style3.css' %}" />
+    <link rel="icon" href="data:," />
+    {% block css %}
+    {% endblock %}
+  </head>
+  <body>
+    <div class="container">
+      <header>
         <img class="logo" src="{% static 'images/logo.png' %}" alt="Snap Sketch" />
-    </header>
-    <div id = "box">
+      </header>
+      <div id="box">
         {% block content %}
+
+        {% endblock %}
+      </div>
+      <div id="side">
+        
+        <!-- ナビゲーションバー -->
+        <div class="navbar" style="display: block;">
+
+          <!-- ハンバーガーメニューボタン -->
+          <div class="openbtn4">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <!-- サイドバーの内容をそのまま残す -->
+          <div class="hamburger-menu">
+            <li>
+              <a href="{% url 'enikki:timeline' %}" class="side-list">timeline</a>
+            </li>
+            <li>
+              <a href="{% url 'enikki:calendar' %}" class="side-list">calendar</a>
+            </li>
+            <li>
+              <a href="{% url 'enikki:create' %}" class="side-list">create</a>
+            </li>
+            <li>
+              <a href="{% url 'enikki:friend' %}" class="side-list">friend</a>
+            </li>
+            <li>
+              <a href="{% url 'enikki:group' %}" class="side-list">groups</a>
+            </li>
+            <li>
+              <a href="{% url 'enikki:usersearch' %}" class="side-list">search</a>
+            </li>
+            <li>
+              <a href="{% url 'enikki:request' %}" class="side-list">follow</a>
+            </li>
+          </div>
+        </div>
+        {% block side %}
+
         {% endblock %}
     </div>
-    <ul id="side">
-        {% block side %}
-        <li><a href="{% url 'enikki:mypage' %}" class="side-list">マイページ</a></li>
-        <li><a href="{% url 'enikki:calendar' %}" class="side-list">カレンダー</a></li>
-        <li><a href="{% url 'enikki:create' %}" class="side-list">絵日記作成</a></li>
-        <li><a href="{% url 'enikki:friend' %}" class="side-list">フレンド一覧</a></li>
-        <li><a href="{% url 'enikki:group' %}" class="side-list">グループ一覧</a></li>
-        <li><a href="{% url 'enikki:group' %}" class="side-list">フォローリクエスト</a></li>
-        <li><a href="{% url 'enikki:usersearch' %}" class="side-list">ユーザー検索</a></li>
-        {% endblock %}
-    </ul>
-    
-    {% block footer %}
-    {% endblock %}
-</div>
 
-<script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
-<script src="{% static 'js/app.js' %}"></script>
-<script src="https://kit.fontawesome.com/706c0011db.js" crossorigin="anonymous"></script>
-{% block js %}{% endblock %}
-</body>
+      {% block footer %}
+
+      {% endblock %}
+    </div>
+
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="https://kit.fontawesome.com/706c0011db.js" crossorigin="anonymous"></script>
+    {% block js %}
+    {% endblock %}
+  </body>
 </html>

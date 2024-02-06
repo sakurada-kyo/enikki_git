@@ -20,26 +20,6 @@
 </form>
 {% endblock %}
 
-{% block side %}
-<!-- ナビゲーションバー -->
-<div class="navbar" style="display: block;">
-    <!-- ハンバーガーメニューボタン -->
-    <div class="openbtn4">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  
-    <!-- サイドバーの内容をそのまま残す -->
-    <div class="hamburger-menu">
-    <li><a href="{% url 'enikki:timeline' %}" class="side-list">timeline</a></li>
-    <li><a href="{% url 'enikki:calendar' %}" class="side-list">calendar</a></li>
-    <li><a href="{% url 'enikki:mypage' %}" class="side-list">mypage</a></li>
-    <li><a href="{% url 'enikki:friend' %}" class="side-list">friends</a></li>
-    <li><a href="{% url 'enikki:group' %}" class="side-list">groups</a></li>
-</div>
-    {% endblock %}
-
 {% block footer %}
 <footer>
     <div id = "kotei">

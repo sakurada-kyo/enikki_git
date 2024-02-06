@@ -4,19 +4,17 @@ var currentDate = new Date();
 currentYear = currentDate.getFullYear();
 currentMonth = currentDate.getMonth();
 generateCalendar(currentYear, currentMonth);
-var leftBtn = document.getElementById('leftBtnId')
-var rightBtn = document.getElementById('rightBtnId')
-leftBtn.addEventListener('click',showPreviousMonth)
-rightBtn.addEventListener('click',showNextMonth)
+
 
 
 function createLeftRightBtn(){
   let fragment = document.createDocumentFragment()
   const leftButtonDivElem = document.createElement('div')
   const rightButtonDivElem = document.createElement('div')
+  const btnWrap = document.createElement('div')
   const leftButtonInputElem = document.createElement('input')
   const rightButtonInputElem = document.createElement('input')
-  
+
   leftButtonInputElem.setAttribute('type','button')
   leftButtonInputElem.setAttribute('class','button1')
   leftButtonInputElem.setAttribute('value','◀')
@@ -33,8 +31,11 @@ function createLeftRightBtn(){
   rightButtonDivElem.setAttribute('id','rightBtnId')
   rightButtonDivElem.appendChild(rightButtonInputElem)
 
-  fragment.appendChild(leftButtonDivElem)
-  fragment.appendChild(rightButtonDivElem)
+  btnWrap.setAttribute('id','btnWrap')
+  btnWrap.appendChild(leftButtonDivElem)
+  btnWrap.appendChild(rightButtonDivElem)
+
+  fragment.appendChild(btnWrap)
 
   return fragment
 }
@@ -57,6 +58,12 @@ function generateCalendar(year, month) {
     header.innerHTML = `<span class="current-month">${monthNames[month]} ${year}</span>`;
     header.appendChild(leftRightBtn)
     calendar.appendChild(header);
+
+    //ボタンハンドラ
+    const leftBtn = document.getElementById('leftBtnId')
+    const rightBtn = document.getElementById('rightBtnId')
+    leftBtn.addEventListener('click',showPreviousMonth)
+    rightBtn.addEventListener('click',showNextMonth)
 
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const daysContainer = document.createElement("div");

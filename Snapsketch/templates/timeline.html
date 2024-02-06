@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block side %}
-<!-- ナビゲーションバー -->
+{% comment %} <!-- ナビゲーションバー -->
 <div class="navbar" style="display: block;">
     <!-- ハンバーガーメニューボタン -->
     <div class="openbtn4">
@@ -26,7 +26,7 @@
 <li><a href="{% url 'enikki:create' %}" class="side-list">create</a></li>
 <li><a href="{% url 'enikki:friend' %}" class="side-list">friends</a></li>
 <li><a href="{% url 'enikki:group' %}" class="side-list">groups</a></li>
-</div>
+</div> {% endcomment %}
 {% endblock %}
 
 {% block js %}

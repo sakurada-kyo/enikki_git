@@ -61,45 +61,6 @@
 
 {% endblock %}
 
-{% block side %}
-
-
-<!-- ナビゲーションバー -->
-<div class="navbar" style="display: block;">
-  <!-- ハンバーガーメニューボタン -->
-  <div class="openbtn4">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-
-  <!-- サイドバーの内容をそのまま残す -->
-  <div class="hamburger-menu">
-  <li>
-    <a href="{% url 'enikki:timeline' %}" class="side-list">timeline</a>
-  </li>
-  <li>
-    <a href="{% url 'enikki:calendar' %}" class="side-list">calendar</a>
-  </li>
-  <li>
-    <a href="{% url 'enikki:create' %}" class="side-list">create</a>
-  </li>
-  <li>
-    <a href="{% url 'enikki:friend' %}" class="side-list">friend</a>
-  </li>
-  <li>
-    <a href="{% url 'enikki:group' %}" class="side-list">groups</a>
-  </li>
-  <li>
-    <a href="{% url 'enikki:usersearch' %}" class="side-list">search</a>
-  </li>
-  <li>
-    <a href="{% url 'enikki:request' %}" class="side-list">follow</a>
-  </li> 
-  </div>
-</div>
-{% endblock %}
-
 {% block footer %}
   <!-- フッターの内容をそのまま残す -->
   <footer>
