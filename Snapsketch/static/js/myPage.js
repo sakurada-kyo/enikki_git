@@ -66,7 +66,6 @@ $(function () {
 
 //メールアドレス、名前編集のajax
 function mypage_detail_ajax(data,flg,button,editField){
-    console.log(`data:${data},flg:${flg},button:${button},editField:${editField}`);
     $.ajax({
         url: '/enikki/ajax_mypage_detail/', // 適切なURLに変更
         type: 'POST',
