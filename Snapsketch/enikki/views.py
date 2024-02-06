@@ -221,8 +221,10 @@ def ajax_changeGroup(request):
 class CommentView(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
         context = {}
-        
+
+        # ログインユーザー
         user = request.user
+        user_id = user.user_id
 
         # セッションからグループ名取得
         groupName = request.session["currentGroup"]
@@ -273,11 +275,22 @@ class CommentView(LoginRequiredMixin,TemplateView):
             CommentMaster.objects.filter(post=post_id)
             .select_related("user")
             .values(
+                "user__user_id",
                 "user__username",
                 "user__user_icon_path",
                 "comment",
             )
         )
+
+        # ポストにいいね情報を追加
+        for comment in comments:
+            comment_user_id = comment["user__user_id"]
+            # 自分がコメントしたかどうか
+            comment["is_myuser"] = False
+            if comment_user_id == user_id:
+                comment["is_myuser"] = True
+
+        print(f'comments:{comments}')
 
         if not comments:
             context["error"] = "コメントがありません"
