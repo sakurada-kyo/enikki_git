@@ -346,13 +346,11 @@ input#open{display: none;}
     margin-left: 5%;
 }
 
-.delete-comment {
-    margin-left: 60%;
-}
 .hamburger-menu li {
     margin: 30px 50px;
-    text-align: center  ;
+    text-align: center;
 }
+
 #toukou {
 	display: block;
 	margin: auto;
@@ -371,6 +369,7 @@ input#open{display: none;}
 	transition: all 0.2s ease-in;
     width: 100px;
 }
+
 #toukou:hover {
 	color: #fff;
 	background: #27acd9;
@@ -378,11 +377,13 @@ input#open{display: none;}
 	-moz-transition: all 0.2s ease-out;
 	transition: all 0.2s ease-out;
 }
+
 #toukou:hover::before {
 	-webkit-animation: sh02 0.5s 0s linear;
 	-moz-animation: sh02 0.5s 0s linear;
 	animation: light 0.5s 0s linear;
 }
+
 #toukou::before {
 	content: '';
 	display: block;

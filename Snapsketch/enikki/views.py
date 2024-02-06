@@ -309,7 +309,6 @@ def ajax_comment(request):
         if comment:
             if "post_id" in request.session:
                 post_id = request.session["post_id"]
-                print(f"post_id:{post_id}")
                 post = PostMaster.objects.get(pk=post_id)
                 # 新しいコメントを作成する例
                 new_comment = CommentMaster(

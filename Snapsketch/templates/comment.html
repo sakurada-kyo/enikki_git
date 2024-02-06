@@ -66,8 +66,8 @@
           </div>
             <span class="comment-sentence">{{ comment.comment }}</span>
             
-            {% if  %}
-              
+            {% if comment.is_myuser %}
+              <input type="button" value="削除" class="deleteBtn">
             {% endif %}
               
         </div>
