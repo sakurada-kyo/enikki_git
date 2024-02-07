@@ -245,6 +245,7 @@
     width: 576px;
     margin: 0;
     line-height: 2.17;
+    overflow-wrap: break-word;
 }
 
 .button1 {

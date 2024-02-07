@@ -15,40 +15,6 @@
       <input type="button" class="button2" onclick="showNextMonth()" value="▶" />
     </div>
   </div>
-  <div id="popup-wrapper">
-    <div id="popup-inside">
-      <div id="close">x</div>
-      <div id="scroll">
-        <article class="content" data-group="" data-page="">
-          <div class="content_header">
-            <img class="user_icon" src="" alt="ユーザーアイコン" />
-            <p class="user_name"></p>
-            <div class="like">
-                <button type="button" class="ajax-like">
-                  <!-- すでにいいねしている時はfasクラス -->
-                  <i class="fas fa-heart text-danger"></i>
-                </button>
-                <button type="button" class="ajax-like">
-                  <!-- いいねしていないときはfarクラス -->
-                  <i class="far fa-heart text-danger"></i>
-                </button>
-              <!-- いいねの数 -->
-              <span class="like-count"></span>
-            </div>
-            <div class="comment">
-              <!-- グループ名とページ番号送信 -->
-              <a class="fa-regular fa-comment" href="{% url 'enikki:comment' %}?page={{ post.page }}"></a>
-              <span class="comment-count"></span>
-            </div>
-          </div>
-          <section class="draw_diary">
-            <img class="draw" src="" alt="絵日記の絵" />
-            <p class="diary"></p>
-          </section>
-        </article>
-      </div>
-    </div>
-  </div>
 {% endblock %}
 
 {% block js %}

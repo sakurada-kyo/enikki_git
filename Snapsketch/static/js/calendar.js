@@ -4,41 +4,8 @@ var currentDate = new Date();
 currentYear = currentDate.getFullYear();
 currentMonth = currentDate.getMonth();
 generateCalendar(currentYear, currentMonth);
+handlePostDay()
 
-
-
-function createLeftRightBtn(){
-  let fragment = document.createDocumentFragment()
-  const leftButtonDivElem = document.createElement('div')
-  const rightButtonDivElem = document.createElement('div')
-  const btnWrap = document.createElement('div')
-  const leftButtonInputElem = document.createElement('input')
-  const rightButtonInputElem = document.createElement('input')
-
-  leftButtonInputElem.setAttribute('type','button')
-  leftButtonInputElem.setAttribute('class','button1')
-  leftButtonInputElem.setAttribute('value','◀')
-
-  leftButtonDivElem.setAttribute('class','buttonId')
-  leftButtonDivElem.setAttribute('id','leftBtnId')
-  leftButtonDivElem.appendChild(leftButtonInputElem)
-
-  rightButtonInputElem.setAttribute('value','▶')
-  rightButtonInputElem.setAttribute('type','button')
-  rightButtonInputElem.setAttribute('class','button2')
-
-  rightButtonDivElem.setAttribute('class','buttonId')
-  rightButtonDivElem.setAttribute('id','rightBtnId')
-  rightButtonDivElem.appendChild(rightButtonInputElem)
-
-  btnWrap.setAttribute('id','btnWrap')
-  btnWrap.appendChild(leftButtonDivElem)
-  btnWrap.appendChild(rightButtonDivElem)
-
-  fragment.appendChild(btnWrap)
-
-  return fragment
-}
 
 function generateCalendar(year, month) {
     const calendar = document.getElementById("calendar");
@@ -76,7 +43,6 @@ function generateCalendar(year, month) {
         daysContainer.appendChild(dayElement);
     });
 
-    console.log(`firstDayOfMonth:${firstDayOfMonth}`)
     for (let i = 0; i < firstDayOfMonth; i++) {
         const emptyDay = document.createElement("div");
         emptyDay.classList.add("day");
@@ -105,19 +71,13 @@ function generateCalendar(year, month) {
 
     calendar.appendChild(daysContainer);
 
-    var dayTags = document.querySelectorAll("[data-post]");
-    dayTags.forEach((element) => {
-      element.addEventListener('click', (event) => {
-        // $('#popup-wrapper').fadeIn();
-        ajax_open(event.target);
-      });
-    });
 
-    $('#close , #popup-wrapper').click(function(){
-      $('#popup-wrapper').fadeOut()
-      // 特定のIDを持つ要素内の全ての子要素を削除
-      $('#popup-inside').empty()
-    });
+    // $('#close , #popup-wrapper').click(function(e){
+    //   console.log(e.target)
+    //   $('#popup-wrapper').fadeOut()
+    //   // 特定のIDを持つ要素内の全ての子要素を削除
+    //   $('#popup-inside').empty()
+    // });
 
     // $('[data-post="true"]').on('click',(event) => {
     //   const target = event.target
@@ -125,7 +85,27 @@ function generateCalendar(year, month) {
     // })
 }
 
+function handlePostDay() {
+  var dayTags = document.querySelectorAll("[data-post]");
+  dayTags.forEach((element) => {
+    element.addEventListener('click', (event) => {
+      ajax_open(event.target)
+    })
+  })
+}
 
+function deletePopup() {
+  const popupWrapElem = document.getElementById('popup-wrapper')
+  const closeElem = document.getElementById('close')
+
+  popupWrapElem.addEventListener('click',() => {
+    popupWrapElem.remove()
+  })
+  
+  closeElem.addEventListener('click',() => {
+    closeElem.remove()
+  })
+}
 
 function showPreviousMonth() {
   if (currentMonth === 0) {
@@ -164,7 +144,6 @@ function padZero(num) {
 //-----------------------ajax処理-----------------------
 function ajax_open(element) {
   const date = $(element).attr('data-date');
-  console.log(`date:${date}`)
   var formData = new FormData($('#calendar-form').get(0))
   formData.append('date',date)
   $.ajax({
@@ -177,14 +156,13 @@ function ajax_open(element) {
       headers: { 'X-CSRFToken': csrftoken }
   })
       .done(function (data) {
-
       if ('error' in data) {
           console.log(data.error);
       } else {
           var postsArray = JSON.parse(data.posts); // JSONText→JSONObject
           const fragment = showPosts(postsArray)
-          $('#popup-inside').append(fragment)
-          $('#popup-wrapper').css('display','block')
+          $('#box').append(fragment)
+          deletePopup()
       }
       })
       .fail((jqXHR, textStatus, errorThrown) => {
@@ -199,9 +177,16 @@ function ajax_open(element) {
 //-----------------------ポップアップ投稿表示-----------------------
 function showPosts(posts){
     var fragment = document.createDocumentFragment();
-    // const closeElem = document.createElement('div')
-    // closeElem.setAttribute('id','close')
-    // fragment.appendChild(closeElem)
+    const closeElem = document.createElement('div')
+    const popupWrapElem = document.createElement('div')
+    const popupInsideElem = document.createElement('div')
+    const scrollElem = document.createElement('div')
+
+    closeElem.setAttribute('id','close')
+    closeElem.innerHTML = '×'
+
+    scrollElem.setAttribute('id','scroll')
+
     posts.forEach(function(post){
         const postSketchPath = `/media/${post.post__sketch_path}`; // 絵パス情報を取得
         const postDiary = post.post__diary; // 日記情報を取得
@@ -257,11 +242,19 @@ function showPosts(posts){
 
         content.setAttribute('data-page', postPage);
 
-        fragment.appendChild(content); // fragmentの追加する
+        scrollElem.appendChild(content); // fragmentの追加する
 
     });
 
-    return fragment;
+    popupInsideElem.setAttribute('id','popup-inside')
+    popupInsideElem.appendChild(closeElem)
+    popupInsideElem.appendChild(scrollElem)
+
+    popupWrapElem.setAttribute('id','popup-wrapper')
+    popupWrapElem.setAttribute('style','display: block;')
+    popupWrapElem.appendChild(popupInsideElem)
+
+    return popupWrapElem;
 }
 //-----------------------ポップアップ投稿表示-----------------------
 
