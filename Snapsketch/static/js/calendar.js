@@ -160,8 +160,8 @@ function padZero(num) {
 function ajax_open(element) {
   date = $(element).attr('data-date');
   console.log(`date:${date}`)
-  var formData = new FormData($('#calendar-form').get(0));
-  formData.append('date',date);
+  var formData = new FormData($('#calendar-form').get(0))
+  formData.append('date',date)
   $.ajax({
       url: '/enikki/calendar/ajax_calendar/',
       type: 'POST',
@@ -193,6 +193,9 @@ function ajax_open(element) {
 //-----------------------ポップアップ投稿表示-----------------------
 function showPosts(posts){
     var fragment = document.createDocumentFragment();
+    // const closeElem = document.createElement('div')
+    // closeElem.setAttribute('id','close')
+    // fragment.appendChild(closeElem)
     posts.forEach(function(post){
         const postSketchPath = `/media/${post.post__sketch_path}`; // 絵パス情報を取得
         const postDiary = post.post__diary; // 日記情報を取得
@@ -202,7 +205,6 @@ function showPosts(posts){
         const postPage = post.page; //ページ番号取得
         const isLiked = post.is_liked; // いいね情報を取得
         const postUserIcon = `/media/${post.post__user__user_icon_path}`; // ユーザーアイコン
-
 
         var content = createAndAppendElement('article', 'content', '');
 

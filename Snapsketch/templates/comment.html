@@ -59,7 +59,7 @@
         <p id="error">{{ error }}</p>
         {% endif %}
         {% for comment in comments %}
-        <div class="comment-content">
+        <div class="comment-content" data-comment-id="{{ comment.comment_id }}">
           <div class="comment-content2">
             <img class="user-icon" src="/media/{{ comment.user__user_icon_path }}" alt="アイコン" />
             <span class="comment-name">{{ comment.user__username }}</span><br/>

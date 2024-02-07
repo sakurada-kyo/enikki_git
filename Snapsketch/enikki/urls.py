@@ -34,4 +34,5 @@ urlpatterns = [
     path('request/', views.request_view,name='request'),
     path('request/allow/', views.allow,name='allow'),
     path('request/deny/', views.deny,name='deny'),
+    
 ]

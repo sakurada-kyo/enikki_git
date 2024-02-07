@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.views.decorators.csrf import csrf_exempt
 
 # セッションにグループ保存（ログイン時に使用）
 def set_session_group(request):
@@ -26,6 +27,7 @@ def set_session_group(request):
     request.session['currentGroup'] = group_list[0]
 
 # ログイン
+@csrf_exempt
 def signin(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -44,6 +46,7 @@ def signin(request):
     return render(request, 'login.html', {'form': form})
 
 # 新規登録
+@csrf_exempt
 def signup(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)

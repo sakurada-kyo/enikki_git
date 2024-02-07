@@ -1,8 +1,4 @@
-from audioop import reverse
-import calendar
-from typing import Any
 from uuid import UUID
-from django.conf import settings
 from django.forms import ValidationError
 from django.http.response import HttpResponse as HttpResponse
 from django.views.generic import TemplateView
@@ -11,8 +7,8 @@ import os
 from django.db.models import Q
 import tempfile
 from datetime import datetime
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseServerError, JsonResponse
-from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
+from django.http import Http404, HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import PostMaster
 from django.utils.crypto import get_random_string
 from PIL import Image
@@ -21,14 +17,8 @@ from django.core.files.base import ContentFile
 from .models import *
 from django.core.paginator import Paginator
 from django.core import serializers
-from django.db.models import F, Max, Subquery, OuterRef
-from .forms import UpLoadProfileImgForm
-from django.db import transaction
+from django.db.models import F, Max
 from django.utils import timezone
-from django.contrib.sessions.models import Session
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # グループ作成画面表示
@@ -275,6 +265,7 @@ class CommentView(LoginRequiredMixin,TemplateView):
             CommentMaster.objects.filter(post=post_id)
             .select_related("user")
             .values(
+                "comment_id",
                 "user__user_id",
                 "user__username",
                 "user__user_icon_path",
@@ -312,13 +303,16 @@ def ajax_comment(request):
                 post = PostMaster.objects.get(pk=post_id)
                 # 新しいコメントを作成する例
                 new_comment = CommentMaster(
-                    user=user,  # ユーザーは適切な方法で取得する必要があります
-                    post=post,  # セッションから取得したpost_idに紐づくPostMasterインスタンスを指定
-                    comment=comment,  # コメントの内容を適切なものに置き換える
+                    user=user,
+                    post=post,
+                    comment=comment,
                 )
                 new_comment.save()  # 新しいコメントを保存する
+                
+                print(f'new_comment:{new_comment.comment_id}')
 
                 comment_data = {
+                    "comment_id":new_comment.comment_id,
                     "username": new_comment.user.username,
                     "usericon": new_comment.user.user_icon_path.url,
                     "comment": new_comment.comment,
@@ -334,7 +328,7 @@ def delete_comment(request):
     comment_id = request.POST.get("comment_id")
     print(comment_id)
     if comment_id:
-        comment_uuid = [uuid.UUID(str(comment_id))]  # UUIDを文字列に変換
+        comment_uuid = uuid.UUID(str(comment_id))  # UUIDを文字列に変換
 
         comment = CommentMaster.objects.get(pk=comment_uuid)
         comment.delete()

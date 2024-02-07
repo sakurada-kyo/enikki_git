@@ -24,7 +24,7 @@ $(function () {
 });
 
 $('.deleteBtn').on('click', function() {
-    var commentId = $(this).attr('data-comment-id')
+    var commentId = $(this).closest('.comment-content').attr('data-comment-id')
     $.ajax({
         url: '/enikki/comment/delete_comment/',
         type: 'POST',
@@ -84,7 +84,7 @@ function add_comment(data) {
     const deleteButton = document.createElement('input');
     deleteButton.setAttribute('class', 'deleteBtn');
     deleteButton.setAttribute('data-comment-id', data.comment_data.id);
-    deleteButton.innerHTML = '削除';
+    deleteButton.setAttribute('value','削除')
 
     commentContent.appendChild(deleteButton);
 

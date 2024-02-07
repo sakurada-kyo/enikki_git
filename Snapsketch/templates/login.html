@@ -14,18 +14,31 @@
             <form method="post" action="{% url 'signin' %}">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="id_username" class="form-label">ユーザー名</label>
-                    <input type="text" id="id_username" name="username" class="form-control">
+                    <input
+                        type="text"
+                        id="id_username"
+                        name="username"
+                        class="form-control"
+                        placeholder="ユーザー名">
                 </div>
                 <div class="mb-3">
-                    <label for="id_password" class="form-label">パスワード</label>
-                    <input type="password" id="id_password" name="password" class="form-control">
+                    <input
+                        type="password"
+                        id="id_password"
+                        name="password"
+                        class="form-control"
+                        placeholder="パスワード">
+                    <i
+                        id="eye-icon"
+                        class="fa-solid fa-eye position-absolute translate-middle top-50 end-0"></i>
                 </div>
                 <button type="submit" class="btn btn-primary">ログイン</button>
             </form>
+            <hr>
             <a href="{% url 'signup' %}">新規登録</a>
             <a href="{% url 'password_reset' %}">パスワードを忘れた方</a>
         </div>
     </div>
+    <script src="https://kit.fontawesome.com/706c0011db.js" crossorigin="anonymous"></script>
 </body>
 </html>
