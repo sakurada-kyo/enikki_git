@@ -21,3 +21,10 @@ body {
 .form-login button[type="submit"] {
     width: 100%;
 }
+.mb-3 {
+    display: flex;
+}
+#eye-icon {
+    margin-left: 330px;
+    margin-top: 10px;
+}
