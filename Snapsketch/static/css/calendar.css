@@ -44,7 +44,6 @@
     background-color: #ccc;
     color: white;
     /* text-align: center; */
-    
 }
 .Sat {
     background-color: rgb(32, 100, 227);
@@ -120,6 +119,7 @@
     border-radius: 5%;
     width: 620px;
 }
+
 #close {
     float: right;
 }
