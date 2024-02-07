@@ -66,7 +66,6 @@ function generateCalendar(year, month) {
         const dayElement = document.createElement("div");
         if(day == "Sat"){
           dayElement.classList.add("Sat")
-          // day.style.color = "red";
         }
         if(day == "Sun"){
           dayElement.classList.add("Sun")
@@ -108,19 +107,25 @@ function generateCalendar(year, month) {
 
     var dayTags = document.querySelectorAll("[data-post]");
     dayTags.forEach((element) => {
-      element.addEventListener('click', () => {
-
-        $('#popup-wrapper').fadeIn();
-        ajax_open(element);
+      element.addEventListener('click', (event) => {
+        // $('#popup-wrapper').fadeIn();
+        // ajax_open(event.target);
       });
     });
 
     $('#close , #popup-wrapper').click(function(){
-      $('#popup-wrapper').fadeOut();
+      $('#popup-wrapper').fadeOut()
       // 特定のIDを持つ要素内の全ての子要素を削除
-      $('#popup-inside').empty();
+      $('#popup-inside').empty()
     });
+
+    // $('[data-post="true"]').on('click',(event) => {
+    //   const target = event.target
+    //   ajax_open(target)
+    // })
 }
+
+
 
 function showPreviousMonth() {
   if (currentMonth === 0) {
@@ -158,7 +163,7 @@ function padZero(num) {
 
 //-----------------------ajax処理-----------------------
 function ajax_open(element) {
-  date = $(element).attr('data-date');
+  const date = $(element).attr('data-date');
   console.log(`date:${date}`)
   var formData = new FormData($('#calendar-form').get(0))
   formData.append('date',date)
@@ -176,9 +181,10 @@ function ajax_open(element) {
       if ('error' in data) {
           console.log(data.error);
       } else {
-          var postsArray = JSON.parse(data.posts);//JSONText→JSONObject
-          var fragment = showPosts(postsArray);
-          $('#popup-inside').append(fragment);
+          var postsArray = JSON.parse(data.posts); // JSONText→JSONObject
+          const fragment = showPosts(postsArray)
+          $('#popup-inside').append(fragment)
+          $('#popup-wrapper').css('display','block')
       }
       })
       .fail((jqXHR, textStatus, errorThrown) => {
