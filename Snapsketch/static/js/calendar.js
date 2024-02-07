@@ -109,7 +109,7 @@ function generateCalendar(year, month) {
     dayTags.forEach((element) => {
       element.addEventListener('click', (event) => {
         // $('#popup-wrapper').fadeIn();
-        // ajax_open(event.target);
+        ajax_open(event.target);
       });
     });
 
