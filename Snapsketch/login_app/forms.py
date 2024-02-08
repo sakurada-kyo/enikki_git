@@ -23,6 +23,7 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields['password2'].label = 'パスワード確認'
         self.fields['user_icon_path'].label = 'アイコン画像'
         self.fields['tel'].label = '電話番号'
+        self.fields['tel'].widget.attrs['placeholder'] = '00011112222'
         self.fields['gender'].label = '性別'
         self.fields['gender'].choices = [
             ('M', '男性'),
