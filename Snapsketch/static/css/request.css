@@ -2,20 +2,39 @@
     display: flex;
 }
 
+#box{
+    margin: auto;
+}
+
 .search {
-    margin-top: 45%;
+    margin: auto;
+    margin-top: 40%;
     margin-bottom: 30px;
+    text-align: center;
+    width: 70%;
     display: flex;
 }
 
-.request {
+.text_type{
+    width: 90%;
+}
+
+.request-form {
+    margin: auto;
     margin-bottom: 30px;
-    width: 100%;
     height: 130px;
     background-color: #ffffff;
     display: flex;
     justify-content: space-between;
     align-items:center;
+    border: solid 1px #000;
+    border-radius: 5px;
+}
+
+.icon{
+    border-radius: 100%;
+    border: 1px solid #000;
+    margin: 10px;
 }
 
 .request p, button {
@@ -33,12 +52,18 @@
       border-radius: 200px;
 }
 
+.delete, .allow{
+    float: right;
+    width: 100px;
+}
+
 .user-info {
+    margin-left: 20px;
     width: 450px;
 }
 
 .approve {
-    width:200px;
+    margin-right: 10px;
 }
 
 .hamburger-menu li {
@@ -46,3 +71,161 @@
     text-align: center;
 }
 
+.allow, .delete{
+    margin-top:20px;
+    float: right;
+    height: 20px;
+    width: 100px;
+}
+
+
+.post-btn {
+    float: right;
+    background: blue;
+    color: #ffffff;
+    width: 180px;
+    text-align: center;
+    margin-right: 400px;
+    margin-top: 70px;
+}
+
+.delete {
+	display: block;
+	/* margin: auto; */
+    /* margin-right: 10px; */
+	/* padding: 13px 22px; */
+	position: relative;
+	border-radius: 5px;
+	border: 1px solid #27acd9;
+	font-weight: bold;
+	letter-spacing: 2px;
+	background: transparent;
+	color: #27acd9;
+	overflow: hidden;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+    /* width: 65%; */
+}
+.delete:hover {
+	color: #fff;
+	background: #27acd9;
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
+}
+.delete:hover::before {
+	-webkit-animation: sh02 0.5s 0s linear;
+	-moz-animation: sh02 0.5s 0s linear;
+	animation: light 0.5s 0s linear;
+}
+.delete::before {
+	content: '';
+	display: block;
+	width: 0px;
+	height: 86%;
+	position: absolute;
+	top: 7%;
+	left: 0%;
+	opacity: 0;
+	background: #000000;
+	box-shadow: 0 0 50px 30px #0a0a0a;
+	-webkit-transform: skewX(-20deg);
+	-moz-transform: skewX(-20deg);
+	-ms-transform: skewX(-20deg);
+	-o-transform: skewX(-20deg);
+}
+
+.allow {
+	display: block;
+	/* margin: auto; */
+    /* margin-right: 10px; */
+	/* padding: 13px 22px; */
+	position: relative;
+	border-radius: 5px;
+	border: 1px solid #27acd9;
+	font-weight: bold;
+	letter-spacing: 2px;
+	background: transparent;
+	color: #27acd9;
+	overflow: hidden;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+    /* width: 65%; */
+}
+.allow:hover {
+	color: #fff;
+	background: #27acd9;
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
+}
+.allow:hover::before {
+	-webkit-animation: sh02 0.5s 0s linear;
+	-moz-animation: sh02 0.5s 0s linear;
+	animation: light 0.5s 0s linear;
+}
+.allow::before {
+	content: '';
+	display: block;
+	width: 0px;
+	height: 86%;
+	position: absolute;
+	top: 7%;
+	left: 0%;
+	opacity: 0;
+	background: #000000;
+	box-shadow: 0 0 50px 30px #0a0a0a;
+	-webkit-transform: skewX(-20deg);
+	-moz-transform: skewX(-20deg);
+	-ms-transform: skewX(-20deg);
+	-o-transform: skewX(-20deg);
+}
+
+.search_bar {
+	display: block;
+	/* margin: auto; */
+    /* margin-right: 10px; */
+	/* padding: 13px 22px; */
+	position: relative;
+	border-radius: 5px;
+	border: 1px solid #27acd9;
+	font-weight: bold;
+	letter-spacing: 2px;
+	background: transparent;
+	color: #27acd9;
+	overflow: hidden;
+	-webkit-transition: all 0.2s ease-in;
+	-moz-transition: all 0.2s ease-in;
+	transition: all 0.2s ease-in;
+    /* width: 65%; */
+}
+.search_bar:hover {
+	color: #fff;
+	background: #27acd9;
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
+}
+.search_bar:hover::before {
+	-webkit-animation: sh02 0.5s 0s linear;
+	-moz-animation: sh02 0.5s 0s linear;
+	animation: light 0.5s 0s linear;
+}
+.search_bar::before {
+	content: '';
+	display: block;
+	width: 0px;
+	height: 86%;
+	position: absolute;
+	top: 7%;
+	left: 0%;
+	opacity: 0;
+	background: #000000;
+	box-shadow: 0 0 50px 30px #0a0a0a;
+	-webkit-transform: skewX(-20deg);
+	-moz-transform: skewX(-20deg);
+	-ms-transform: skewX(-20deg);
+	-o-transform: skewX(-20deg);
+}
