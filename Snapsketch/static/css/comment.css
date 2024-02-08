@@ -123,8 +123,6 @@ button{
     margin-left: 10%;
 }
 
-
-
 .comment{
     float: right;
     margin-top: 10px;
@@ -154,7 +152,6 @@ button{
     width: 97.8%;
     border: 1px solid #CCCFD6;
 }
-
 
 .diary{
     height: 200px;
@@ -306,7 +303,6 @@ input#open{display: none;}
     width: 130px;
     display: flex;
 }
-
 
 .comment-name{
     font-size: 20px;

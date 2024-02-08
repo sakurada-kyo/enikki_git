@@ -51,7 +51,6 @@
     cursor: pointer;
 }
 
-
 @media screen and (max-width: 768px) {
     /* ウィンドウの幅が小さい場合のスタイル調整 */
     #popup-inside {
