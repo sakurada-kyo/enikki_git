@@ -5,10 +5,10 @@
 {% endblock  %}
 
 {% block content %}
-<div class="search">
-    <input type="text" class="text_type">
-    <input type="button" value="検索" class="search_bar">
-</div>
+<h2>フォローリクエスト</h2>
+{% if not followers %}
+<p>フォローリクエストがありません</p>
+{% endif %}
 {% for follower in followers %}
 <div class="request-form">
     <img src="/media/{{ follower.followee__user_icon_path }}" width="110px" height="110px" class="icon">
