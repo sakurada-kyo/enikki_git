@@ -1,3 +1,5 @@
+
+
 #box{
     margin-top: 10%;
 }
@@ -117,11 +119,13 @@
     height: 70%;
     margin-top: 23%;
     border-radius: 5%;
-    width: 620px;
+    /* width: 620px; */
+    width:641.8px;
 }
 
 #close {
     float: right;
+    cursor: pointer;
 }
 
 .draw_diary {
@@ -136,17 +140,19 @@
 }
 
 #scroll{
-    /* width: 80%; */
+    width: 576px;
     float: left;
     margin-top:10px;
     margin-bottom: 10px;
+    margin-left:35px;
 }
 
 .content{
     /* overflow-y:scroll; */
-    width: 605px;
+    /* width: 605px; */
     height: 680px;
-    padding-left: 10px;
+    /* padding-left: 10px; */
+    margin-bottom: 180px;
 }
 
 .user_icon{
@@ -164,6 +170,10 @@
     color: black;
 }
 
+.ajax-like{
+    margin-top: 25px;
+}
+
 .like{
     float: right;
     margin-top:10px;
@@ -175,10 +185,6 @@
 }
 
 .fa-regular {
-    margin-top: 25px;
-}
-
-.far{
     margin-top: 25px;
 }
 
@@ -225,7 +231,7 @@
     border-radius: 0%;
     height: 500px;
     margin-top: 5px;
-    width: 95%;
+    width: 100%;
 }
 .new {
     background:repeating-linear-gradient(
@@ -242,7 +248,7 @@
     writing-mode: vertical-rl;
     text-orientation: upright;
     height: 202px;
-    width: 576px;
+    width: 100%;
     margin: 0;
     line-height: 2.17;
     overflow-wrap: break-word;

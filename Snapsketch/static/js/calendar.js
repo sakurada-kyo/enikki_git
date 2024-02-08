@@ -264,9 +264,9 @@ function showPosts(posts){
     if (className) {
       element.setAttribute('class', className);
     }
-    if (textContent) {
-      element.innerHTML = textContent;
-    }
+    
+    element.innerHTML = textContent;
+    
     return element;
   };
   //------------------------タグ生成------------------------
