@@ -16,7 +16,7 @@ class CustomUser(AbstractUser):
 
     user_id = models.UUIDField(default=uuid.uuid4, editable=False)
     user_icon_path = models.ImageField(upload_to='user_icons/')
-    tel = models.CharField(max_length=15,null=True,blank=True)
+    tel = models.CharField(max_length=11,null=True,blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     birthday = models.DateField(null=True,blank=True)
     email = models.EmailField(unique=True)

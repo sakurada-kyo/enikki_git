@@ -1,9 +1,18 @@
+p{
+	margin: 0;
+}
+
 #box{
     margin-top: 15%;
 }
 
 #register h2 {
     font-size: 30px;
+}
+
+.username{
+	font-size: large;
+    margin: 29px 9px;
 }
 
 .account-form {

@@ -2,21 +2,23 @@
 {% load static %}
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/friend.css' %}" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC:300 rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC:300 rel="stylesheet"> {% endcomment %}
 
 {% endblock %}
 {% block content %}
   <div id="register">
     <h2>フレンド一覧</h2><br />
-
+    {% if not friends %}
+    <p>フレンドがいません</p>
+    {% endif %}
     {% for friend in friends %}
       <div class="account-form">
         <div class="circle">
           <img src="{{ friend.followee.user_icon_path.url }}" />
         </div>
-        <h4>{{ friend.followee.username }}</h4>
+        <p class="username">{{ friend.followee.username }}</p>
         {% comment %} 友達を削除するボタン {% endcomment %}
         <input type="button" class="delete" value="削除">
       </div>
