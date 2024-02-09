@@ -16,7 +16,21 @@ body {
 }
 /*ここまでがヘッダー*/
 
+#logout{
+  position: absolute;
+  top: 65px;
+  right: 112px;
+  border: 1px solid #27acd9;
+  background-color: #ffffff;
+  color: #27acd9;
+  border-radius: 5px;
+  transition: 0.5s;
+}
 
+#logout:hover{
+  background-color: #27acd9;
+  color: white;
+}
 
 #box{
     animation: fadein 4s;
