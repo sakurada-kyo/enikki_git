@@ -1,0 +1,18 @@
+body {
+    background-color: #f0f8ff; /* 背景色 */
+    color:#000000;
+}
+
+.container {
+    margin-top: 100px;
+}
+
+#logoutWrap{
+    max-width: 400px;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+

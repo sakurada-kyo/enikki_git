@@ -140,8 +140,9 @@ AUTH_USER_MODEL = "login_app.CustomUser"
 # ログイン後のリダイレクト先を設定する場合
 # LOGIN_REDIRECT_URL = "enikki:timeline"
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "sotuken1470@gmail.com"
-EMAIL_HOST_PASSWORD = "evtw eanq wcun drnq"
+EMAIL_HOST_PASSWORD = "rifh jaiy mcuh skdr"
 EMAIL_USE_TLS = True

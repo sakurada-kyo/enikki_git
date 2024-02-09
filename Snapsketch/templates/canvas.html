@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/canvas.css' %}">
     <link rel="icon" href="data:,">
 </head>
-<body style="background-color: darkgray;">
-   {% comment %} <header>
-      <div id = "logo">Snap Sketch</div>
-   </header> {% endcomment %}
+<body>
    <div id = "wrapper">
       <form id="save-form" action="{% url 'enikki:canvas' %}" method="post" enctype="multipart/form-data">
          {% csrf_token %}

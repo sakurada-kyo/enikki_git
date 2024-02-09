@@ -96,12 +96,9 @@ input[type="file"]{
 
 #createBtn {
     border: 1px solid #27acd9;
-    border-radius: 6px;
+    border-radius: 50%;
     font-size: 18px;
-    padding: 10px;
-    margin-top: 30px;
     transition: 0.6s;
-    margin-left: 25%;
     background-color: #ffffff;
     color: #27acd9;
 }
@@ -267,4 +264,57 @@ input[type="file"]{
     border:1px solid #CCCFD6;
     overflow-wrap: break-word;
     line-height: 1.76;
+}
+
+.btn{
+    position: relative;
+	overflow: hidden;
+	text-decoration: none;
+	display: inline-block;
+    background-color: #f54083;
+	text-align: center;
+    outline: none;
+    transition: ease .2s;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    top:700px;
+}
+
+/*ボタン内spanの形状*/
+.btn span {
+    position: relative;
+    z-index: 3;
+    color: #ffffff;
+    font-size: 30px;
+    top: 22px;
+}
+
+.btn:hover span{
+	color: #f54083;
+}
+
+/*== 背景が流れる（中央から外） */
+
+.bgcenterout:before {
+	content: '';
+    /*絶対配置で位置を指定*/
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+    /*色や形状*/
+	background-color: #ffffff;
+	width: 100%;
+	height: 100%;
+    /*アニメーション*/
+	transition: transform .3s cubic-bezier(0.8, 0, 0.2, 1) 0s;
+	transform: scale(0, 0);
+	transform-origin:center;
+}
+
+/*hoverした際の形状*/
+.bgcenterout:hover:before{
+	transform:scale(1, 1);
+    
 }

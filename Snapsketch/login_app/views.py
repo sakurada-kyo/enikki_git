@@ -12,6 +12,7 @@ from django.views import View
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.translation import gettext as _
 
 # セッションにグループ保存（ログイン時に使用）
 def set_session_group(request):
@@ -85,6 +86,13 @@ class PasswordResetConfirm(PasswordResetConfirmView):
     # """新パスワード入力ページ"""
     success_url = reverse_lazy('password_reset_complete')
     template_name = 'password_reset_confirm.html'
+    
+    def get_form(self, **kwargs):
+        form = super().get_form(**kwargs)
+        # フィールドのラベルをカスタマイズ
+        form.fields['new_password1'].label = _('新パスワード')
+        form.fields['new_password2'].label = _('新パスワード確認')
+        return form
 
 class PasswordResetComplete(PasswordResetCompleteView):
     # """新パスワード設定しましたページ"""

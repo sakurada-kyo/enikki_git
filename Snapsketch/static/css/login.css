@@ -28,3 +28,8 @@ body {
     margin-left: 330px;
     margin-top: 10px;
 }
+
+a{
+    display: inline-block;
+    margin-left:45px;
+}

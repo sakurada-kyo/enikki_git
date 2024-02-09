@@ -1,13 +1,22 @@
+{% bootstrap_css %}
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="utf-8">
     <title>ログアウト</title>
     <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="{% static 'css/logout.css' %}">
 </head>
 <body>
-    <p>ログアウトしました</p>
+    <div class="container">
+        <div id="logoutWrap">
+            <p>ログアウトしました</p>
+            <a href="{% url 'signin' %}">ログイン画面へ</a>
+        </div>
+        
+    </div>
+    
 </body>
 
 </html>

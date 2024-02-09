@@ -2,14 +2,9 @@ body{
     width: 1920px;
 }
 
-/* #wrapper{
-    
-} */
 
 #draw_nav{
     float:left;
-    /* width: 15%; */
-    /* margin: 104px 0 120px 300px; */
     margin: 120px 0 0 -220px;
 }
 
@@ -91,6 +86,10 @@ main{
     width:100%;
 }
 
+#end{
+    width: 100%;
+}
+
 #canvas{
     width: 800px;
     float:left;
@@ -104,5 +103,27 @@ main{
 }
 
 .openbtn4 {
+    display: none;
+}
+
+input[type=button],input[type=submit]{
+    border:1px solid #27acd9;
+    background-color: #ffffff;
+    color: #27acd9;
+    border-radius: 5px;
+    
+}
+
+input[type=button]:hover,input[type=submit]:hover{
+    background-color:#27acd9;
+    color: #ffffff;
+    border-radius: 5px;
+}
+
+#defaultCanvas0{
+    border: 1px solid;
+}
+
+#logout{
     display: none;
 }
