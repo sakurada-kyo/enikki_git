@@ -1,16 +1,16 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
+{% block content %}
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style3.css' %}">
     <link rel="stylesheet" href="{% static 'css/canvas.css' %}">
     <link rel="icon" href="data:,">
 </head>
 <body style="background-color: darkgray;">
-   <header>
+   {% comment %} <header>
       <div id = "logo">Snap Sketch</div>
-   </header>
+   </header> {% endcomment %}
    <div id = "wrapper">
       <form id="save-form" action="{% url 'enikki:canvas' %}" method="post" enctype="multipart/form-data">
          {% csrf_token %}
@@ -39,11 +39,15 @@
          <div id="canvas"></div>
       </form>
    </div>
+   {% endblock  %}
+   {% block js %}
    <!-- <canvas id="canvas" width="1344" height="700"></canvas> -->
 <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.min.js"></script>
 <script src="https://unpkg.com/ml5@0.6.0/dist/ml5.min.js"></script>
+<script src="{% static 'js/base3.js' %}"></script>
 <script src="{% static 'js/canvas.js' %}"></script>
+{% endblock %}
 </body>
-</html>
+
 

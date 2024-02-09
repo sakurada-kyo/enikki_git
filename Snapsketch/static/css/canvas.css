@@ -8,8 +8,9 @@ body{
 
 #draw_nav{
     float:left;
-    width: 15%;
-    margin: 104px 0 120px 300px;
+    /* width: 15%; */
+    /* margin: 104px 0 120px 300px; */
+    margin: 120px 0 0 -220px;
 }
 
 #color_nav{
@@ -96,4 +97,12 @@ main{
     position: absolute;
     left: 50%;
     margin: 120px 0 0 -300px;
+}
+
+.p5Canvas {
+    margin-top: 16px;
+}
+
+.openbtn4 {
+    display: none;
 }
