@@ -38,11 +38,11 @@ function showUser(data) {
     const icon = data.context.user_icon_path;
     const isFollowed = data.context.is_followed
 
-    console.log(`isFollowed:${isFollowed}`)
-
+    const labelNameElem = createElem("p","label-username","","ユーザー名:");
+    const labelIdElem = createElem("p","label-user-id","","ユーザーID:");
     const iconElem = createElem("img","","","");
-    const idElem = createElem("p","user-id","",userId);
-    const nameElem = createElem("p","username","",username);
+    const idElem = createElem("span","user-id","",userId);
+    const nameElem = createElem("span","username","",username);
     const btnElem = createElem("input","follow-button","","");
     const formElem = createElem("form","follow-form","","");
     const userElem = createElem("div","user-info","","")
@@ -62,8 +62,12 @@ function showUser(data) {
         btnElem.disabled = null
     }
 
-    userElem.appendChild(idElem);
-    userElem.appendChild(nameElem);
+    labelIdElem.appendChild(idElem)
+
+    labelNameElem.appendChild(nameElem)
+
+    userElem.appendChild(labelIdElem)
+    userElem.appendChild(labelNameElem)
 
     formElem.appendChild(iconElem);
     formElem.appendChild(userElem);

@@ -7,10 +7,11 @@
 {% block content %}
 <form id="search-form">
     {% csrf_token %}
-    <dl class="search2">
-        <dt><input type="text" id="search" name="search" placeholder="ユーザーIDを入力...." /></dt>
-        <dd><input type="submit" id="search-button" value="検索"></dd>
-    </dl>
+    <h2>ユーザー検索</h2>
+    <div id="searchWrap">
+        <input type="text" id="search" name="search" placeholder="ユーザーIDを入力...." />
+        <input type="submit" id="search-button" value="検索"/>
+    </div>
 </form>
 {% endblock %}
 
