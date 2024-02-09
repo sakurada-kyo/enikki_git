@@ -86,7 +86,7 @@ const GroupCreatePopup = (props) => {
                         </label>
                         
                     </div>
-                    <button id='createBtn' onClick={fetchGroupCreate} disabled>作成</button>
+                    <button id='createBtn' onClick={fetchGroupCreate}>作成</button>
                 </div>
             </div>
         </div>
