@@ -1,25 +1,24 @@
-$(function () {
-    $('#toukou').on('click', function () {
-        $.ajax({
-            url: '/enikki/comment/ajax_comment/',
-            type: 'POST',
-            data: {
-                'comment': $('#comment').val()
-            },
-            headers: { 'X-CSRFToken': csrftoken }
+
+$('#toukou').on('click', function () {
+    $.ajax({
+        url: '/enikki/comment/ajax_comment/',
+        type: 'POST',
+        data: {
+            'comment': $('#comment').val()
+        },
+        headers: { 'X-CSRFToken': csrftoken }
+    })
+        .done((data) => {
+            const fragment = add_comment(data);
+            $('.comment-area').append(fragment);
+            closePopup();
         })
-            .done((data) => {
-                const fragment = add_comment(data);
-                $('.comment-area').append(fragment);
-                closePopup();
-            })
-            // Ajax通信が失敗したら発動
-            .fail((jqXHR, textStatus, errorThrown) => {
-                alert('Ajax通信に失敗しました。');
-                console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-                console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-                console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
-        });
+        // Ajax通信が失敗したら発動
+        .fail((jqXHR, textStatus, errorThrown) => {
+            alert('Ajax通信に失敗しました。');
+            console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
+            console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
+            console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
     });
 });
 
@@ -91,14 +90,41 @@ function add_comment(data) {
     return fragment;
 }
 
-$(function () {
-    $('.reply').click(function () {
-        var fragment = add_comment();
-        $('.comment_area').append(fragment);
-        closePopup();
-    })
+
+$('.reply').click(function () {
+    var fragment = add_comment();
+    $('.comment_area').append(fragment);
+    closePopup();
 })
+
 
 function closePopup() {
     document.getElementById('open').checked = false;
 }
+
+
+// いいね投稿
+// $('.ajax-like').on('click',() => {
+//     const page = $(this).closest('.content').attr('data-page')
+//     $.ajax({
+//         url: '/enikki/timeline/fetch_like/',
+//         type: 'POST',
+//         data: {
+//             'page':page
+//         },
+//         headers: { 'X-CSRFToken': csrftoken }
+//     })
+//     .done((response) => {
+//         if(response){
+            
+//         }else{
+//             alert('投稿がありません')
+//         }
+//     })
+//     .fail((jqXHR, textStatus, errorThrown) => {
+//         alert('Ajax通信に失敗しました。');
+//         console.log("jqXHR          : " + jqXHR.status);
+//         console.log("textStatus     : " + textStatus);
+//         console.log("errorThrown    : " + errorThrown.message);
+//     });
+// })

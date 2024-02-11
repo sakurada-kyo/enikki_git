@@ -1359,6 +1359,42 @@ def ajax_getmembers_list(request):
 
     return JsonResponse({'error': '無効なリクエスト'})
 
+def ajax_like(request):
+    if request.method == 'POST':
+        page = request.POST.get('page')
+        current_group = request.session['currentGroup']
+        user = request.user
+
+        group_post_query =  (
+            GroupPostTable.objects
+            .filter(
+                group__groupname=current_group,
+                page=page
+            )
+            .values(
+                'post'
+            )
+        )
+        
+        post_query = group_post_query.post
+
+        like_query = (
+            LikeTable.objects
+            .filter(
+                user=user,
+                post=post_query
+            )
+            .exists()
+        )
+
+        
+        # いいね数プラス
+        group_post_query.update(like_count=F("like_count") + 1)
+        # いいね数マイナス
+        group_post_query.update(like_count=F("like_count") - 1)
+        
+        return JsonResponse
+
 # UUID型を文字列に変換する関数
 def convert_uuid_to_str(obj):
     if isinstance(obj, UUID):
