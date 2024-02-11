@@ -1361,39 +1361,55 @@ def ajax_getmembers_list(request):
 
 def ajax_like(request):
     if request.method == 'POST':
-        page = request.POST.get('page')
-        current_group = request.session['currentGroup']
-        user = request.user
-
-        group_post_query =  (
-            GroupPostTable.objects
-            .filter(
-                group__groupname=current_group,
-                page=page
+        try:
+            page = request.POST.get('page')
+            current_group = request.session['currentGroup']
+            user = request.user
+            
+            group_post_query =  (
+                GroupPostTable.objects
+                .get(
+                    group__groupname=current_group,
+                    page=page
+                )
             )
-            .values(
-                'post'
-            )
-        )
-        
-        post_query = group_post_query.post
+            
+            post_query = group_post_query.post
 
-        like_query = (
-            LikeTable.objects
-            .filter(
-                user=user,
-                post=post_query
-            )
-            .exists()
-        )
 
+            like_query = (
+                LikeTable.objects
+                .filter(
+                    user=user,
+                    post=post_query
+                )
+                .first()
+            )
+
+            if like_query:
+                # いいね数マイナス
+                post_query.like_count = post_query.like_count - 1
+                post_query.save()
+                like_query.delete() # いいねテーブルから削除
+                is_liked = False
+            else:
+                # いいね数プラス
+                post_query.like_count = post_query.like_count + 1
+                post_query.save()
+                LikeTable.objects.create(user=user,post=post_query) # いいねテーブルへ追加
+                is_liked = True
+                
+            like_count = str(post_query.like_count)    
+            
+            print(f'is_liked:{is_liked}')
+            print(f'like_count:{like_count}')
+        except GroupPostTable.DoesNotExist:
+            return JsonResponse({'err_msg':'投稿が存在しません'})
         
-        # いいね数プラス
-        group_post_query.update(like_count=F("like_count") + 1)
-        # いいね数マイナス
-        group_post_query.update(like_count=F("like_count") - 1)
-        
-        return JsonResponse
+        return JsonResponse({
+            'is_liked':is_liked, # いいね有無
+            'like_count':like_count # いいね数
+        })
 
 # UUID型を文字列に変換する関数
 def convert_uuid_to_str(obj):

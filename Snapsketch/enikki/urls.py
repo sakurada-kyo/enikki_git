@@ -9,6 +9,7 @@ urlpatterns = [
     path('timeline/fetch_like/', views.fetch_like, name='fetch_like'),
     path('timeline/creategroup/', views.fetch_group_create, name='fetch_group_create'),
     path("comment/", views.CommentView.as_view(), name="comment"),
+    path("comment/ajax_like/", views.ajax_like, name="comment_ajax_like"),
     path('canvas/', views.CanvasView.as_view(), name='canvas'),
     path('create/', views.CreateView.as_view(), name='create'),
     path('mypage/',views.MypageView.as_view(), name='mypage'),

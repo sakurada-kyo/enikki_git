@@ -103,28 +103,51 @@ function closePopup() {
 }
 
 
-// いいね投稿
-// $('.ajax-like').on('click',() => {
-//     const page = $(this).closest('.content').attr('data-page')
-//     $.ajax({
-//         url: '/enikki/timeline/fetch_like/',
-//         type: 'POST',
-//         data: {
-//             'page':page
-//         },
-//         headers: { 'X-CSRFToken': csrftoken }
-//     })
-//     .done((response) => {
-//         if(response){
-            
-//         }else{
-//             alert('投稿がありません')
-//         }
-//     })
-//     .fail((jqXHR, textStatus, errorThrown) => {
-//         alert('Ajax通信に失敗しました。');
-//         console.log("jqXHR          : " + jqXHR.status);
-//         console.log("textStatus     : " + textStatus);
-//         console.log("errorThrown    : " + errorThrown.message);
-//     });
-// })
+// いいね機能
+$('.ajax-like').on('click',(event) => {
+    const target = event.target
+    const page = $(target).closest('.content').attr('data-page')
+    
+    $.ajax({
+        url: '/enikki/comment/ajax_like/',
+        type: 'POST',
+        data: {
+            'page':page
+        },
+        headers: { 'X-CSRFToken': csrftoken }
+    })
+    .done((response) => {
+        // レスポンスデータの有無
+        if(response.err_msg){
+            alert(response.err_msg)
+        }else{
+            showLike(response,target)
+        }
+    })
+    .fail((jqXHR, textStatus, errorThrown) => {
+        alert('Ajax通信に失敗しました。');
+        console.log("jqXHR          : " + jqXHR.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+    });
+})
+
+// いいねマーク切り替えハンドラ
+function showLike(response,element) {
+    const isLiked = response.is_liked
+    const likeCount = response.like_count
+
+
+    // いいねマーク切り替え
+    if(isLiked){ 
+        // いいね有
+        $(element).removeClass("far").addClass('fas')
+    }else{
+        // いいね無
+        $(element).removeClass("fas").addClass('far')
+    }
+
+    // いいね数更新
+    const likeCountElem = $(element).closest('.like').find('.like-count')
+    $(likeCountElem).text(likeCount)
+}
