@@ -459,9 +459,10 @@ class CreateView(LoginRequiredMixin,TemplateView):
                 post.diary = diary  # 日記を更新
                 post.save()
 
-            if "groupList" in request.session:
-                group_names = request.session["groupList"]
-                groups = GroupMaster.objects.filter(groupname__in=group_names)
+            if "group_id_list" in request.session:
+                group_ids = request.session["group_id_list"]
+                groups = GroupMaster.objects.filter(group_id__in=group_ids)
+
                 max_pages = (
                     GroupPostTable.objects.filter(group__in=groups)
                     .values("group")
@@ -487,7 +488,6 @@ class CreateView(LoginRequiredMixin,TemplateView):
                         new_group_posts.append(
                             GroupPostTable(group=group, post=post, page=page_value)
                         )
-
                 GroupPostTable.objects.bulk_create(new_group_posts)
 
         except Exception as e:

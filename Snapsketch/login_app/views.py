@@ -17,13 +17,19 @@ from django.utils.translation import gettext as _
 # セッションにグループ保存（ログイン時に使用）
 def set_session_group(request):
     user = request.user
-    groupnames = (
+    groups = (
         UserGroupTable.objects
         .filter(user=user)
-        .values_list('group__groupname',flat=True)
+        .values(
+            'group__group_id',
+            'group__groupname'
+        )
         .order_by('group__created_at')
     )
-    group_list = [group for group in groupnames]
+    group_id_list = [str(group['group__group_id']) for group in groups]
+    group_list = [group['group__groupname'] for group in groups]
+
+    request.session['group_id_list'] = group_id_list
     request.session['groupList'] = group_list
     request.session['currentGroup'] = group_list[0]
 
