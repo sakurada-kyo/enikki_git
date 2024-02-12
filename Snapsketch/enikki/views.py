@@ -1401,8 +1401,6 @@ def ajax_like(request):
                 
             like_count = str(post_query.like_count)    
             
-            print(f'is_liked:{is_liked}')
-            print(f'like_count:{like_count}')
         except GroupPostTable.DoesNotExist:
             return JsonResponse({'err_msg':'投稿が存在しません'})
         
