@@ -70,19 +70,6 @@ function generateCalendar(year, month) {
     }
 
     calendar.appendChild(daysContainer);
-
-
-    // $('#close , #popup-wrapper').click(function(e){
-    //   console.log(e.target)
-    //   $('#popup-wrapper').fadeOut()
-    //   // 特定のIDを持つ要素内の全ての子要素を削除
-    //   $('#popup-inside').empty()
-    // });
-
-    // $('[data-post="true"]').on('click',(event) => {
-    //   const target = event.target
-    //   ajax_open(target)
-    // })
 }
 
 function handlePostDay() {
@@ -136,9 +123,6 @@ function padZero(num) {
 }
 //-----------------------1桁→2桁の処理関数-----------------------
 
-//----------------------ポップアップ表示フェード----------------------
-
-//----------------------ポップアップ表示フェード----------------------
 
 
 //-----------------------ajax処理-----------------------
@@ -258,61 +242,18 @@ function showPosts(posts){
 }
 //-----------------------ポップアップ投稿表示-----------------------
 
- //------------------------タグ生成------------------------
- function createAndAppendElement(tagName, className = '', textContent = '') {
-    var element = document.createElement(tagName);
-    if (className) {
-      element.setAttribute('class', className);
-    }
-    
-    element.innerHTML = textContent;
-    
-    return element;
-  };
-  //------------------------タグ生成------------------------
-
-  //-----------------------いいね機能-----------------------
-  var likeBtn = document.querySelector('.ajax-like');
-  if (likeBtn) {
-    likeBtn.addEventListener('click', e => {
-      var parent = e.currentTarget;
-      var parentContent = parent.closest(".content");
-      var likeCount = parent.nextElementSibling.innerHTML;
-      e.preventDefault();
-
-      $.ajax({
-        url: 'ajax_like/',
-        type: 'POST',
-        data: {
-          'page': $(parentContent).attr('data-page'),
-          'group': $(parentContent).attr('data-group'),
-          'likeCount': likeCount,
-        },
-        dataType: 'json',
-        headers: { 'X-CSRFToken': csrftoken }
-      })
-        .done(function (response) {
-          // いいね数を書き換える
-          // いいねした時はハートを塗る
-          if (response.method == 'create') {
-            e.target.classList.remove('far')
-            e.target.classList.add('fas')
-          } else {
-            e.target.classList.remove('fas')
-            e.target.classList.add('far')
-          }
-        })
-        // Ajax通信が失敗したら発動
-        .fail((jqXHR, textStatus, errorThrown) => {
-          alert('Ajax通信に失敗しました。');
-          console.log("jqXHR          : " + jqXHR.status); // HTTPステータスを表示
-          console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラーなどのエラー情報を表示
-          console.log("errorThrown    : " + errorThrown.message); // 例外情報を表示
-        });
-    });
+//------------------------タグ生成------------------------
+function createAndAppendElement(tagName, className = '', textContent = '') {
+  var element = document.createElement(tagName);
+  if (className) {
+    element.setAttribute('class', className);
   }
-
-  //-----------------------いいね機能-----------------------
+  
+  element.innerHTML = textContent;
+  
+  return element;
+};
+//------------------------タグ生成------------------------
 
 //-----------------------YYYMMDDの形式に変換-----------------------
 function formatDate(dateString) {
