@@ -1104,6 +1104,7 @@ def fetch_posts(request):
                 'page'
             )
             .order_by('post__updated_at')
+            .distinct()
         )
 
         # いいね情報取得用のpost_id
